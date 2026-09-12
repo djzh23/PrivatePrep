@@ -1,10 +1,10 @@
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;
 using UglyToad.PdfPig.Writer;
 
-namespace SmartAssistApi.Tests.Services;
+namespace PrivatePrep.Tests.Services;
 
 public class CvParsingServiceTests
 {

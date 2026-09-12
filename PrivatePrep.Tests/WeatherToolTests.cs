@@ -1,6 +1,6 @@
-using SmartAssistApi.Services.Tools;
+using PrivatePrep.Services.Tools;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class WeatherToolTests
 {

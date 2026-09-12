@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SmartAssistApi.Services.Tools;
+namespace PrivatePrep.Services.Tools;
 
 /// <summary>
 /// wttr.in lookup wrapped in a typed HttpClient. Registered via IHttpClientFactory so DNS

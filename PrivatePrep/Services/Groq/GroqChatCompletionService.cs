@@ -2,9 +2,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services.Groq;
+namespace PrivatePrep.Services.Groq;
 
 public sealed class GroqOptions
 {

@@ -23,7 +23,7 @@ Add CSS classes to wwwroot/css/app.css.
 Apply responsive rules from docs/skills/responsive-layout.md.
 
 ## Step 7 — Build and verify
-dotnet build SmartAssistApi.Client
+dotnet build PrivatePrep.Client
 Fix any build errors.
 
 ## Step 8 — Commit

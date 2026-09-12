@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
-using SmartAssistApi.Configuration;
+using PrivatePrep.Configuration;
 
-namespace SmartAssistApi.Services.Embeddings;
+namespace PrivatePrep.Services.Embeddings;
 
 public sealed class OnnxEmbeddingService : IEmbeddingService, IDisposable
 {

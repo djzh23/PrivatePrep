@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
-using SmartAssistApi.Security;
+using PrivatePrep.Security;
 
-namespace SmartAssistApi.Configuration;
+namespace PrivatePrep.Configuration;
 
 public static class HttpSecurityExtensions
 {
@@ -127,7 +127,7 @@ public static class HttpSecurityExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseSmartAssistApiSecurityHeaders(this IApplicationBuilder app)
+    public static IApplicationBuilder UsePrivatePrepSecurityHeaders(this IApplicationBuilder app)
     {
         app.Use(async (context, next) =>
         {

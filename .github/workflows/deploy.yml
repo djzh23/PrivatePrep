@@ -22,13 +22,13 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore SmartAssistApi.sln
+        run: dotnet restore PrivatePrep.sln
 
       - name: Build
-        run: dotnet build SmartAssistApi.sln --no-restore --configuration Release
+        run: dotnet build PrivatePrep.sln --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test SmartAssistApi.sln --no-build --configuration Release --verbosity normal --logger "console;verbosity=detailed"
+        run: dotnet test PrivatePrep.sln --no-build --configuration Release --verbosity normal --logger "console;verbosity=detailed"
         continue-on-error: true
 
   deploy:

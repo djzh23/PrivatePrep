@@ -1,10 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 using UglyToad.PdfPig;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// PDF-Rohtext-Extraktion und KI-gestütztes Mapping auf Profil-DTOs.

@@ -1,6 +1,6 @@
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class JobAnalysisSnapshotExtractorTests
 {

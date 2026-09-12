@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartAssistApi.Data.Entities;
+namespace PrivatePrep.Data.Entities;
 
 [Table("user_usage_daily")]
 public sealed class UserUsageDailyEntity

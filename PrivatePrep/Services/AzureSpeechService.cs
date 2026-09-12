@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
 using System.Text;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// TTS via Microsoft Azure Cognitive Services Speech (Neural voices).

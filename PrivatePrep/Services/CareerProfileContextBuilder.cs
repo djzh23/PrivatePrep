@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Builds the compact German profile block for the LLM system prompt.</summary>
 public static class CareerProfileContextBuilder

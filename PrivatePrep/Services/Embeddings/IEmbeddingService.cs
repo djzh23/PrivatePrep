@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services.Embeddings;
+namespace PrivatePrep.Services.Embeddings;
 
 public interface IEmbeddingService
 {

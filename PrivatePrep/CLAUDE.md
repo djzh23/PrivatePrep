@@ -4,19 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SmartAssistApi is the **ASP.NET Core 9 REST API** for the SmartAssist product.
+PrivatePrep is the **ASP.NET Core 9 REST API** for the SmartAssist product.
 
 - **Production frontend:** **React** (separate repo: `SmartAssist-react`, Vite) — this is what ships to users.
-- **Optional in this repo:** `SmartAssistApi.Client/` — **Blazor WebAssembly** sample/legacy UI used for early testing; not the live product UI.
+- **Optional in this repo:** `PrivatePrep.Client/` — **Blazor WebAssembly** sample/legacy UI used for early testing; not the live product UI.
 - **Infrastructure:** Docker Compose, GitHub Actions CI
 
 ## Solution Structure
 
 ```
-SmartAssistApi/
-├── SmartAssistApi/          ← Backend API (primary focus)
-├── SmartAssistApi.Client/   ← Blazor WASM (optional / legacy — do not assume production traffic)
-├── SmartAssistApi.Tests/    ← xUnit Tests
+PrivatePrep/
+├── PrivatePrep/          ← Backend API (primary focus)
+├── PrivatePrep.Client/   ← Blazor WASM (optional / legacy — do not assume production traffic)
+├── PrivatePrep.Tests/    ← xUnit Tests
 ├── docs/
 │   ├── agents/              ← Claude Code Agents
 │   ├── playbooks/           ← Reproducible workflows
@@ -47,7 +47,7 @@ docs: update documentation
 test: add or fix tests
 ```
 
-## Backend Standards (SmartAssistApi/)
+## Backend Standards (PrivatePrep/)
 
 - Controllers: only HTTP routing + validation + error handling
 - Services: all business logic
@@ -61,7 +61,7 @@ test: add or fix tests
 - Lives outside this repo; consumes this API via `VITE_API_BASE_URL` (or host proxy).
 - CORS / `FRONTEND__BASEURL` / `CORS_ALLOWED_ORIGINS` on the API host must include the deployed React origin(s).
 
-## Optional: Blazor client (SmartAssistApi.Client/)
+## Optional: Blazor client (PrivatePrep.Client/)
 
 - Pages: Blazor pages in `Pages/` — only UI logic
 - Services: HttpClient wrappers in `Services/`

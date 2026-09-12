@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Thin Upstash REST string store (same host/token as LearningMemoryRedisService).</summary>
 public class UpstashRedisStringStore(

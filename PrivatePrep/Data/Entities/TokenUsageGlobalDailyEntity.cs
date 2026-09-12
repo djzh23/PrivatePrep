@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartAssistApi.Data.Entities;
+namespace PrivatePrep.Data.Entities;
 
 [Table("token_usage_global_daily")]
 public sealed class TokenUsageGlobalDailyEntity

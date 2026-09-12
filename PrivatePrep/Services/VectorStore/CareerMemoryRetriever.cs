@@ -2,10 +2,10 @@ using System.Globalization;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using SmartAssistApi.Data;
-using SmartAssistApi.Services.Embeddings;
+using PrivatePrep.Data;
+using PrivatePrep.Services.Embeddings;
 
-namespace SmartAssistApi.Services.VectorStore;
+namespace PrivatePrep.Services.VectorStore;
 
 public sealed class CareerMemoryRetriever(
     SmartAssistDbContext db,

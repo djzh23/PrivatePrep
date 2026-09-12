@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Shared pricing, sanitization, and display helpers for Redis and Postgres token tracking.</summary>
 public static class TokenTrackingCostHelper

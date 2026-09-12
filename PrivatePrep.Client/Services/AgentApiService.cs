@@ -1,8 +1,8 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using SmartAssistApi.Client.Models;
+using PrivatePrep.Client.Models;
 
-namespace SmartAssistApi.Client.Services;
+namespace PrivatePrep.Client.Services;
 
 public class AgentApiService(HttpClient http)
 {

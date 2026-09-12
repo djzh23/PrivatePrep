@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartAssistApi.Data.Entities;
+namespace PrivatePrep.Data.Entities;
 
 [Table("cv_pdf_exports")]
 public sealed class CvPdfExportEntity

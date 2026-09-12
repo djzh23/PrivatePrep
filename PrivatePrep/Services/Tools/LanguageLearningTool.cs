@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Services.Tools;
+namespace PrivatePrep.Services.Tools;
 
 public static partial class LanguageLearningTool
 {

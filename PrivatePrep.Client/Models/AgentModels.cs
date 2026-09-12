@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Client.Models;
+namespace PrivatePrep.Client.Models;
 
 public record CareerToolSetup(
     string? CvText = null,

@@ -2,10 +2,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using SmartAssistApi.Health;
-using SmartAssistApi.Services;
+using PrivatePrep.Health;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests.Health;
+namespace PrivatePrep.Tests.Health;
 
 public sealed class UpstashRedisHealthCheckTests
 {

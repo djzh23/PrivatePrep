@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartAssistApi.Data.Entities;
+namespace PrivatePrep.Data.Entities;
 
 [Table("token_usage_registered_users")]
 public sealed class TokenUsageRegisteredUserEntity

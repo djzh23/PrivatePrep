@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>Optional strukturierter Kontext für Job-Analyzer und Interview-Coach (vom Frontend gesendet).</summary>
 public record CareerToolSetup(

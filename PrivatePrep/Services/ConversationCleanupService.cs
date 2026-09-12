@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Background service that evicts conversation history and context

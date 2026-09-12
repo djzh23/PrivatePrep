@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public class JobContextExtractor(IHttpClientFactory httpClientFactory, ILogger<JobContextExtractor> logger)
     : IJobContextExtractor

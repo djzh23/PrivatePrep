@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>Matches frontend <c>ApiChatSessionRecord</c> (camelCase JSON).</summary>
 public class ChatSessionRecord

@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class RedisConfigurationGuardTests
 {

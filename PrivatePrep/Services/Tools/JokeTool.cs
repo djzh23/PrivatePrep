@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services.Tools;
+namespace PrivatePrep.Services.Tools;
 
 public static class JokeTool
 {

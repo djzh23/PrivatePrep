@@ -5,14 +5,14 @@ using Anthropic.SDK;
 using Anthropic.SDK.Common;
 using Anthropic.SDK.Messaging;
 using Microsoft.Extensions.Options;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services.Background;
-using SmartAssistApi.Services.Groq;
-using SmartAssistApi.Services.Tools;
-using SmartAssistApi.Services.VectorStore;
+using PrivatePrep.Models;
+using PrivatePrep.Services.Background;
+using PrivatePrep.Services.Groq;
+using PrivatePrep.Services.Tools;
+using PrivatePrep.Services.VectorStore;
 using Tool = Anthropic.SDK.Common.Tool;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public class AgentService(
     IConfiguration config,

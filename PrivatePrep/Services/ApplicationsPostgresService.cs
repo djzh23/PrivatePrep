@@ -1,10 +1,10 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Job applications in Supabase/PostgreSQL via EF Core.</summary>
 public sealed class ApplicationsPostgresService(SmartAssistDbContext db, ILogger<ApplicationsPostgresService> logger)

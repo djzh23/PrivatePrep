@@ -7,12 +7,12 @@ using Serilog;
 using CvStudio.Application;
 using CvStudio.Infrastructure;
 using CvStudio.Infrastructure.Persistence;
-using SmartAssistApi.Configuration;
-using SmartAssistApi.Data;
-using SmartAssistApi.Services;
-using SmartAssistApi.Services.Embeddings;
-using SmartAssistApi.Services.Groq;
-using SmartAssistApi.Services.VectorStore;
+using PrivatePrep.Configuration;
+using PrivatePrep.Data;
+using PrivatePrep.Services;
+using PrivatePrep.Services.Embeddings;
+using PrivatePrep.Services.Groq;
+using PrivatePrep.Services.VectorStore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, services, configuration) =>
@@ -143,7 +143,7 @@ var registerPostgresHealth = registerPostgres && databaseFeaturesPreview.Postgre
 builder.Services.AddSmartAssistHealthChecks(registerPostgresCheck: registerPostgresHealth);
 builder.Services.AddSmartAssistRateLimiter();
 builder.Services.AddMemoryCache();
-builder.Services.AddHttpClient<SmartAssistApi.Services.Tools.WeatherTool>(client =>
+builder.Services.AddHttpClient<PrivatePrep.Services.Tools.WeatherTool>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(15);
     client.DefaultRequestHeaders.UserAgent.ParseAdd("SmartAssistApi/1.0 (weather assistant)");
@@ -176,11 +176,11 @@ builder.Services.AddHttpClient<GroqChatCompletionService>(client =>
 });
 builder.Services.AddSingleton<IEmbeddingService, OnnxEmbeddingService>();
 builder.Services.AddHostedService<CareerMemorySchemaInitializerHostedService>();
-builder.Services.AddHostedService<SmartAssistMigrationRunner>();
-builder.Services.AddSingleton<SmartAssistApi.Services.Background.AgentBackgroundQueue>();
-builder.Services.AddSingleton<SmartAssistApi.Services.Background.IAgentBackgroundQueue>(
-    sp => sp.GetRequiredService<SmartAssistApi.Services.Background.AgentBackgroundQueue>());
-builder.Services.AddHostedService<SmartAssistApi.Services.Background.AgentBackgroundQueueProcessor>();
+builder.Services.AddHostedService<PrivatePrepMigrationRunner>();
+builder.Services.AddSingleton<PrivatePrep.Services.Background.AgentBackgroundQueue>();
+builder.Services.AddSingleton<PrivatePrep.Services.Background.IAgentBackgroundQueue>(
+    sp => sp.GetRequiredService<PrivatePrep.Services.Background.AgentBackgroundQueue>());
+builder.Services.AddHostedService<PrivatePrep.Services.Background.AgentBackgroundQueueProcessor>();
 builder.Services.AddScoped<ICareerMemoryIngester, CareerMemoryIngester>();
 builder.Services.AddScoped<ICareerMemoryRetriever, CareerMemoryRetriever>();
 builder.Services.AddSingleton<ConversationService>();
@@ -445,12 +445,12 @@ app.Use(async (context, next) =>
 });
 
 app.UseRateLimiter();
-app.UseSmartAssistApiSecurityHeaders();
-app.UseMiddleware<SmartAssistApi.Middleware.UserResolutionMiddleware>();
+app.UsePrivatePrepSecurityHeaders();
+app.UseMiddleware<PrivatePrep.Middleware.UserResolutionMiddleware>();
 
 app.UseWhen(
     static ctx => ctx.Request.Path.StartsWithSegments("/api/cv-studio"),
-    static branch => branch.UseMiddleware<SmartAssistApi.Middleware.CvStudioApiExceptionMiddleware>());
+    static branch => branch.UseMiddleware<PrivatePrep.Middleware.CvStudioApiExceptionMiddleware>());
 
 app.MapHealthChecks("/api/health");
 // Endpoint routing: attach named CORS policy to API controllers (fixes missing ACAO on some hosts).

@@ -1,6 +1,6 @@
-using SmartAssistApi.Configuration;
+using PrivatePrep.Configuration;
 
-namespace SmartAssistApi.Services.Groq;
+namespace PrivatePrep.Services.Groq;
 
 /// <summary>Sampling- und Längen-Parameter pro Tool (Groq + konsistent für Anthropic-Temperature).</summary>
 public static class GroqInferenceParameters

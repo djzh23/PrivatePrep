@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using SmartAssistApi.Configuration;
-using SmartAssistApi.Services.Embeddings;
+using PrivatePrep.Configuration;
+using PrivatePrep.Services.Embeddings;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class OnnxEmbeddingServiceTests
 {

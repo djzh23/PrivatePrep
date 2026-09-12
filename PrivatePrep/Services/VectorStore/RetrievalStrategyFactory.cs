@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services.VectorStore;
+namespace PrivatePrep.Services.VectorStore;
 
 public static class RetrievalStrategyFactory
 {

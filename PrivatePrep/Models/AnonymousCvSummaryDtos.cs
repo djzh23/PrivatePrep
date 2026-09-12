@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 public sealed class AnonymousCvSummaryRequest
 {

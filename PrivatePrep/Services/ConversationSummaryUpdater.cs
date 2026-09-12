@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Regelbasierte Kurz-Zusammenfassung gegen Wiederholungen in Job- und Interview-Chats.</summary>
 public static class ConversationSummaryUpdater

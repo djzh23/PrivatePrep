@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SmartAssistApi.Data;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Where token usage is actually stored vs what was configured.</summary>
 public readonly record struct TokenTrackingBackendInfo(

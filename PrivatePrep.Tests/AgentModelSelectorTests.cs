@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class AgentModelSelectorTests
 {

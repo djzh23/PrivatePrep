@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>Stored JSON for one job application (aligned with React <c>JobApplicationApi</c>).</summary>
 public class JobApplicationDocument

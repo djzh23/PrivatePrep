@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public static class TokenCostCalculator
 {

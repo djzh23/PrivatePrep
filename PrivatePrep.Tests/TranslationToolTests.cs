@@ -1,7 +1,7 @@
-using SmartAssistApi.Models;
-using SmartAssistApi.Services.Tools;
+using PrivatePrep.Models;
+using PrivatePrep.Services.Tools;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class TranslationToolTests
 {

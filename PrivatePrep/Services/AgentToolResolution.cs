@@ -1,6 +1,6 @@
-using SmartAssistApi.Configuration;
+using PrivatePrep.Configuration;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public static class AgentToolResolution
 {

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SmartAssistApi.Data;
+using PrivatePrep.Data;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Where daily usage limits + plan rows are stored vs what was configured.</summary>
 public readonly record struct UsageBackendInfo(

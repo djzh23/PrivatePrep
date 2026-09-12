@@ -24,25 +24,25 @@ If anything sensitive appears, remove it before commit.
 Run API build:
 
 ```bash
-dotnet build SmartAssistApi/SmartAssistApi.csproj
+dotnet build PrivatePrep/PrivatePrep.csproj
 ```
 
 Run client compile:
 
 ```bash
-dotnet msbuild SmartAssistApi.Client/SmartAssistApi.Client.csproj /t:CoreCompile
+dotnet msbuild PrivatePrep.Client/PrivatePrep.Client.csproj /t:CoreCompile
 ```
 
 Run tests (if your local policy allows test assembly loading):
 
 ```bash
-dotnet test SmartAssistApi.Tests/SmartAssistApi.Tests.csproj
+dotnet test PrivatePrep.Tests/PrivatePrep.Tests.csproj
 ```
 
 ## 3) Docker sanity check (local)
 
 ```bash
-docker compose -f SmartAssistApi/docker-compose.yml up --build -d
+docker compose -f PrivatePrep/docker-compose.yml up --build -d
 curl http://localhost:8080/api/agent/health
 ```
 
@@ -50,7 +50,7 @@ Expected: HTTP `200` with `status: ok`.
 
 ## 4) Backend deploy on Render
 
-Use the `SmartAssistApi` folder as service root (Docker deploy).
+Use the `PrivatePrep` folder as service root (Docker deploy).
 
 Required environment variables in Render:
 
@@ -72,7 +72,7 @@ The live product UI is **not** in this repository. Deploy **SmartAssist-react** 
 
 ## 6) Optional: Blazor WASM client (legacy / testing only)
 
-`SmartAssistApi.Client` is a standalone WASM app. Only if you still use it: deploy static files from `SmartAssistApi.Client/wwwroot` build output and set API base URL in `SmartAssistApi.Client/wwwroot/appsettings.json` (`ApiBaseUrl` → your API URL), then build/publish and deploy to a static host.
+`PrivatePrep.Client` is a standalone WASM app. Only if you still use it: deploy static files from `PrivatePrep.Client/wwwroot` build output and set API base URL in `PrivatePrep.Client/wwwroot/appsettings.json` (`ApiBaseUrl` → your API URL), then build/publish and deploy to a static host.
 
 ## 7) Final commit and push
 

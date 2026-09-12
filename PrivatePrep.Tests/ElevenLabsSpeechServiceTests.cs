@@ -3,10 +3,10 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.Protected;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class ElevenLabsSpeechServiceTests
 {

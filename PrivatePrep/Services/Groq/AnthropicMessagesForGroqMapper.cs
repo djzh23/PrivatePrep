@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Anthropic.SDK.Messaging;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services.Groq;
+namespace PrivatePrep.Services.Groq;
 
 /// <summary>
 /// Maps Anthropic SDK <see cref="Message"/> history to Groq/OpenAI roles when every turn is plain user/assistant text.

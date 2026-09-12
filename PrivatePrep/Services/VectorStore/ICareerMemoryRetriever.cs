@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services.VectorStore;
+namespace PrivatePrep.Services.VectorStore;
 
 public interface ICareerMemoryRetriever
 {

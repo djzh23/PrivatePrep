@@ -2,7 +2,7 @@
 
 ## Step 1 — Create tool file
 
-Path: `SmartAssistApi/Services/Tools/{Name}Tool.cs`
+Path: `PrivatePrep/Services/Tools/{Name}Tool.cs`
 
 Use template from `docs/agents/tool-builder-agent.md`
 
@@ -12,7 +12,7 @@ Add `Tool.FromFunc()` entry to the tools list
 
 ## Step 3 — Write unit test
 
-Path: `SmartAssistApi.Tests/{Name}ToolTests.cs`
+Path: `PrivatePrep.Tests/{Name}ToolTests.cs`
 
 Test: valid input returns non-empty string
 

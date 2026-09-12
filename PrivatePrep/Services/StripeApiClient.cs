@@ -1,7 +1,7 @@
 using Stripe;
 using Stripe.Checkout;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public interface IStripeApiClient
 {

@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>OpenAI-compatible chat message for Groq API.</summary>
 public sealed class GroqChatMessage

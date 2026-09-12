@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace SmartAssistApi.Services.Tools;
+namespace PrivatePrep.Services.Tools;
 
 public static class JobAnalyzerTool
 {

@@ -1,8 +1,8 @@
 using System.Collections;
 using Anthropic.SDK.Messaging;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Begrenzt den für das LLM sichtbaren Verlauf: letzte N Nachrichten, ältere Assistant-Turns gekürzt.

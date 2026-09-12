@@ -2,19 +2,19 @@
 
 ## Step 1 — Create page
 
-Path: `SmartAssistApi.Client/Pages/{Name}.razor`
+Path: `PrivatePrep.Client/Pages/{Name}.razor`
 
 Add `@page "/{route}"` directive at the top.
 
 ## Step 2 — Create API service if needed
 
-Path: `SmartAssistApi.Client/Services/{Name}Service.cs`
+Path: `PrivatePrep.Client/Services/{Name}Service.cs`
 
 Inject `HttpClient`, wrap all API calls here. No direct `HttpClient` usage in pages.
 
 ## Step 3 — Register service
 
-In `SmartAssistApi.Client/Program.cs`:
+In `PrivatePrep.Client/Program.cs`:
 
 ```csharp
 builder.Services.AddScoped<{Name}Service>();
@@ -35,7 +35,7 @@ In `Shared/NavMenu.razor`, add a `NavLink` entry:
 ## Step 5 — Test manually
 
 ```bash
-dotnet run --project SmartAssistApi.Client
+dotnet run --project PrivatePrep.Client
 ```
 
 Navigate to the page and verify loading, error, and happy-path states all render correctly.

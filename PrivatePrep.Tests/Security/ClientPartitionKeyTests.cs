@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
-using SmartAssistApi.Security;
+using PrivatePrep.Security;
 
-namespace SmartAssistApi.Tests.Security;
+namespace PrivatePrep.Tests.Security;
 
 public class ClientPartitionKeyTests
 {

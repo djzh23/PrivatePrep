@@ -2,11 +2,11 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Token usage metrics in PostgreSQL (Supabase).</summary>
 public sealed class TokenTrackingPostgresService(

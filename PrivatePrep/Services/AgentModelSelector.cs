@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Default routing: Haiku 4.5 for all tools (cost). Sonnet is opt-in per tool via

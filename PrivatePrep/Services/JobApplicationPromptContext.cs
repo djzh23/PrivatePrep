@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Formats the compact German job-application block for the LLM system prompt.</summary>
 public static class JobApplicationPromptContext

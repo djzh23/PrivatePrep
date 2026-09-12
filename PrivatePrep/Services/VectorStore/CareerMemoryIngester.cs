@@ -2,12 +2,12 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Pgvector;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services.Embeddings;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Models;
+using PrivatePrep.Services.Embeddings;
 
-namespace SmartAssistApi.Services.VectorStore;
+namespace PrivatePrep.Services.VectorStore;
 
 public sealed class CareerMemoryIngester(
     SmartAssistDbContext db,

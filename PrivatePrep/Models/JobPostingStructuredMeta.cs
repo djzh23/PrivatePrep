@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>Strukturierte Felder aus schema.org JobPosting (JSON-LD), falls vorhanden.</summary>
 public sealed record JobPostingStructuredMeta(

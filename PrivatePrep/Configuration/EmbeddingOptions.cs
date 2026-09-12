@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Configuration;
+namespace PrivatePrep.Configuration;
 
 public sealed class EmbeddingOptions
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 public class SetContextRequest
 {

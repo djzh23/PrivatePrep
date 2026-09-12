@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>
 /// System prompt split for Anthropic fine-grained prompt caching:

@@ -4,22 +4,22 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SmartAssistApi.Data;
+using PrivatePrep.Data;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Applies SmartAssist SQL migrations (Migrations/NNN_*.sql) idempotently at startup.
 /// Tracks applied files in a metadata table so subsequent deploys are no-ops.
 ///
-/// SQL files are embedded resources (see SmartAssistApi.csproj &lt;EmbeddedResource&gt;).
+/// SQL files are embedded resources (see PrivatePrep.csproj &lt;EmbeddedResource&gt;).
 /// Files are applied in ascending numeric prefix order inside a transaction;
 /// if any file fails, the run aborts and the app refuses to start so we never serve
 /// requests against a partially-migrated schema.
 /// </summary>
-public sealed class SmartAssistMigrationRunner(
+public sealed class PrivatePrepMigrationRunner(
     IServiceScopeFactory scopeFactory,
-    ILogger<SmartAssistMigrationRunner> logger) : IHostedService
+    ILogger<PrivatePrepMigrationRunner> logger) : IHostedService
 {
     private const string TrackingTableSql = """
         CREATE TABLE IF NOT EXISTS __smartassist_migrations (
@@ -93,7 +93,7 @@ public sealed class SmartAssistMigrationRunner(
 
     private static List<EmbeddedMigration> LoadEmbeddedMigrations()
     {
-        var asm = typeof(SmartAssistMigrationRunner).Assembly;
+        var asm = typeof(PrivatePrepMigrationRunner).Assembly;
         var names = asm.GetManifestResourceNames()
             .Where(n => n.Contains(".Migrations.", StringComparison.Ordinal)
                 && n.EndsWith(".sql", StringComparison.OrdinalIgnoreCase))

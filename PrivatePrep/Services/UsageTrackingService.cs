@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public sealed class UsageTrackingService(SmartAssistDbContext db) : IUsageTrackingService
 {

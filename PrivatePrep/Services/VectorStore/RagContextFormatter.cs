@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SmartAssistApi.Services.VectorStore;
+namespace PrivatePrep.Services.VectorStore;
 
 public static class RagContextFormatter
 {

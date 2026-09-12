@@ -1,8 +1,8 @@
 using Anthropic.SDK.Messaging;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests.Services;
+namespace PrivatePrep.Tests.Services;
 
 public class LlmHistoryTrimmerTests
 {

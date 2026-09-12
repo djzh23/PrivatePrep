@@ -2,11 +2,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
-using SmartAssistApi.Services.VectorStore;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
+using PrivatePrep.Services.VectorStore;
 
-namespace SmartAssistApi.Controllers;
+namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/profile")]

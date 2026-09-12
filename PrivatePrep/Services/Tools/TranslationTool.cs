@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-namespace SmartAssistApi.Services.Tools;
+namespace PrivatePrep.Services.Tools;
 
 public static class TranslationTool
 {

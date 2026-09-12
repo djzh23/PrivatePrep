@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using SmartAssistApi.Controllers;
-using SmartAssistApi.Data;
-using SmartAssistApi.Services;
+using PrivatePrep.Controllers;
+using PrivatePrep.Data;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class StripeControllerTests
 {

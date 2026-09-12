@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Admin allow-list: Clerk JWT <c>sub</c> must match an entry from configuration or <c>ADMIN_USER_IDS</c>.

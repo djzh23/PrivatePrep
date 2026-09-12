@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class SystemPromptPartsTests
 {

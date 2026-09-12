@@ -1,11 +1,11 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Persists chat session index + transcripts in PostgreSQL (Supabase).</summary>
 public sealed class ChatSessionPostgresService(SmartAssistDbContext db, ILogger<ChatSessionPostgresService> logger)

@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Where job applications are stored vs what was configured.</summary>
 public readonly record struct ApplicationsBackendInfo(

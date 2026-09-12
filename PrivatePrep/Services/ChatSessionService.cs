@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
-using SmartAssistApi.Data;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Where chat sessions are actually stored vs what was configured.</summary>
 public readonly record struct ChatSessionBackendInfo(

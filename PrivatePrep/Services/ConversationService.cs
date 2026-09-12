@@ -1,7 +1,7 @@
 using Anthropic.SDK.Messaging;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public class ConversationService
 {

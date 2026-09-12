@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using CvStudio.Application.Exceptions;
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Middleware;
+namespace PrivatePrep.Middleware;
 
 /// <summary>Maps CV.Studio domain exceptions to RFC 7807 problem responses for <c>/api/cv-studio</c> routes.</summary>
 public sealed class CvStudioApiExceptionMiddleware(RequestDelegate next, ILogger<CvStudioApiExceptionMiddleware> logger, IWebHostEnvironment environment)

@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Redis-backed job applications for <c>/api/applications</c> and agent context.</summary>
 public sealed class ApplicationsRedisService(IRedisStringStore redis, ILogger<ApplicationsRedisService> logger)

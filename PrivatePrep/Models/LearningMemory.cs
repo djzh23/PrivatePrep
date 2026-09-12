@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>
 /// An insight the model can reuse in later chats (stored per user; Redis or Postgres per deployment).

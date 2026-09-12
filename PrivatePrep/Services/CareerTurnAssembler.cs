@@ -1,7 +1,7 @@
 using System.Text;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Baut die effektive Nutzerrolle aus kurzer Frage + strukturiertem Setup (Backend autoritativ).</summary>
 public static class CareerTurnAssembler

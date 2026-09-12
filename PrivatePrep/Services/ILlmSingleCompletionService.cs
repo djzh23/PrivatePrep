@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Ein einzelner, nicht-streamender LLM-Aufruf (z. B. strukturierte CV-Extraktion).

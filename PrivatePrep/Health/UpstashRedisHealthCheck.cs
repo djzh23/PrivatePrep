@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Health;
+namespace PrivatePrep.Health;
 
 /// <summary>Verifies Upstash REST (same path as <see cref="IRedisStringStore"/>) with a lightweight GET.</summary>
 public sealed class UpstashRedisHealthCheck(IServiceProvider services, ILogger<UpstashRedisHealthCheck> logger)

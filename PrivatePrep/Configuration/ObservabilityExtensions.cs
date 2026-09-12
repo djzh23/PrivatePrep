@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Context;
-using SmartAssistApi.Data;
-using SmartAssistApi.Health;
+using PrivatePrep.Data;
+using PrivatePrep.Health;
 
-namespace SmartAssistApi.Configuration;
+namespace PrivatePrep.Configuration;
 
 public static class ObservabilityExtensions
 {

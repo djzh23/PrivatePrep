@@ -1,12 +1,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.2.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.8.12023.21 stable
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivatePrep", "PrivatePrep\PrivatePrep.csproj", "{890A3373-930B-A181-6F2C-858E561E079A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAssistApi", "SmartAssistApi\SmartAssistApi.csproj", "{890A3373-930B-A181-6F2C-858E561E079A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivatePrep.Client", "PrivatePrep.Client\PrivatePrep.Client.csproj", "{9C603DDB-08BD-6983-D458-1D53AF4A6E77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAssistApi.Client", "SmartAssistApi.Client\SmartAssistApi.Client.csproj", "{9C603DDB-08BD-6983-D458-1D53AF4A6E77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivatePrep.Tests", "PrivatePrep.Tests\PrivatePrep.Tests.csproj", "{634C9C1C-C4E6-7B9B-697F-047A8A46ACF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAssistApi.Tests", "SmartAssistApi.Tests\SmartAssistApi.Tests.csproj", "{634C9C1C-C4E6-7B9B-697F-047A8A46ACF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

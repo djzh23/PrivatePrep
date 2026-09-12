@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Baut den gecachten System-Prefix: Kernpersönlichkeit, optional Profil, bestehende Tool-Regeln aus

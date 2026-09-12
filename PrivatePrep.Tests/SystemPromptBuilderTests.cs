@@ -1,7 +1,7 @@
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class SystemPromptBuilderTests
 {

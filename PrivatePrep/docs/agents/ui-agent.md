@@ -7,7 +7,7 @@ Before doing anything, read these files in order:
 3. docs/playbooks/redesign-component.md — step-by-step process
 
 ## Your Responsibilities
-- All visual changes to SmartAssistApi.Client/
+- All visual changes to PrivatePrep.Client/
 - CSS in wwwroot/css/app.css or component-scoped <style> blocks
 - Blazor component structure and layout
 - Loading states, error states, empty states — always all three

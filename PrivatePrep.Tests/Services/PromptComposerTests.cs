@@ -1,8 +1,8 @@
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
-using SmartAssistApi.Services.Groq;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
+using PrivatePrep.Services.Groq;
 
-namespace SmartAssistApi.Tests.Services;
+namespace PrivatePrep.Tests.Services;
 
 public class PromptComposerTests
 {

@@ -2,7 +2,7 @@
 
 ## Overview
 
-SmartAssistApi is an ASP.NET Core Web API that exposes a single conversational endpoint backed by Claude (Anthropic). It supports **tool calling**: Claude can decide mid-conversation to invoke a registered tool (e.g. get weather, summarize text), receive the result, and incorporate it into its final reply.
+PrivatePrep is an ASP.NET Core Web API that exposes a single conversational endpoint backed by Claude (Anthropic). It supports **tool calling**: Claude can decide mid-conversation to invoke a registered tool (e.g. get weather, summarize text), receive the result, and incorporate it into its final reply.
 
 ---
 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using SmartAssistApi.Data;
+using PrivatePrep.Data;
 
-namespace SmartAssistApi.Services.VectorStore;
+namespace PrivatePrep.Services.VectorStore;
 
 public sealed class CareerMemorySchemaInitializerHostedService(
     IServiceScopeFactory scopeFactory,

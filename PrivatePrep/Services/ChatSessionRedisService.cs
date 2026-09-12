@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Chat session index + transcripts in Redis (Upstash).</summary>
 public class ChatSessionRedisService(IRedisStringStore redis, ILogger<ChatSessionRedisService> logger)

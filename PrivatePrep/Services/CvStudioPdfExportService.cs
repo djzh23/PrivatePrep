@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public sealed class CvStudioPdfExportService(SmartAssistDbContext db, UsageService usage)
 {

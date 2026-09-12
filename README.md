@@ -28,7 +28,7 @@ Frontend: [github.com/djzh23/SmartAssist-react](https://github.com/djzh23/SmartA
 Browser (betweenatna.de / Clerk)
         │  Bearer JWT
         ▼
-SmartAssistApi (Render, Docker)
+PrivatePrep (Render, Docker)
         ├── Supabase PostgreSQL   (production: profiles, sessions, applications,
         │                          notes, usage, CV.Studio, career_memory)
         ├── Upstash Redis REST    (always used for some caches; local default storage)
@@ -160,7 +160,7 @@ Dashboard, usage, token and RAG stats, plus Redis→Postgres backfill routes und
 ## Architecture (this repo)
 
 ```
-SmartAssistApi/
+PrivatePrep/
 ├── Controllers/           Agent, Profile, Sessions, ChatNotes, Applications,
 │                          Learning, Jobs, Skills, Speech, Stripe, Admin,
 │                          CvStudioResumes / Categories / PdfExports / ResumeTemplates
@@ -196,7 +196,7 @@ Startup **blocks on migrations**: CV.Studio `Database.MigrateAsync()` and `Smart
 | CV PDF | QuestPDF |
 | CV text extract | PdfPig |
 | Embeddings | ONNX (`Models/model-2.onnx`) |
-| Tests | xUnit (`SmartAssistApi.Tests`) |
+| Tests | xUnit (`PrivatePrep.Tests`) |
 | Hosting | Render (Docker), deploy hook from GitHub Actions on `main` |
 
 ---
@@ -235,9 +235,9 @@ Landing demo agent uses a separate per-IP counter (10 requests/day in code).
 **Requirements:** .NET 9 SDK
 
 ```bash
-git clone https://github.com/djzh23/SmartAIAssist.git
-cd SmartAIAssist
-dotnet run --project SmartAssistApi
+git clone https://github.com/djzh23/PrivatePrep.git
+cd PrivatePrep
+dotnet run --project PrivatePrep
 ```
 
 `launchSettings.json` binds **`http://localhost:5108`** (not 5194). Point the React Vite proxy (`VITE_PROXY_TARGET`) at that URL.
@@ -263,7 +263,7 @@ On Render, map `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` (or `UPSTAS
 dotnet test
 ```
 
-Docker (from `SmartAssistApi/`):
+Docker (from `PrivatePrep/`):
 
 ```bash
 docker compose up --build

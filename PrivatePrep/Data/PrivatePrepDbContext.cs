@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Pgvector.EntityFrameworkCore;
-using SmartAssistApi.Data.Entities;
+using PrivatePrep.Data.Entities;
 
-namespace SmartAssistApi.Data;
+namespace PrivatePrep.Data;
 
 public sealed class SmartAssistDbContext(DbContextOptions<SmartAssistDbContext> options) : DbContext(options)
 {

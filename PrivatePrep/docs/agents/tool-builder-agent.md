@@ -9,7 +9,7 @@ When activated with a tool name, you:
 ## Tool File Template
 
 ```csharp
-namespace SmartAssistApi.Services.Tools;
+namespace PrivatePrep.Services.Tools;
 
 public static class {Name}Tool
 {

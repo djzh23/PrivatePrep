@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartAssistApi\SmartAssistApi.csproj" />
-    <ProjectReference Include="..\SmartAssistApi.Client\SmartAssistApi.Client.csproj" />
+    <ProjectReference Include="..\PrivatePrep\PrivatePrep.csproj" />
+    <ProjectReference Include="..\PrivatePrep.Client\PrivatePrep.Client.csproj" />
   </ItemGroup>
 
 </Project>

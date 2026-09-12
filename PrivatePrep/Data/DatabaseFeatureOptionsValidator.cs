@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 
-namespace SmartAssistApi.Data;
+namespace PrivatePrep.Data;
 
 public sealed class DatabaseFeatureOptionsValidator : IValidateOptions<DatabaseFeatureOptions>
 {

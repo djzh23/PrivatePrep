@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using Npgsql;
 
-namespace SmartAssistApi.Configuration;
+namespace PrivatePrep.Configuration;
 
 /// <summary>Result of resolving a Supabase / Postgres connection string for Npgsql (no secrets logged).</summary>
 public sealed record SupabaseConnectionResolution(

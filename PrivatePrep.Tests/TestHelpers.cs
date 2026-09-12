@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 internal static class TestHelpers
 {

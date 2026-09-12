@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>
 /// Das Karriereprofil eines Users. Wird in Redis als JSON gespeichert.

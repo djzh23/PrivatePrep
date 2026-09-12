@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Controllers;
+namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

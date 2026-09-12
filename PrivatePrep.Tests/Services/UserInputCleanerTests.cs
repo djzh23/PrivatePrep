@@ -1,6 +1,6 @@
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests.Services;
+namespace PrivatePrep.Tests.Services;
 
 public class UserInputCleanerTests
 {

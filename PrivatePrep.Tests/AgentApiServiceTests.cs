@@ -2,10 +2,10 @@ using System.Net;
 using System.Text.Json;
 using Moq;
 using Moq.Protected;
-using SmartAssistApi.Client.Models;
-using SmartAssistApi.Client.Services;
+using PrivatePrep.Client.Models;
+using PrivatePrep.Client.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class AgentApiServiceTests
 {

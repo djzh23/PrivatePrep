@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Scoped request context populated by <see cref="UserResolutionMiddleware"/>.

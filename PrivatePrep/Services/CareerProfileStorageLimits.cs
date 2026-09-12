@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Shared limits for Redis and Postgres career profile storage (aligned with PDF extraction / token caps).</summary>
 public static class CareerProfileStorageLimits

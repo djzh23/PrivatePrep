@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services.Background;
+namespace PrivatePrep.Services.Background;
 
 /// <summary>
 /// Drains <see cref="AgentBackgroundQueue"/> on a single background loop.

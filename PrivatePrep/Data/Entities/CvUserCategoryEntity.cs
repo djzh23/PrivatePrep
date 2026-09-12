@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Data.Entities;
+namespace PrivatePrep.Data.Entities;
 
 public sealed class CvUserCategoryEntity
 {

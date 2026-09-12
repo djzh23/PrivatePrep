@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Delegates <see cref="ILlmSingleCompletionService"/> to <see cref="AgentService.SingleCompletion"/>.</summary>
 public sealed class AgentLlmSingleCompletionService(AgentService agent) : ILlmSingleCompletionService

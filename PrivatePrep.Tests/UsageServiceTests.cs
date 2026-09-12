@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
-using SmartAssistApi.Data;
-using SmartAssistApi.Services;
+using PrivatePrep.Data;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class UsageServiceTests
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using SmartAssistApi.Services;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Controllers;
+namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/cv-studio/categories")]

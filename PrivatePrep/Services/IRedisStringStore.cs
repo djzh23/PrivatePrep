@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Minimal string get/set for Upstash-backed features (sessions, applications).</summary>
 public interface IRedisStringStore

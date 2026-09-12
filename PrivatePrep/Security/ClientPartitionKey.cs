@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SmartAssistApi.Security;
+namespace PrivatePrep.Security;
 
 /// <summary>Stable partition key for rate limiting (per bearer token hash or client IP).</summary>
 public static class ClientPartitionKey

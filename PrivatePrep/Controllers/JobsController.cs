@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Controllers;
+namespace PrivatePrep.Controllers;
 
 /// <summary>Stellen-Vorschau für Chat-Setup (URL oder Rohtext).</summary>
 [ApiController]

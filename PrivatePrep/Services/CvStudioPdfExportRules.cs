@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>CV.Studio PDF export limits by subscription plan (aligned with Stripe plan slugs).</summary>
 public static class CvStudioPdfExportRules

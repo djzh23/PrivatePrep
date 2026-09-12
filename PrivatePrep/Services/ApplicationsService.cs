@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
-using SmartAssistApi.Data;
-using SmartAssistApi.Models;
+using PrivatePrep.Data;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Routes job applications to Redis or PostgreSQL based on <see cref="DatabaseFeatureOptions"/>.

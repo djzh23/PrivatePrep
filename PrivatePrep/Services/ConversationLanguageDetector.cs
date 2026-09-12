@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 public static class ConversationLanguageDetector
 {

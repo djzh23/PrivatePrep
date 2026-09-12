@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>
 /// Normalizes inbound user text before LLM calls. Does not run on server-side session context

@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using SmartAssistApi.Controllers;
-using SmartAssistApi.Models;
-using SmartAssistApi.Services;
+using PrivatePrep.Controllers;
+using PrivatePrep.Models;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class JobsControllerTests
 {

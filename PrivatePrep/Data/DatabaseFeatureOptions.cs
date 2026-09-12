@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Data;
+namespace PrivatePrep.Data;
 
 /// <summary>Feature flags for PostgreSQL / Supabase rollout. Defaults keep Redis behavior.</summary>
 public sealed class DatabaseFeatureOptions

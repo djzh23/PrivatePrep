@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Daily usage counts and plan in PostgreSQL (replaces usage:{userId}:{date} and plan:{userId}).</summary>
 public sealed class UsagePostgresService(SmartAssistDbContext db)

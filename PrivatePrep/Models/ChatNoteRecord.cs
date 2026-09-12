@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Models;
+namespace PrivatePrep.Models;
 
 /// <summary>User-saved chat reply (Redis-backed, synced across devices).</summary>
 public sealed class ChatNoteRecord

@@ -1,7 +1,7 @@
-using SmartAssistApi.Configuration;
-using SmartAssistApi.Services;
+using PrivatePrep.Configuration;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Tests;
+namespace PrivatePrep.Tests;
 
 public class SessionIsolationTests
 {

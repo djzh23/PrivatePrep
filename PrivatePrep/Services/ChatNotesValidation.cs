@@ -1,4 +1,4 @@
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Shared limits and normalization for Redis and Postgres chat-notes implementations.</summary>
 public static class ChatNotesValidation

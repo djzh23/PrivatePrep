@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using CvStudio.Application.DTOs;
 using CvStudio.Application.Services;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Services;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Controllers;
+namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/cv-studio/resumes")]

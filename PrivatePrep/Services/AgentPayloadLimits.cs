@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Deckelt strukturierte Career-Payloads für TPM und Missbrauchsschutz.</summary>
 public static class AgentPayloadLimits

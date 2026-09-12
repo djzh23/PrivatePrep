@@ -1,6 +1,6 @@
 using System.Threading.Channels;
 
-namespace SmartAssistApi.Services.Background;
+namespace PrivatePrep.Services.Background;
 
 /// <summary>
 /// Bounded queue for fire-and-forget work spawned from request handlers

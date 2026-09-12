@@ -1,6 +1,6 @@
-using SmartAssistApi.Models;
+using PrivatePrep.Models;
 
-namespace SmartAssistApi.Services;
+namespace PrivatePrep.Services;
 
 /// <summary>Shared in-memory transforms for learning insights (Redis and Postgres backends).</summary>
 internal static class LearningMemoryInsightMutations

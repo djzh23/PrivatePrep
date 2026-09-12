@@ -3,7 +3,7 @@
 When activated, you:
 
 1. Run `dotnet test` and read the current output
-2. Read all files in SmartAssistApi.Tests/
+2. Read all files in PrivatePrep.Tests/
 3. Identify every service and controller that has NO test coverage
 4. For each untested class, write tests following this pattern:
 

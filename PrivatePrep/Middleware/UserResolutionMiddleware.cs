@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using SmartAssistApi.Data;
-using SmartAssistApi.Data.Entities;
-using SmartAssistApi.Services;
+using PrivatePrep.Data;
+using PrivatePrep.Data.Entities;
+using PrivatePrep.Services;
 
-namespace SmartAssistApi.Middleware;
+namespace PrivatePrep.Middleware;
 
 /// <summary>
 /// Resolves the authenticated user on every request.
