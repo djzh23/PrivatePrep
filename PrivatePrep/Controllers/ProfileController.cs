@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Background;
 using PrivatePrep.Services.VectorStore;
 
 namespace PrivatePrep.Controllers;
@@ -13,12 +14,12 @@ public sealed class ProfileController(
     CareerProfileService profileService,
     IAppUserContext userContext,
     ILlmSingleCompletionService llmSingleCompletion,
-    ICareerMemoryIngester careerMemoryIngester,
+    IAgentBackgroundQueue backgroundQueue,
     CvParsingService cvParsingService,
     ILogger<ProfileController> logger) : ControllerBase
 {
     private static void QueueCvIngestion(
-        ICareerMemoryIngester ingester,
+        IAgentBackgroundQueue queue,
         ILogger logger,
         string userId,
         string cvText)
@@ -26,11 +27,12 @@ public sealed class ProfileController(
         if (string.IsNullOrWhiteSpace(cvText))
             return;
 
-        _ = Task.Run(async () =>
+        queue.TryEnqueue("cv-ingestion", async (sp, ct) =>
         {
             try
             {
-                await ingester.IngestCvAsync(userId, cvText, CancellationToken.None).ConfigureAwait(false);
+                var ingester = sp.GetRequiredService<ICareerMemoryIngester>();
+                await ingester.IngestCvAsync(userId, cvText, ct).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -40,16 +42,17 @@ public sealed class ProfileController(
     }
 
     private static void QueueProfileIngestion(
-        ICareerMemoryIngester ingester,
+        IAgentBackgroundQueue queue,
         ILogger logger,
         string userId,
         CareerProfile profile)
     {
-        _ = Task.Run(async () =>
+        queue.TryEnqueue("profile-ingestion", async (sp, ct) =>
         {
             try
             {
-                await ingester.IngestProfileAsync(userId, profile, CancellationToken.None).ConfigureAwait(false);
+                var ingester = sp.GetRequiredService<ICareerMemoryIngester>();
+                await ingester.IngestProfileAsync(userId, profile, ct).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -126,7 +129,7 @@ public sealed class ProfileController(
             request.Goals ?? new List<string>());
         var onboardingProfile = await profileService.GetProfile(userId).ConfigureAwait(false);
         if (onboardingProfile is not null)
-            QueueProfileIngestion(careerMemoryIngester, logger, userId, onboardingProfile);
+            QueueProfileIngestion(backgroundQueue, logger, userId, onboardingProfile);
         SetCareerProfileStorageHeaders();
         return Ok(new { success = true });
     }
@@ -209,7 +212,7 @@ public sealed class ProfileController(
         await profileService.SetSkills(userId, request.Skills ?? new List<string>());
         var skillsProfile = await profileService.GetProfile(userId).ConfigureAwait(false);
         if (skillsProfile is not null)
-            QueueProfileIngestion(careerMemoryIngester, logger, userId, skillsProfile);
+            QueueProfileIngestion(backgroundQueue, logger, userId, skillsProfile);
         SetCareerProfileStorageHeaders();
         return Ok(new { success = true });
     }
@@ -411,7 +414,7 @@ public sealed class ProfileController(
             return BadRequest(new { error = "CV-Text darf nicht leer sein." });
 
         await profileService.SetCvText(userId, request.Text);
-        QueueCvIngestion(careerMemoryIngester, logger, userId, request.Text);
+        QueueCvIngestion(backgroundQueue, logger, userId, request.Text);
         SetCareerProfileStorageHeaders();
         return Ok(new { success = true, length = request.Text.Length });
     }
@@ -454,7 +457,7 @@ public sealed class ProfileController(
                 .ConfigureAwait(false);
 
             await profileService.SetCvText(userId, rawText).ConfigureAwait(false);
-            QueueCvIngestion(careerMemoryIngester, logger, userId, rawText);
+            QueueCvIngestion(backgroundQueue, logger, userId, rawText);
 
             SetCareerProfileStorageHeaders();
             return Ok(new
@@ -526,7 +529,7 @@ public sealed class ProfileController(
         try
         {
             await profileService.SaveProfile(userId, profile);
-            QueueProfileIngestion(careerMemoryIngester, logger, userId, profile);
+            QueueProfileIngestion(backgroundQueue, logger, userId, profile);
             SetCareerProfileStorageHeaders();
             return Ok(new { success = true });
         }
