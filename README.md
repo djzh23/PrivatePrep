@@ -84,6 +84,29 @@ Full endpoint list is in the controller source files.
 | Premium | 200 |
 | Pro | Unlimited |
 
+## Frontend
+
+The React client lives at [github.com/djzh23/SmartAssist-react](https://github.com/djzh23/SmartAssist-react) and is deployed on Vercel at [betweenatna.de](https://www.betweenatna.de).
+
+| Area | Technology |
+|---|---|
+| Framework | React 18 + TypeScript + Vite |
+| Styling | Tailwind CSS v3 |
+| Auth | Clerk (publishable key via `VITE_CLERK_PUBLISHABLE_KEY`) |
+| Icons | Lucide React |
+| Routing | React Router v6 |
+| Deployment | Vercel |
+
+The client calls `/api/*` routes exclusively. In development Vite proxies those requests to the local backend (`VITE_PROXY_TARGET=http://localhost:5108`). In production `VITE_API_BASE_URL` points to the Render deployment.
+
+```bash
+git clone https://github.com/djzh23/SmartAssist-react.git
+cd SmartAssist-react
+cp .env.example .env.local   # fill in VITE_CLERK_PUBLISHABLE_KEY
+npm install
+npm run dev                   # proxies /api/* to http://localhost:5108
+```
+
 ## Local development
 
 Requires .NET 9 SDK.
