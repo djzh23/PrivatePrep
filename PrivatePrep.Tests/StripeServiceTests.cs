@@ -9,6 +9,7 @@ using PrivatePrep.Controllers;
 using PrivatePrep.Data;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Background;
 using Stripe;
 
 namespace PrivatePrep.Tests;
@@ -251,6 +252,7 @@ public class StripeServiceTests
             userContextMock.Object,
             tokenTrackingMock.Object,
             speechMock.Object,
+            Mock.Of<IAgentBackgroundQueue>(),
             agentLoggerMock.Object)
         {
             ControllerContext = new ControllerContext

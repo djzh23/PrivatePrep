@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Configuration;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Background;
 
 namespace PrivatePrep.Controllers;
 
@@ -17,6 +18,7 @@ public sealed class AgentController(
     IAppUserContext userContext,
     TokenTrackingService tokenTrackingService,
     ISpeechService speechService,
+    IAgentBackgroundQueue backgroundQueue,
     ILogger<AgentController> logger) : ControllerBase
 {
     private async Task<(ActionResult? Error, AgentRequest Normalized)> TryNormalizeAgentRequestAsync(
@@ -644,7 +646,10 @@ public sealed class AgentController(
         if (i == 0 && o == 0 && cc == 0 && cr == 0)
             return;
 
-        _ = tokenTrackingService.TrackUsageAsync(userId, tool, result.Model ?? "unknown", i, o, cc, cr);
+        var model = result.Model ?? "unknown";
+        backgroundQueue.TryEnqueue("token-tracking", (sp, ct) =>
+            sp.GetRequiredService<TokenTrackingService>()
+              .TrackUsageAsync(userId, tool, model, i, o, cc, cr));
     }
 
     private void FireTokenTracking(
@@ -665,6 +670,9 @@ public sealed class AgentController(
         if (i == 0 && o == 0 && cc == 0 && cr == 0)
             return;
 
-        _ = tokenTrackingService.TrackUsageAsync(userId, tool, model ?? "unknown", i, o, cc, cr);
+        var resolvedModel = model ?? "unknown";
+        backgroundQueue.TryEnqueue("token-tracking", (sp, ct) =>
+            sp.GetRequiredService<TokenTrackingService>()
+              .TrackUsageAsync(userId, tool, resolvedModel, i, o, cc, cr));
     }
 }

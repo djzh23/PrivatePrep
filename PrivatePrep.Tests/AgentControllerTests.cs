@@ -10,6 +10,7 @@ using PrivatePrep.Controllers;
 using PrivatePrep.Data;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Background;
 
 namespace PrivatePrep.Tests;
 
@@ -20,6 +21,7 @@ public class AgentControllerTests
     private readonly Mock<UsageService> _usageMock;
     private readonly Mock<IAppUserContext> _userContextMock = new();
     private readonly Mock<ISpeechService> _speechMock = new();
+    private readonly Mock<IAgentBackgroundQueue> _backgroundQueueMock = new();
     private readonly Mock<TokenTrackingService> _tokenTrackingMock;
     private readonly ConversationService _conversationService = new();
     private readonly Mock<IRedisStringStore> _redisStoreMock = new();
@@ -77,6 +79,7 @@ public class AgentControllerTests
             _userContextMock.Object,
             _tokenTrackingMock.Object,
             _speechMock.Object,
+            _backgroundQueueMock.Object,
             _loggerMock.Object);
 
         controller.ControllerContext = new ControllerContext
