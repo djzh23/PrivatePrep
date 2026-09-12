@@ -10,7 +10,7 @@ namespace PrivatePrep.Services;
 
 /// <summary>Token usage metrics in PostgreSQL (Supabase).</summary>
 public sealed class TokenTrackingPostgresService(
-    SmartAssistDbContext db,
+    PrivatePrepDbContext db,
     IConfiguration configuration,
     ILogger<TokenTrackingPostgresService> logger)
 {
@@ -137,40 +137,54 @@ public sealed class TokenTrackingPostgresService(
     public async Task<AdminDashboardData> GetDashboardDataAsync(CancellationToken cancellationToken = default)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);
-        var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
-        var todayData = await ReadGlobalDayAsync(today, cancellationToken).ConfigureAwait(false);
+        var monthStartOnly = DateOnly.FromDateTime(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc));
+        var last30Start = today.AddDays(-29);
+        var rangeStart = monthStartOnly < last30Start ? monthStartOnly : last30Start;
+
+        // Fetch all needed data in 3 range queries instead of per-day loops
+        var globalDays = await db.TokenUsageGlobalDaily.AsNoTracking()
+            .Where(x => x.UsageDate >= rangeStart && x.UsageDate <= today)
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var modelCostByDay = await db.TokenUsageDailyUserModels.AsNoTracking()
+            .Where(x => x.UsageDate >= rangeStart && x.UsageDate <= today)
+            .GroupBy(x => x.UsageDate)
+            .Select(g => new { Date = g.Key, CostUsd = g.Sum(x => x.CostUsd) })
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var activeCountByDay = await db.TokenUsageDailyUsers.AsNoTracking()
+            .Where(x => x.UsageDate >= rangeStart && x.UsageDate <= today && x.MessageCount > 0)
+            .GroupBy(x => x.UsageDate)
+            .Select(g => new { Date = g.Key, Count = g.Select(x => x.ClerkUserId).Distinct().Count() })
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var globalByDate = globalDays.ToDictionary(x => x.UsageDate);
+        var modelCostLookup = modelCostByDay.ToDictionary(x => x.Date, x => x.CostUsd);
+        var activeLookup = activeCountByDay.ToDictionary(x => x.Date, x => x.Count);
+
+        var todayGlobal = globalByDate.GetValueOrDefault(today);
 
         var monthCost = 0m;
         var monthMessages = 0;
-        for (var d = monthStart.Date; d <= DateTime.UtcNow.Date; d = d.AddDays(1))
+        for (var d = monthStartOnly; d <= today; d = d.AddDays(1))
         {
-            var ds = DateOnly.FromDateTime(d);
-            var day = await ReadGlobalDayAsync(ds, cancellationToken).ConfigureAwait(false);
-            var dayModels = await ReadModelAggregatesAsync(ds, cancellationToken).ConfigureAwait(false);
-            monthCost += dayModels.Values.Sum(m => m.CostUsd);
-            monthMessages += day.Messages;
+            monthMessages += (int)(globalByDate.GetValueOrDefault(d)?.MessageCount ?? 0);
+            monthCost += modelCostLookup.GetValueOrDefault(d, 0m);
         }
 
         var last30 = new List<DailyUsage>();
         for (var i = 29; i >= 0; i--)
         {
-            var d = DateOnly.FromDateTime(DateTime.UtcNow.Date.AddDays(-i));
-            var day = await ReadGlobalDayAsync(d, cancellationToken).ConfigureAwait(false);
-            var dayModels = await ReadModelAggregatesAsync(d, cancellationToken).ConfigureAwait(false);
-            var active = await db.TokenUsageDailyUsers.AsNoTracking()
-                .Where(x => x.UsageDate == d && x.MessageCount > 0)
-                .Select(x => x.ClerkUserId)
-                .Distinct()
-                .CountAsync(cancellationToken)
-                .ConfigureAwait(false);
+            var d = today.AddDays(-i);
+            var g = globalByDate.GetValueOrDefault(d);
             last30.Add(new DailyUsage
             {
                 Date = d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                Messages = day.Messages,
-                InputTokens = day.InputTokens,
-                OutputTokens = day.OutputTokens,
-                CostUsd = dayModels.Values.Sum(m => m.CostUsd),
-                ActiveUsers = active,
+                Messages = (int)(g?.MessageCount ?? 0),
+                InputTokens = (int)(g?.InputTokens ?? 0),
+                OutputTokens = (int)(g?.OutputTokens ?? 0),
+                CostUsd = modelCostLookup.GetValueOrDefault(d, 0m),
+                ActiveUsers = activeLookup.GetValueOrDefault(d, 0),
             });
         }
 
@@ -184,21 +198,16 @@ public sealed class TokenTrackingPostgresService(
         var totalCostTodayLlm = byModel.Values.Sum(m => m.CostUsd);
 
         var registered = await db.TokenUsageRegisteredUsers.AsNoTracking().CountAsync(cancellationToken).ConfigureAwait(false);
-        var activeToday = await db.TokenUsageDailyUsers.AsNoTracking()
-            .Where(x => x.UsageDate == today && x.MessageCount > 0)
-            .Select(x => x.ClerkUserId)
-            .Distinct()
-            .CountAsync(cancellationToken)
-            .ConfigureAwait(false);
+        var activeToday = activeLookup.GetValueOrDefault(today, 0);
 
         return new AdminDashboardData
         {
             TotalCostToday = totalCostTodayLlm,
             TotalCostThisMonth = monthCost,
-            TotalMessagesToday = todayData.Messages,
+            TotalMessagesToday = (int)(todayGlobal?.MessageCount ?? 0),
             TotalMessagesThisMonth = monthMessages,
-            TotalInputTokensToday = todayData.InputTokens,
-            TotalOutputTokensToday = todayData.OutputTokens,
+            TotalInputTokensToday = (int)(todayGlobal?.InputTokens ?? 0),
+            TotalOutputTokensToday = (int)(todayGlobal?.OutputTokens ?? 0),
             GroqMessagesToday = groqMsgs,
             OtherLlmMessagesToday = otherMsgs,
             ActiveUsersToday = activeToday,
@@ -225,45 +234,49 @@ public sealed class TokenTrackingPostgresService(
         if (end < start)
             (start, end) = (end, start);
 
+        var startOnly = DateOnly.FromDateTime(start);
+        var endOnly = DateOnly.FromDateTime(end);
+
+        var dayRows = await db.TokenUsageDailyUsers.AsNoTracking()
+            .Where(x => x.ClerkUserId == userId && x.UsageDate >= startOnly && x.UsageDate <= endOnly)
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var modelRows = await db.TokenUsageDailyUserModels.AsNoTracking()
+            .Where(x => x.ClerkUserId == userId && x.UsageDate >= startOnly && x.UsageDate <= endOnly)
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var toolRows = await db.TokenUsageDailyUserTools.AsNoTracking()
+            .Where(x => x.ClerkUserId == userId && x.UsageDate >= startOnly && x.UsageDate <= endOnly)
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var dayRowsByDate = dayRows.ToDictionary(x => x.UsageDate);
+        var modelRowsByDate = modelRows.GroupBy(x => x.UsageDate).ToDictionary(g => g.Key, g => g.ToList());
+        var toolRowsByDate = toolRows.GroupBy(x => x.UsageDate).ToDictionary(g => g.Key, g => g.ToList());
+
         for (var d = start; d <= end; d = d.AddDays(1))
         {
             var ds = DateOnly.FromDateTime(d);
-            var dayRow = await db.TokenUsageDailyUsers.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.ClerkUserId == userId && x.UsageDate == ds, cancellationToken)
-                .ConfigureAwait(false);
-            var dayMessages = dayRow?.MessageCount ?? 0;
-            var dayInput = dayRow?.InputTokens ?? 0;
-            var dayOutput = dayRow?.OutputTokens ?? 0;
-            var dayCostHash = dayRow?.CostUsd ?? 0m;
+            var dayRow = dayRowsByDate.GetValueOrDefault(ds);
+            var dayModels = modelRowsByDate.GetValueOrDefault(ds, []);
+            var dayTools = toolRowsByDate.GetValueOrDefault(ds, []);
 
-            summary.TotalMessages += (int)dayMessages;
-            summary.TotalInputTokens += (int)dayInput;
-            summary.TotalOutputTokens += (int)dayOutput;
+            summary.TotalMessages += (int)(dayRow?.MessageCount ?? 0);
+            summary.TotalInputTokens += (int)(dayRow?.InputTokens ?? 0);
+            summary.TotalOutputTokens += (int)(dayRow?.OutputTokens ?? 0);
 
-            var modelRows = await db.TokenUsageDailyUserModels.AsNoTracking()
-                .Where(x => x.ClerkUserId == userId && x.UsageDate == ds)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
             decimal dayLlmCost = 0;
-            foreach (var row in modelRows)
+            foreach (var row in dayModels)
             {
-                var mu = ((int)row.MessageCount, (int)row.InputTokens, (int)row.OutputTokens, row.CostUsd);
-                dayLlmCost += TokenTrackingCostHelper.AdjustStoredCostUsdForDisplay(row.ModelKey, mu.Item4);
+                dayLlmCost += TokenTrackingCostHelper.AdjustStoredCostUsdForDisplay(row.ModelKey, row.CostUsd);
                 MergeModel(summary.ByModel, row.ModelKey,
-                    (mu.Item1, mu.Item2, mu.Item3, mu.Item4));
+                    ((int)row.MessageCount, (int)row.InputTokens, (int)row.OutputTokens, row.CostUsd));
             }
 
-            summary.TotalCostUsd += modelRows.Count > 0 ? dayLlmCost : dayCostHash;
+            summary.TotalCostUsd += dayModels.Count > 0 ? dayLlmCost : (dayRow?.CostUsd ?? 0m);
 
-            var toolRows = await db.TokenUsageDailyUserTools.AsNoTracking()
-                .Where(x => x.ClerkUserId == userId && x.UsageDate == ds)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
-            foreach (var row in toolRows)
-            {
-                var tu = ((int)row.MessageCount, (int)row.InputTokens, (int)row.OutputTokens, row.CostUsd);
-                MergeTool(summary.ByTool, row.Tool, tu);
-            }
+            foreach (var row in dayTools)
+                MergeTool(summary.ByTool, row.Tool,
+                    ((int)row.MessageCount, (int)row.InputTokens, (int)row.OutputTokens, row.CostUsd));
         }
 
         summary.Plan = await GetPlanFromDbAsync(userId, cancellationToken).ConfigureAwait(false);
@@ -434,26 +447,42 @@ public sealed class TokenTrackingPostgresService(
     public async Task<List<DailyUsage>> GetDailyStatsAsync(int days, CancellationToken cancellationToken = default)
     {
         days = Math.Clamp(days, 1, 366);
-        var list = new List<DailyUsage>();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+        var rangeStart = today.AddDays(-(days - 1));
+
+        var globalDays = await db.TokenUsageGlobalDaily.AsNoTracking()
+            .Where(x => x.UsageDate >= rangeStart && x.UsageDate <= today)
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var modelCostByDay = await db.TokenUsageDailyUserModels.AsNoTracking()
+            .Where(x => x.UsageDate >= rangeStart && x.UsageDate <= today)
+            .GroupBy(x => x.UsageDate)
+            .Select(g => new { Date = g.Key, CostUsd = g.Sum(x => x.CostUsd) })
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var activeCountByDay = await db.TokenUsageDailyUsers.AsNoTracking()
+            .Where(x => x.UsageDate >= rangeStart && x.UsageDate <= today && x.MessageCount > 0)
+            .GroupBy(x => x.UsageDate)
+            .Select(g => new { Date = g.Key, Count = g.Select(x => x.ClerkUserId).Distinct().Count() })
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        var globalByDate = globalDays.ToDictionary(x => x.UsageDate);
+        var modelCostLookup = modelCostByDay.ToDictionary(x => x.Date, x => x.CostUsd);
+        var activeLookup = activeCountByDay.ToDictionary(x => x.Date, x => x.Count);
+
+        var list = new List<DailyUsage>(days);
         for (var i = days - 1; i >= 0; i--)
         {
-            var d = DateOnly.FromDateTime(DateTime.UtcNow.Date.AddDays(-i));
-            var day = await ReadGlobalDayAsync(d, cancellationToken).ConfigureAwait(false);
-            var dayModels = await ReadModelAggregatesAsync(d, cancellationToken).ConfigureAwait(false);
-            var active = await db.TokenUsageDailyUsers.AsNoTracking()
-                .Where(x => x.UsageDate == d && x.MessageCount > 0)
-                .Select(x => x.ClerkUserId)
-                .Distinct()
-                .CountAsync(cancellationToken)
-                .ConfigureAwait(false);
+            var d = today.AddDays(-i);
+            var g = globalByDate.GetValueOrDefault(d);
             list.Add(new DailyUsage
             {
                 Date = d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                Messages = day.Messages,
-                InputTokens = day.InputTokens,
-                OutputTokens = day.OutputTokens,
-                CostUsd = dayModels.Values.Sum(m => m.CostUsd),
-                ActiveUsers = active,
+                Messages = (int)(g?.MessageCount ?? 0),
+                InputTokens = (int)(g?.InputTokens ?? 0),
+                OutputTokens = (int)(g?.OutputTokens ?? 0),
+                CostUsd = modelCostLookup.GetValueOrDefault(d, 0m),
+                ActiveUsers = activeLookup.GetValueOrDefault(d, 0),
             });
         }
 
