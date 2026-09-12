@@ -87,18 +87,3 @@ public sealed class RagSummary
     public decimal RagAdoptionPercent { get; set; }
 }
 
-public sealed class RagPreviewResponse
-{
-    public string Query { get; set; } = string.Empty;
-    public long EmbeddingLatencyMs { get; set; }
-    public long SearchLatencyMs { get; set; }
-    public List<RagPreviewResult> Results { get; set; } = new();
-}
-
-public sealed class RagPreviewResult
-{
-    public string Content { get; set; } = string.Empty;
-    public string ChunkType { get; set; } = string.Empty;
-    public string SourceTool { get; set; } = string.Empty;
-    public float Score { get; set; }
-}

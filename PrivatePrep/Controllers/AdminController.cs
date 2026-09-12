@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
@@ -526,32 +525,6 @@ public class AdminController(
 
         var data = await usageTracking.GetRagSummaryAsync(start, end, cancellationToken).ConfigureAwait(false);
         return Ok(data);
-    }
-
-    [HttpGet("rag/preview")]
-    public IActionResult GetRagPreview([FromQuery] string userId, [FromQuery] string query)
-    {
-        if (!IsAdmin())
-            return StatusCode(403, new { error = "forbidden" });
-        if (string.IsNullOrWhiteSpace(userId))
-            return BadRequest(new { error = "invalid_args", message = "userId is required." });
-        if (string.IsNullOrWhiteSpace(query))
-            return BadRequest(new { error = "invalid_args", message = "query is required." });
-
-        var embedSw = Stopwatch.StartNew();
-        embedSw.Stop();
-
-        var searchSw = Stopwatch.StartNew();
-        searchSw.Stop();
-
-        var response = new RagPreviewResponse
-        {
-            Query = query.Trim(),
-            EmbeddingLatencyMs = embedSw.ElapsedMilliseconds,
-            SearchLatencyMs = searchSw.ElapsedMilliseconds,
-            Results = [],
-        };
-        return Ok(response);
     }
 
     private static bool TryParseRange(
