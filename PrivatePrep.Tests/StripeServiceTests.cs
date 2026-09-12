@@ -238,16 +238,9 @@ public class StripeServiceTests
             TokenUsageStorage = "redis",
             UsageStorage = "redis",
         });
-        var chatSessions = new ChatSessionService(
-            optMock.Object,
-            new ChatSessionRedisService(
-                Mock.Of<IRedisStringStore>(),
-                Microsoft.Extensions.Logging.Abstractions.NullLogger<ChatSessionRedisService>.Instance),
-            new ServiceCollection().BuildServiceProvider());
         var controller = new AgentController(
             agentServiceMock.Object,
             new ConversationService(),
-            chatSessions,
             usage,
             userContextMock.Object,
             tokenTrackingMock.Object,

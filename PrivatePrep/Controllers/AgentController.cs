@@ -13,7 +13,6 @@ namespace PrivatePrep.Controllers;
 public sealed class AgentController(
     IAgentService agentService,
     ConversationService conversationService,
-    ChatSessionService chatSessionService,
     UsageService usageService,
     IAppUserContext userContext,
     TokenTrackingService tokenTrackingService,
@@ -185,11 +184,22 @@ public sealed class AgentController(
             FireTokenTracking(userId, agentRequest.ToolType, result);
             if (!isAnonymous)
             {
-                _ = NotifySessionAfterMessageSafeAsync(
-                    userId!,
-                    request.SessionId!,
-                    request.Message ?? "",
-                    HttpContext.RequestAborted);
+                var uid = userId!;
+                var sid = request.SessionId!;
+                var msg = request.Message ?? "";
+                backgroundQueue.TryEnqueue("session-notify", async (sp, ct) =>
+                {
+                    try
+                    {
+                        await sp.GetRequiredService<ChatSessionService>()
+                            .NotifyAfterAgentMessageAsync(uid, sid, msg, ct)
+                            .ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogWarning(ex, "Chat session notify failed for user {UserId} session {SessionId}", uid, sid);
+                    }
+                });
             }
 
             return Ok(result);
@@ -319,11 +329,22 @@ public sealed class AgentController(
                         chunk.CacheReadInputTokens);
                     if (!isAnonymous)
                     {
-                        _ = NotifySessionAfterMessageSafeAsync(
-                            userId!,
-                            request.SessionId!,
-                            request.Message ?? "",
-                            HttpContext.RequestAborted);
+                        var uid = userId!;
+                        var sid = request.SessionId!;
+                        var msg = request.Message ?? "";
+                        backgroundQueue.TryEnqueue("session-notify", async (sp, ct) =>
+                        {
+                            try
+                            {
+                                await sp.GetRequiredService<ChatSessionService>()
+                                    .NotifyAfterAgentMessageAsync(uid, sid, msg, ct)
+                                    .ConfigureAwait(false);
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogWarning(ex, "Chat session notify failed for user {UserId} session {SessionId}", uid, sid);
+                            }
+                        });
                     }
 
                     json = JsonSerializer.Serialize(new
@@ -614,24 +635,6 @@ public sealed class AgentController(
         {
             logger.LogError(ex, "Failed to read agent context. SessionId {SessionId} ToolType {ToolType}", sessionId, normalizedToolType);
             return StatusCode(500, new { error = "context_read_failed" });
-        }
-    }
-
-    private async Task NotifySessionAfterMessageSafeAsync(
-        string userId,
-        string sessionId,
-        string userMessage,
-        CancellationToken cancellationToken)
-    {
-        try
-        {
-            await chatSessionService
-                .NotifyAfterAgentMessageAsync(userId, sessionId, userMessage, cancellationToken)
-                .ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            logger.LogWarning(ex, "Chat session metadata update failed. UserId {UserId} SessionId {SessionId}", userId, sessionId);
         }
     }
 

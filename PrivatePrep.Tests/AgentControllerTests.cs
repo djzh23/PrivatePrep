@@ -24,8 +24,6 @@ public class AgentControllerTests
     private readonly Mock<IAgentBackgroundQueue> _backgroundQueueMock = new();
     private readonly Mock<TokenTrackingService> _tokenTrackingMock;
     private readonly ConversationService _conversationService = new();
-    private readonly Mock<IRedisStringStore> _redisStoreMock = new();
-    private readonly ChatSessionService _chatSessionService;
     private readonly IConfiguration _config;
 
     public AgentControllerTests()
@@ -65,8 +63,6 @@ public class AgentControllerTests
         _usageMock.Setup(u => u.GetBackendInfo()).Returns(new UsageBackendInfo("redis", "redis", false, null));
         _tokenTrackingMock.Setup(t => t.GetBackendInfo()).Returns(new TokenTrackingBackendInfo("redis", "redis", false, null));
 
-        var redis = new ChatSessionRedisService(_redisStoreMock.Object, NullLogger<ChatSessionRedisService>.Instance);
-        _chatSessionService = new ChatSessionService(optMock.Object, redis, sp);
     }
 
     private AgentController CreateController()
@@ -74,7 +70,6 @@ public class AgentControllerTests
         var controller = new AgentController(
             _agentServiceMock.Object,
             _conversationService,
-            _chatSessionService,
             _usageMock.Object,
             _userContextMock.Object,
             _tokenTrackingMock.Object,
