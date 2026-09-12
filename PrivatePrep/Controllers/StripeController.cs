@@ -1,13 +1,13 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using PrivatePrep.Models;
 using PrivatePrep.Services;
 
 namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/stripe")]
-public class StripeController(
+public sealed class StripeController(
     StripeService stripeService,
     UsageService usageService,
     IAppUserContext userContext,
@@ -227,23 +227,3 @@ public class StripeController(
     }
 }
 
-public class CheckoutRequest
-{
-    [Required]
-    [StringLength(20, MinimumLength = 3)]
-    public string Plan { get; set; } = "";
-
-    [StringLength(320)]
-    [EmailAddress]
-    public string? Email { get; set; }
-
-    [StringLength(128)]
-    public string? UserId { get; set; }
-}
-
-public class SyncPlanRequest
-{
-    [StringLength(320)]
-    [EmailAddress]
-    public string? Email { get; set; }
-}

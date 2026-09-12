@@ -9,7 +9,7 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/applications")]
 [EnableRateLimiting("applications")]
-public class ApplicationsController(IAppUserContext userContext, IApplicationService applications) : ControllerBase
+public sealed class ApplicationsController(IAppUserContext userContext, IApplicationService applications) : ControllerBase
 {
     private void SetJobApplicationsStorageHeaders()
     {

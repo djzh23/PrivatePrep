@@ -9,7 +9,7 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [EnableRateLimiting("agent_read")]
-public class LearningController(LearningMemoryService learningMemory, IAppUserContext userContext) : ControllerBase
+public sealed class LearningController(LearningMemoryService learningMemory, IAppUserContext userContext) : ControllerBase
 {
     private void SetLearningMemoryStorageHeaders()
     {

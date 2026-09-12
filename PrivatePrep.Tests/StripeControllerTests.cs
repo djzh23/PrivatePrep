@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using PrivatePrep.Controllers;
 using PrivatePrep.Data;
+using PrivatePrep.Models;
 using PrivatePrep.Services;
 
 namespace PrivatePrep.Tests;

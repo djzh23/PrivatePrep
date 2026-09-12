@@ -9,7 +9,7 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/admin")]
 [EnableRateLimiting("admin")]
-public class AdminController(
+public sealed class AdminController(
     TokenTrackingService tracking,
     IUsageTrackingService usageTracking,
     IAppUserContext userContext,

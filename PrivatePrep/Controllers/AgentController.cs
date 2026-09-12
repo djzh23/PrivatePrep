@@ -9,7 +9,7 @@ namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AgentController(
+public sealed class AgentController(
     IAgentService agentService,
     ConversationService conversationService,
     ChatSessionService chatSessionService,

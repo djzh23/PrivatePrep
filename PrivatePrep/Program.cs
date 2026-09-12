@@ -12,6 +12,7 @@ using PrivatePrep.Data;
 using PrivatePrep.Services;
 using PrivatePrep.Services.Embeddings;
 using PrivatePrep.Services.Groq;
+using PrivatePrep.Services.Background;
 using PrivatePrep.Services.VectorStore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -120,7 +121,7 @@ if (supabaseConnectionString is not null)
 var registerPostgres = !string.IsNullOrWhiteSpace(supabaseConnectionString);
 if (registerPostgres)
 {
-    builder.Services.AddDbContext<SmartAssistDbContext>(options =>
+    builder.Services.AddDbContext<PrivatePrepDbContext>(options =>
         options.UseNpgsql(supabaseConnectionString, npgsql => npgsql.UseVector()));
     builder.Services.AddScoped<ChatNotesPostgresService>();
     builder.Services.AddScoped<ApplicationsPostgresService>();
@@ -177,17 +178,15 @@ builder.Services.AddHttpClient<GroqChatCompletionService>(client =>
 builder.Services.AddSingleton<IEmbeddingService, OnnxEmbeddingService>();
 builder.Services.AddHostedService<CareerMemorySchemaInitializerHostedService>();
 builder.Services.AddHostedService<PrivatePrepMigrationRunner>();
-builder.Services.AddSingleton<PrivatePrep.Services.Background.AgentBackgroundQueue>();
-builder.Services.AddSingleton<PrivatePrep.Services.Background.IAgentBackgroundQueue>(
-    sp => sp.GetRequiredService<PrivatePrep.Services.Background.AgentBackgroundQueue>());
-builder.Services.AddHostedService<PrivatePrep.Services.Background.AgentBackgroundQueueProcessor>();
+builder.Services.AddSingleton<AgentBackgroundQueue>();
+builder.Services.AddSingleton<IAgentBackgroundQueue>(sp => sp.GetRequiredService<AgentBackgroundQueue>());
+builder.Services.AddHostedService<AgentBackgroundQueueProcessor>();
 builder.Services.AddScoped<ICareerMemoryIngester, CareerMemoryIngester>();
 builder.Services.AddScoped<ICareerMemoryRetriever, CareerMemoryRetriever>();
 builder.Services.AddSingleton<ConversationService>();
 builder.Services.AddSingleton<SystemPromptBuilder>();
 builder.Services.AddScoped<PromptComposer>();
-builder.Services.AddScoped<JobContextExtractor>();
-builder.Services.AddScoped<IJobContextExtractor>(sp => sp.GetRequiredService<JobContextExtractor>());
+builder.Services.AddScoped<IJobContextExtractor, JobContextExtractor>();
 builder.Services.AddScoped<CvParsingService>();
 builder.Services.AddScoped<AgentService>();
 builder.Services.AddScoped<IAgentService>(sp => sp.GetRequiredService<AgentService>());
@@ -212,8 +211,7 @@ builder.Services.AddScoped<LearningMemoryService>();
 builder.Services.AddScoped<ChatNotesRedisService>();
 builder.Services.AddScoped<ChatNotesService>();
 builder.Services.AddScoped<ApplicationsRedisService>();
-builder.Services.AddScoped<ApplicationsService>();
-builder.Services.AddScoped<IApplicationService>(sp => sp.GetRequiredService<ApplicationsService>());
+builder.Services.AddScoped<IApplicationService, ApplicationsService>();
 builder.Services.AddScoped<CareerProfileService>();
 builder.Services.AddSingleton<ClerkAuthService>();
 builder.Services.AddScoped<AppUserContext>();

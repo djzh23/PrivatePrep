@@ -8,7 +8,7 @@ namespace PrivatePrep.Controllers;
 /// <summary>Stellen-Vorschau für Chat-Setup (URL oder Rohtext).</summary>
 [ApiController]
 [Route("api/jobs")]
-public class JobsController(
+public sealed class JobsController(
     IAppUserContext userContext,
     IJobContextExtractor jobContextExtractor,
     ILogger<JobsController> logger) : ControllerBase

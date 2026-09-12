@@ -10,7 +10,7 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/sessions")]
 [EnableRateLimiting("sessions")]
-public class SessionsController(IAppUserContext userContext, ChatSessionService chatSessions) : ControllerBase
+public sealed class SessionsController(IAppUserContext userContext, ChatSessionService chatSessions) : ControllerBase
 {
     private void SetChatSessionStorageHeaders()
     {

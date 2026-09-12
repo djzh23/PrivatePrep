@@ -7,7 +7,7 @@ namespace PrivatePrep.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SpeechController(
+public sealed class SpeechController(
     ISpeechService speechService,
     IAppUserContext userContext,
     UsageService usageService,

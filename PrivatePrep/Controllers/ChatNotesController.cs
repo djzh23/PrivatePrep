@@ -9,7 +9,7 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/chat-notes")]
 [EnableRateLimiting("sessions")]
-public class ChatNotesController(IAppUserContext userContext, ChatNotesService chatNotes) : ControllerBase
+public sealed class ChatNotesController(IAppUserContext userContext, ChatNotesService chatNotes) : ControllerBase
 {
     private void SetChatNotesStorageHeaders()
     {

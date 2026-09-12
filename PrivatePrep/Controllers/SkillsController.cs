@@ -8,7 +8,7 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [EnableRateLimiting("agent_read")]
-public class SkillsController(
+public sealed class SkillsController(
     IAppUserContext userContext,
     UsageService usageService,
     ILogger<SkillsController> logger) : ControllerBase
