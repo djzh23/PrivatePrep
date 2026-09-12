@@ -50,7 +50,7 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
         }
 
         // Provision user if Postgres is available
-        var db = context.RequestServices.GetService<SmartAssistDbContext>();
+        var db = context.RequestServices.GetService<PrivatePrepDbContext>();
         if (db is not null)
         {
             var appUser = await db.AppUsers.AsNoTracking()

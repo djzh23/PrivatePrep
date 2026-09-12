@@ -4,7 +4,7 @@ using PrivatePrep.Data.Entities;
 
 namespace PrivatePrep.Services;
 
-public sealed class CvStudioPdfExportService(SmartAssistDbContext db, UsageService usage)
+public sealed class CvStudioPdfExportService(PrivatePrepDbContext db, UsageService usage)
 {
     public async Task<int> CountAsync(string clerkUserId, CancellationToken cancellationToken = default) =>
         await db.CvPdfExports.AsNoTracking().CountAsync(x => x.ClerkUserId == clerkUserId, cancellationToken);

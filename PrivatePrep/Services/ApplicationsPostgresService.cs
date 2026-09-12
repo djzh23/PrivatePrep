@@ -7,7 +7,7 @@ using PrivatePrep.Models;
 namespace PrivatePrep.Services;
 
 /// <summary>Job applications in Supabase/PostgreSQL via EF Core.</summary>
-public sealed class ApplicationsPostgresService(SmartAssistDbContext db, ILogger<ApplicationsPostgresService> logger)
+public sealed class ApplicationsPostgresService(PrivatePrepDbContext db, ILogger<ApplicationsPostgresService> logger)
 {
     public async Task<List<JobApplicationDocument>> ListAsync(string userId, CancellationToken cancellationToken = default)
     {

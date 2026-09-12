@@ -8,7 +8,7 @@ using PrivatePrep.Services.Embeddings;
 namespace PrivatePrep.Services.VectorStore;
 
 public sealed class CareerMemoryRetriever(
-    SmartAssistDbContext db,
+    PrivatePrepDbContext db,
     IEmbeddingService embeddings,
     ILogger<CareerMemoryRetriever> logger) : ICareerMemoryRetriever
 {

@@ -9,7 +9,7 @@ using PrivatePrep.Models;
 namespace PrivatePrep.Services;
 
 /// <summary>Chat notes in Supabase/PostgreSQL via EF Core.</summary>
-public sealed class ChatNotesPostgresService(SmartAssistDbContext db, ILogger<ChatNotesPostgresService> logger)
+public sealed class ChatNotesPostgresService(PrivatePrepDbContext db, ILogger<ChatNotesPostgresService> logger)
 {
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web)
     {

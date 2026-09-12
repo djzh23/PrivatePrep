@@ -12,7 +12,7 @@ public sealed class CareerMemorySchemaInitializerHostedService(
         try
         {
             using var scope = scopeFactory.CreateScope();
-            var db = scope.ServiceProvider.GetService<SmartAssistDbContext>();
+            var db = scope.ServiceProvider.GetService<PrivatePrepDbContext>();
             if (db is null)
             {
                 logger.LogInformation("Skipping career_memory schema init (no Postgres DbContext).");

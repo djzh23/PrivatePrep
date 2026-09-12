@@ -4,7 +4,7 @@ using PrivatePrep.Data.Entities;
 
 namespace PrivatePrep.Services;
 
-public sealed class CvStudioCategoriesService(SmartAssistDbContext db)
+public sealed class CvStudioCategoriesService(PrivatePrepDbContext db)
 {
     public async Task<(IReadOnlyList<CvUserCategoryEntity> categories, Dictionary<Guid, Guid> assignments)>
         GetAllAsync(string clerkUserId, CancellationToken ct = default)

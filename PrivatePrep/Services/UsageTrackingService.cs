@@ -6,7 +6,7 @@ using PrivatePrep.Models;
 
 namespace PrivatePrep.Services;
 
-public sealed class UsageTrackingService(SmartAssistDbContext db) : IUsageTrackingService
+public sealed class UsageTrackingService(PrivatePrepDbContext db) : IUsageTrackingService
 {
     public async Task RecordUsageAsync(UsageRecord record, CancellationToken ct = default)
     {

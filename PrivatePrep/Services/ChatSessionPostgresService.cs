@@ -8,7 +8,7 @@ using PrivatePrep.Models;
 namespace PrivatePrep.Services;
 
 /// <summary>Persists chat session index + transcripts in PostgreSQL (Supabase).</summary>
-public sealed class ChatSessionPostgresService(SmartAssistDbContext db, ILogger<ChatSessionPostgresService> logger)
+public sealed class ChatSessionPostgresService(PrivatePrepDbContext db, ILogger<ChatSessionPostgresService> logger)
 {
     public async Task NotifyAfterAgentMessageAsync(
         string userId,

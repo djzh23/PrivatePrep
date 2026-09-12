@@ -10,7 +10,7 @@ using PrivatePrep.Services.Embeddings;
 namespace PrivatePrep.Services.VectorStore;
 
 public sealed class CareerMemoryIngester(
-    SmartAssistDbContext db,
+    PrivatePrepDbContext db,
     IEmbeddingService embeddings,
     ILlmSingleCompletionService singleCompletion,
     ILogger<CareerMemoryIngester> logger) : ICareerMemoryIngester

@@ -33,11 +33,11 @@ public sealed class PrivatePrepMigrationRunner(
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         using var scope = scopeFactory.CreateScope();
-        var db = scope.ServiceProvider.GetService<SmartAssistDbContext>();
+        var db = scope.ServiceProvider.GetService<PrivatePrepDbContext>();
         if (db is null)
         {
             logger.LogInformation(
-                "SmartAssist migrations: SmartAssistDbContext not registered (no Postgres). Skipping.");
+                "PrivatePrep migrations: PrivatePrepDbContext not registered (no Postgres). Skipping.");
             return;
         }
 
@@ -45,7 +45,7 @@ public sealed class PrivatePrepMigrationRunner(
         if (migrations.Count == 0)
         {
             logger.LogWarning(
-                "SmartAssist migrations: no embedded SQL files found in Migrations/. " +
+                "PrivatePrep migrations: no embedded SQL files found in Migrations/. " +
                 "Check that *.sql files are included as EmbeddedResource in the csproj.");
             return;
         }
@@ -60,13 +60,13 @@ public sealed class PrivatePrepMigrationRunner(
             if (pending.Count == 0)
             {
                 logger.LogInformation(
-                    "SmartAssist migrations: schema up to date ({Count} files already applied).",
+                    "PrivatePrep migrations: schema up to date ({Count} files already applied).",
                     migrations.Count);
                 return;
             }
 
             logger.LogInformation(
-                "SmartAssist migrations: applying {Pending} of {Total} migrations.",
+                "PrivatePrep migrations: applying {Pending} of {Total} migrations.",
                 pending.Count,
                 migrations.Count);
 
@@ -76,14 +76,14 @@ public sealed class PrivatePrepMigrationRunner(
             }
 
             logger.LogInformation(
-                "SmartAssist migrations: applied {Pending} migration(s) successfully.",
+                "PrivatePrep migrations: applied {Pending} migration(s) successfully.",
                 pending.Count);
         }
         catch (Exception ex)
         {
             logger.LogCritical(
                 ex,
-                "SmartAssist migrations: failed. Fix Postgres permissions/connection; " +
+                "PrivatePrep migrations: failed. Fix Postgres permissions/connection; " +
                 "SmartAssist tables will be missing/incomplete until migrations succeed.");
             throw;
         }
@@ -119,7 +119,7 @@ public sealed class PrivatePrepMigrationRunner(
     }
 
     private static async Task<HashSet<string>> LoadAppliedSetAsync(
-        SmartAssistDbContext db,
+        PrivatePrepDbContext db,
         CancellationToken cancellationToken)
     {
         var conn = db.Database.GetDbConnection();
@@ -142,7 +142,7 @@ public sealed class PrivatePrepMigrationRunner(
     }
 
     private async Task ApplyAsync(
-        SmartAssistDbContext db,
+        PrivatePrepDbContext db,
         EmbeddedMigration migration,
         CancellationToken cancellationToken)
     {
@@ -150,7 +150,7 @@ public sealed class PrivatePrepMigrationRunner(
         if (string.IsNullOrWhiteSpace(sql))
         {
             logger.LogWarning(
-                "SmartAssist migrations: {Id} is empty; recording as applied to skip in future.",
+                "PrivatePrep migrations: {Id} is empty; recording as applied to skip in future.",
                 migration.Id);
         }
 
@@ -174,7 +174,7 @@ public sealed class PrivatePrepMigrationRunner(
                 .ConfigureAwait(false);
 
             await tx.CommitAsync(cancellationToken).ConfigureAwait(false);
-            logger.LogInformation("SmartAssist migrations: applied {Id}.", migration.Id);
+            logger.LogInformation("PrivatePrep migrations: applied {Id}.", migration.Id);
         }
         catch
         {
@@ -184,7 +184,7 @@ public sealed class PrivatePrepMigrationRunner(
     }
 
     private static async Task ExecuteNonQuerySqlAsync(
-        SmartAssistDbContext db,
+        PrivatePrepDbContext db,
         string sql,
         CancellationToken cancellationToken)
     {

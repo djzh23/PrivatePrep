@@ -8,7 +8,7 @@ using PrivatePrep.Models;
 namespace PrivatePrep.Services;
 
 /// <summary>Learning memory in PostgreSQL (Supabase).</summary>
-public sealed class LearningMemoryPostgresService(SmartAssistDbContext db, ILogger<LearningMemoryPostgresService> logger)
+public sealed class LearningMemoryPostgresService(PrivatePrepDbContext db, ILogger<LearningMemoryPostgresService> logger)
 {
     private static readonly JsonSerializerOptions JsonOpts = LearningMemoryRedisService.JsonOpts;
 

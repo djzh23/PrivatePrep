@@ -4,7 +4,7 @@ using PrivatePrep.Data.Entities;
 
 namespace PrivatePrep.Data;
 
-public sealed class SmartAssistDbContext(DbContextOptions<SmartAssistDbContext> options) : DbContext(options)
+public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> options) : DbContext(options)
 {
     public DbSet<AppUserEntity> AppUsers => Set<AppUserEntity>();
 

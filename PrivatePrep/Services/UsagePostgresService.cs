@@ -5,7 +5,7 @@ using PrivatePrep.Data.Entities;
 namespace PrivatePrep.Services;
 
 /// <summary>Daily usage counts and plan in PostgreSQL (replaces usage:{userId}:{date} and plan:{userId}).</summary>
-public sealed class UsagePostgresService(SmartAssistDbContext db)
+public sealed class UsagePostgresService(PrivatePrepDbContext db)
 {
     private static DateOnly TodayUtc() => DateOnly.FromDateTime(DateTime.UtcNow.Date);
 
