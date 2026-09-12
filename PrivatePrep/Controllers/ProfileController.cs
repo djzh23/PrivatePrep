@@ -468,7 +468,7 @@ public class ProfileController(
         catch (Exception ex)
         {
             logger.LogError(ex, "CV PDF upload failed for user {UserId}", userId);
-            return BadRequest(new { error = $"PDF-Verarbeitung fehlgeschlagen: {ex.Message}" });
+            return BadRequest(new { error = "PDF-Verarbeitung fehlgeschlagen. Bitte versuche es erneut." });
         }
     }
 

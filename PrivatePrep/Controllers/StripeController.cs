@@ -112,7 +112,7 @@ public class StripeController(
         catch (InvalidOperationException ex) when (ex.Message.Contains("does not belong"))
         {
             logger.LogWarning(ex, "Confirm-plan userId mismatch. UserId {UserId} SessionId {SessionId}", userId, sessionId);
-            return StatusCode(403, new { error = "session_mismatch", message = ex.Message });
+            return StatusCode(403, new { error = "session_mismatch", message = "This checkout session does not belong to your account." });
         }
         catch (Exception ex)
         {
@@ -164,16 +164,12 @@ public class StripeController(
         catch (StripeWebhookSignatureException ex)
         {
             logger.LogWarning(ex, "Stripe webhook signature verification failed");
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new { error = "webhook_signature_invalid" });
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Stripe webhook processing failed");
-            return StatusCode(500, new
-            {
-                error = "webhook_processing_failed",
-                message = ex.Message,
-            });
+            return StatusCode(500, new { error = "webhook_processing_failed" });
         }
     }
 
@@ -226,11 +222,7 @@ public class StripeController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Stripe debug endpoint failed for user {UserId}", userId);
-            return StatusCode(500, new
-            {
-                error = "stripe_debug_failed",
-                message = ex.Message,
-            });
+            return StatusCode(500, new { error = "stripe_debug_failed" });
         }
     }
 }

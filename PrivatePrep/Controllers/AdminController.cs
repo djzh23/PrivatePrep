@@ -55,7 +55,7 @@ public class AdminController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Backfill job applications failed for {UserId}", userId);
-            return StatusCode(500, new { error = "backfill_failed", message = ex.Message });
+            return StatusCode(500, new { error = "backfill_failed" });
         }
     }
 
@@ -104,7 +104,7 @@ public class AdminController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Backfill career profile failed for {UserId}", userId);
-            return StatusCode(500, new { error = "backfill_failed", message = ex.Message });
+            return StatusCode(500, new { error = "backfill_failed" });
         }
     }
 
@@ -145,7 +145,7 @@ public class AdminController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Backfill chat sessions failed for {UserId}", userId);
-            return StatusCode(500, new { error = "backfill_failed", message = ex.Message });
+            return StatusCode(500, new { error = "backfill_failed" });
         }
     }
 
@@ -187,7 +187,7 @@ public class AdminController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Backfill learning memory failed for {UserId}", userId);
-            return StatusCode(500, new { error = "backfill_failed", message = ex.Message });
+            return StatusCode(500, new { error = "backfill_failed" });
         }
     }
 
@@ -320,7 +320,8 @@ public class AdminController(
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new { error = "invalid_args", message = ex.Message });
+            logger.LogWarning(ex, "Admin user usage invalid args for {UserId}", userId);
+            return BadRequest(new { error = "invalid_args", message = "Invalid date range format. Use yyyy-MM-dd." });
         }
         catch (Exception ex)
         {
@@ -355,7 +356,8 @@ public class AdminController(
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new { error = "invalid_args", message = ex.Message });
+            logger.LogWarning(ex, "Admin top users invalid args");
+            return BadRequest(new { error = "invalid_args", message = "Invalid date format. Use yyyy-MM-dd." });
         }
         catch (Exception ex)
         {

@@ -351,7 +351,7 @@ public class AgentController(
             logger.LogError(ex,
                 "Streaming error. UserId {UserId} SessionId {SessionId} ToolType {ToolType}",
                 userId, request.SessionId, request.ToolType ?? "general");
-            var err = JsonSerializer.Serialize(new { type = "error", message = ex.Message });
+            var err = JsonSerializer.Serialize(new { type = "error", message = "An unexpected error occurred. Please try again." });
             await Response.WriteAsync($"data: {err}\n\n");
             await Response.Body.FlushAsync();
         }
@@ -408,7 +408,6 @@ public class AgentController(
             {
                 error = "usage_read_failed",
                 message = "Failed to read usage and plan from storage. Please retry.",
-                details = ex.Message,
             });
         }
     }
