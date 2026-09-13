@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="PrivatePrep.Client/PrivatePrep.Client.csproj" />
-  <Project Path="PrivatePrep.Tests/PrivatePrep.Tests.csproj" />
-  <Project Path="PrivatePrep/PrivatePrep.csproj" />
-</Solution>

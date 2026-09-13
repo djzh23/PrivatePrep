@@ -4,8 +4,6 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivatePrep", "PrivatePrep\PrivatePrep.csproj", "{890A3373-930B-A181-6F2C-858E561E079A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivatePrep.Client", "PrivatePrep.Client\PrivatePrep.Client.csproj", "{9C603DDB-08BD-6983-D458-1D53AF4A6E77}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivatePrep.Tests", "PrivatePrep.Tests\PrivatePrep.Tests.csproj", "{634C9C1C-C4E6-7B9B-697F-047A8A46ACF3}"
 EndProject
 Global
@@ -18,10 +16,6 @@ Global
 		{890A3373-930B-A181-6F2C-858E561E079A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{890A3373-930B-A181-6F2C-858E561E079A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{890A3373-930B-A181-6F2C-858E561E079A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C603DDB-08BD-6983-D458-1D53AF4A6E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C603DDB-08BD-6983-D458-1D53AF4A6E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C603DDB-08BD-6983-D458-1D53AF4A6E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C603DDB-08BD-6983-D458-1D53AF4A6E77}.Release|Any CPU.Build.0 = Release|Any CPU
 		{634C9C1C-C4E6-7B9B-697F-047A8A46ACF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{634C9C1C-C4E6-7B9B-697F-047A8A46ACF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{634C9C1C-C4E6-7B9B-697F-047A8A46ACF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
