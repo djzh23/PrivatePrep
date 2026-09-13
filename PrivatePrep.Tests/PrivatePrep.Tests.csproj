@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PrivatePrep\PrivatePrep.csproj" />
-    <ProjectReference Include="..\PrivatePrep.Client\PrivatePrep.Client.csproj" />
   </ItemGroup>
 
 </Project>
