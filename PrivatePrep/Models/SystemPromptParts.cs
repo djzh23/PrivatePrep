@@ -24,6 +24,26 @@ public sealed record SystemPromptParts(string CachedPrefix, string DynamicToolSu
             : $"{CachedPrefix}{tail}\n\n{LanguageRule}";
     }
 
+    /// <summary>
+    /// Groq-optimised combined prompt: language rule goes first so it is not ignored
+    /// by open-weight models that under-weight instructions at the end of a long system prompt.
+    /// </summary>
+    public string ToGroqCombinedPrompt()
+    {
+        if (string.IsNullOrWhiteSpace(CachedPrefix))
+            throw new InvalidOperationException(
+                "System prompt cached prefix is empty; refuse to call the model without static instructions.");
+
+        if (string.IsNullOrWhiteSpace(LanguageRule))
+            throw new InvalidOperationException(
+                "System prompt language rule is empty; conversation language must be resolved before building the system prompt.");
+
+        var tail = DynamicToolSuffix ?? string.Empty;
+        return string.IsNullOrEmpty(tail)
+            ? $"{LanguageRule}\n\n{CachedPrefix}"
+            : $"{LanguageRule}\n\n{CachedPrefix}{tail}";
+    }
+
     /// <summary>Second system block sent to Anthropic (not prompt-cached).</summary>
     public string UncachedSystemBlock =>
         string.IsNullOrEmpty(DynamicToolSuffix ?? string.Empty)

@@ -128,7 +128,7 @@ public class AgentService(
             && AnthropicMessagesForGroqMapper.TryMap(apiMessages, out var groqMessages))
         {
             var allowAnthropicFallback = groqOptions.Value.AllowAnthropicFallback;
-            var systemCombined = promptWithSummary.ToCombinedPrompt();
+            var systemCombined = promptWithSummary.ToGroqCombinedPrompt();
             var sampling = GroqInferenceParameters.SamplingFor(toolType);
             var groqResult = await groqChat
                 .CompleteAsync(systemCombined, groqMessages, maxTokens, sampling)

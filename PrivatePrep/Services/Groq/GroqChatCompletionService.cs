@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using PrivatePrep.Models;
 
@@ -85,6 +86,10 @@ public sealed class GroqChatCompletionService
         body["frequency_penalty"] = sampling?.FrequencyPenalty ?? 0.3;
         body["presence_penalty"] = sampling?.PresencePenalty ?? 0.1;
 
+        // Disable chain-of-thought for Qwen3 models to avoid <think> tokens and English-language drift
+        if (model.Contains("qwen", StringComparison.OrdinalIgnoreCase))
+            body["reasoning_effort"] = "none";
+
         try
         {
             using var req = new HttpRequestMessage(HttpMethod.Post, "chat/completions")
@@ -109,7 +114,8 @@ public sealed class GroqChatCompletionService
 
             var doc = JsonDocument.Parse(raw);
             var root = doc.RootElement;
-            var content = root.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString() ?? "";
+            var content = StripThinkingTags(
+                root.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString() ?? "");
 
             var inTok = 0;
             var outTok = 0;
@@ -140,4 +146,10 @@ public sealed class GroqChatCompletionService
             };
         }
     }
+
+    private static readonly Regex ThinkTagRegex =
+        new(@"<think>[\s\S]*?</think>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    private static string StripThinkingTags(string content) =>
+        ThinkTagRegex.Replace(content, string.Empty).Trim();
 }
