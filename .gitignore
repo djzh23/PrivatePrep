@@ -31,3 +31,4 @@ Thumbs.db
 # Dev tooling (not for remote)
 .claude/
 **/CLAUDE.md
+**/docs/
