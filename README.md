@@ -1,5 +1,7 @@
 # PrivatePrep API
 
+[![Build, Test & Deploy](https://github.com/djzh23/PrivatePrep/actions/workflows/deploy.yml/badge.svg)](https://github.com/djzh23/PrivatePrep/actions/workflows/deploy.yml)
+
 ASP.NET Core 9 backend for [PrivatePrep](https://www.betweenatna.de), an AI-powered career workspace that helps job seekers prepare for interviews, analyse job listings, manage applications and build CVs.
 
 **Live API:** [smartassist-api.onrender.com](https://smartassist-api.onrender.com)  
