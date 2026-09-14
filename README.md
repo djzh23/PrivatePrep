@@ -1,113 +1,73 @@
-# PrivatePrep
+# PrivatePrep API
 
-ASP.NET Core 9 backend for **PrivatePrep** ([betweenatna.de](https://www.betweenatna.de)), an AI-powered career workspace that helps job seekers prepare interviews, analyse job listings, manage applications and build CVs.
+ASP.NET Core 9 backend for [PrivatePrep](https://www.betweenatna.de), an AI-powered career workspace that helps job seekers prepare for interviews, analyse job listings, manage applications and build CVs.
 
-**Live API:** [smartassist-api.onrender.com](https://smartassist-api.onrender.com)
+**Live API:** [smartassist-api.onrender.com](https://smartassist-api.onrender.com)  
 **Frontend:** [github.com/djzh23/SmartAssist-react](https://github.com/djzh23/SmartAssist-react)
 
-## What it does
+## Features
 
-The API is the sole backend for a production SaaS. It handles:
-
-- **AI agent pipeline** with five specialised modes (career coach, job analyser, interview prep, language learning, programming). Requests are routed by tool type, system prompts are built dynamically with a cached/uncached split for Anthropic-style prompt caching, and responses are streamed over SSE.
-- **Retrieval-augmented memory** using pgvector and ONNX sentence embeddings. Insights extracted from conversations are embedded and retrieved at inference time to give the agent long-term context about the user's career.
-- **Full career workspace** covering profile onboarding, CV parsing (PdfPig), job applications with pipeline status tracking, chat sessions with transcripts, saved notes and a learning insights feed.
+- **AI agent pipeline** with five specialised modes routed by tool type. System prompts are assembled dynamically with a cached/uncached split to reduce token cost, and responses are streamed token-by-token over SSE.
+- **Retrieval-augmented memory** using pgvector and local ONNX sentence embeddings. Insights extracted from conversations are embedded and retrieved at inference time for persistent career context.
+- **Career workspace** covering profile onboarding, CV upload and AI parsing (PdfPig), job applications with pipeline status tracking, chat sessions with transcripts, notes and a learning insights feed.
 - **CV Studio** with resume CRUD, snapshot versioning, category management, and export to PDF (QuestPDF) and DOCX (OpenXML).
-- **Auth and billing** via Clerk JWT verification and Stripe subscriptions with checkout, portal and webhook handling.
-- **Resilient storage layer** with a Postgres/Redis pair per feature domain. If Supabase is unreachable, features degrade to Redis and signal this via response headers rather than returning errors.
+- **Auth and billing** via Clerk JWT verification (JWKS) and Stripe subscriptions with checkout, portal and webhook handling.
+- **Dual-storage architecture** per feature domain: a PostgreSQL table paired with a Redis key. The active backend is reported transparently in response headers.
 
-## Tech stack
+## Tech Stack
 
 | Area | Technology |
 |---|---|
 | Framework | ASP.NET Core 9, C# 13 |
-| Primary LLM | Groq (llama-3.3-70b-versatile) |
-| Fallback LLM | Anthropic Claude Sonnet and Haiku |
+| LLM | Groq API (configurable model) |
 | Database | Supabase PostgreSQL with pgvector |
-| Cache | Upstash Redis REST |
-| Auth | Clerk JWT (JWKS verification) |
+| Cache | Upstash Redis |
+| Embeddings | ONNX runtime (local sentence-transformer) |
+| Auth | Clerk JWT |
 | Payments | Stripe |
 | TTS | Azure Cognitive Speech |
-| CV export | QuestPDF, OpenXML |
-| Embeddings | ONNX runtime with a local sentence-transformer model |
-| Tests | xUnit (196 tests) |
-| CI/CD | GitHub Actions to Render via deploy hook, Dockerised |
+| CV export | QuestPDF, OpenXML SDK |
+| Tests | xUnit |
+| CI/CD | GitHub Actions + Render (Docker) |
 
-## Architecture
+## Project Structure
 
 ```
 PrivatePrep/
-  Controllers/        one controller per feature domain
-  Services/           business logic, Postgres/Redis pairs, Groq, Clerk, Stripe, Azure
-  Services/Tools/     pluggable agent tools (JobAnalyzer, LanguageLearning, ...)
-  Services/VectorStore/  pgvector ingest and retrieval for career memory
-  Data/               PrivatePrepDbContext, embedded SQL migrations
-  Middleware/         JWT resolution, per-request user context
-  vendor/cv-studio/   resume domain with QuestPDF and EF Core schema
+  Controllers/          15 focused controllers, one per feature domain
+  Services/
+    Agent/              LLM pipeline, tool routing, prompt assembly
+    Chat/               Sessions, transcripts, conversation state
+    CvStudio/           Resume logic, PDF/DOCX rendering
+    Payments/           Stripe checkout, portal, webhook handling
+    Profile/            Career profile, CV parsing, onboarding
+    Tracking/           Daily usage limits, token cost tracking
+    VectorStore/        pgvector ingestion and RAG retrieval
+    ...                 Auth, Background, Learning, Notes, Speech, Embeddings
+  Data/                 EF Core context, migrations, embedded SQL scripts
+  Middleware/           JWT resolution, per-request user context
 ```
 
-The main `AgentService` builds a two-part system prompt (a stable cached prefix and a dynamic uncached block) to minimise token cost on repeated requests. Tool routing, LLM selection and context assembly all happen inside the service before any LLM call is made.
+## AI Modes
 
-Startup runs EF Core migrations and embedded SQL scripts synchronously so the database schema is always in sync before the first request is served.
-
-## AI modes
-
-| Tool type | Behaviour |
+| Tool | Behaviour |
 |---|---|
-| `general` | Career coaching and open advice |
-| `jobanalyzer` | Keyword extraction, gap analysis and CV tips from a job ad |
-| `interview` / `interviewprep` | STAR-style interview practice |
-| `language` | Target-language conversation with translation and grammar tips |
-| `programming` | Code help with Markdown output |
+| `general` | Open career coaching |
+| `jobanalyzer` | Gap analysis and keyword extraction from a job listing |
+| `interview` | STAR-style interview practice |
+| `language` | Conversation practice with grammar and translation feedback |
+| `programming` | Code help with syntax-highlighted Markdown responses |
 
-## API surface (selected)
+## Subscription Plans
 
-| Group | Endpoints |
-|---|---|
-| Agent | POST `/api/agent/stream` (SSE), `/ask`, `/demo`, `/context`, `/speak`, `/usage` |
-| Profile | GET/PUT `/api/profile`, onboarding flow, CV upload and parse, target jobs |
-| Sessions | CRUD `/api/sessions`, transcript read/write |
-| Notes | CRUD `/api/chat-notes` |
-| Applications | CRUD `/api/applications`, status, cover letter, interview notes |
-| CV Studio | Resumes, versions, categories, PDF/DOCX export |
-| Payments | `/api/stripe/checkout`, `/portal`, `/webhook`, `/confirm-plan` |
-| Admin | Usage dashboards, token stats, Redis to Postgres backfill |
-
-Full endpoint list is in the controller source files.
-
-## Subscription plans
-
-| Plan | Messages per day |
+| Plan | Messages / day |
 |---|---|
 | Anonymous | 2 |
 | Free | 20 |
 | Premium | 200 |
 | Pro | Unlimited |
 
-## Frontend
-
-The React client lives at [github.com/djzh23/SmartAssist-react](https://github.com/djzh23/SmartAssist-react) and is deployed on Vercel at [betweenatna.de](https://www.betweenatna.de).
-
-| Area | Technology |
-|---|---|
-| Framework | React 18 + TypeScript + Vite |
-| Styling | Tailwind CSS v3 |
-| Auth | Clerk (publishable key via `VITE_CLERK_PUBLISHABLE_KEY`) |
-| Icons | Lucide React |
-| Routing | React Router v6 |
-| Deployment | Vercel |
-
-The client calls `/api/*` routes exclusively. In development Vite proxies those requests to the local backend (`VITE_PROXY_TARGET=http://localhost:5108`). In production `VITE_API_BASE_URL` points to the Render deployment.
-
-```bash
-git clone https://github.com/djzh23/SmartAssist-react.git
-cd SmartAssist-react
-cp .env.example .env.local   # fill in VITE_CLERK_PUBLISHABLE_KEY
-npm install
-npm run dev                   # proxies /api/* to http://localhost:5108
-```
-
-## Local development
+## Local Development
 
 Requires .NET 9 SDK.
 
@@ -117,21 +77,17 @@ cd PrivatePrep
 dotnet run --project PrivatePrep
 ```
 
-The API binds to `http://localhost:5108`. Point the React dev proxy (`VITE_PROXY_TARGET`) at that URL.
-
-Add secrets via `dotnet user-secrets` or `appsettings.Development.json`:
+Configure secrets via `dotnet user-secrets` or `appsettings.Development.json`:
 
 ```json
 {
-  "Groq": { "ApiKey": "gsk_..." },
+  "Groq":              { "ApiKey": "..." },
   "ConnectionStrings": { "Supabase": "Host=...;Username=...;Password=..." },
-  "Upstash": { "RestUrl": "https://...", "RestToken": "..." },
-  "Clerk": { "Issuer": "https://your-instance.clerk.accounts.dev" },
-  "Stripe": { "SecretKey": "sk_test_...", "WebhookSecret": "whsec_..." }
+  "Upstash":           { "RestUrl": "...", "RestToken": "..." },
+  "Clerk":             { "Issuer": "https://your-instance.clerk.accounts.dev" },
+  "Stripe":            { "SecretKey": "...", "WebhookSecret": "..." }
 }
 ```
-
-Optional: `AZURE_SPEECH_KEY`, `GROQ_API_KEY`, `ADMIN_USER_IDS`, `CORS_ALLOWED_ORIGINS`.
 
 ```bash
 dotnet test
