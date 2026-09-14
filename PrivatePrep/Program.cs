@@ -152,13 +152,13 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var databaseFeaturesPreview = builder.Configuration.GetSection(DatabaseFeatureOptions.SectionName)
     .Get<DatabaseFeatureOptions>() ?? new DatabaseFeatureOptions();
 var registerPostgresHealth = registerPostgres && databaseFeaturesPreview.PostgresEnabled;
-builder.Services.AddSmartAssistHealthChecks(registerPostgresCheck: registerPostgresHealth);
-builder.Services.AddSmartAssistRateLimiter();
+builder.Services.AddPrivatePrepHealthChecks(registerPostgresCheck: registerPostgresHealth);
+builder.Services.AddPrivatePrepRateLimiter();
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<PrivatePrep.Services.Tools.WeatherTool>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(15);
-    client.DefaultRequestHeaders.UserAgent.ParseAdd("SmartAssistApi/1.0 (weather assistant)");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("PrivatePrepApi/1.0 (weather assistant)");
 });
 builder.Services.Configure<GroqOptions>(builder.Configuration.GetSection(GroqOptions.SectionName));
 builder.Services.AddHttpClient<GroqChatCompletionService>(client =>
@@ -232,8 +232,8 @@ builder.Services.AddScoped<StripeService>();
 builder.Services.AddHostedService<ConversationCleanupService>();
 builder.Services.AddCors(options =>
 {
-    // Primary production UI: React (SmartAssist-react). Blazor WASM client is optional / legacy in repo.
-    options.AddPolicy("SmartAssistWeb", policy =>
+    // Primary production UI: React frontend. Blazor WASM client is optional / legacy in repo.
+    options.AddPolicy("PrivatePrepWeb", policy =>
     {
         policy.WithOrigins(allowedOrigins)
             .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
@@ -281,7 +281,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// CV.Studio tables (resumes, snapshots, …) live in the same Postgres as SmartAssist. Apply EF migrations
+// CV.Studio tables (resumes, snapshots, …) live in the same Postgres instance. Apply EF migrations
 // on every startup so Render/production never serves /api/cv-studio with a missing "resumes" relation.
 if (registerPostgres)
 {
@@ -440,7 +440,7 @@ app.Use(async (context, next) =>
     }
 });
 
-app.UseCors("SmartAssistWeb");
+app.UseCors("PrivatePrepWeb");
 
 app.UseRequestId();
 app.UseSerilogRequestLogging();
@@ -463,7 +463,7 @@ app.UseWhen(
 
 app.MapHealthChecks("/api/health");
 // Endpoint routing: attach named CORS policy to API controllers (fixes missing ACAO on some hosts).
-app.MapControllers().RequireCors("SmartAssistWeb");
+app.MapControllers().RequireCors("PrivatePrepWeb");
 
 try
 {

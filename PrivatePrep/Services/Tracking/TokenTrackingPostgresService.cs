@@ -220,7 +220,7 @@ public sealed class TokenTrackingPostgresService(
             ByTool = byTool,
             Last30Days = last30,
             LlmCostPolicyNote =
-                "Groq: in SmartAssist mit 0 USD bewertet (kostenloses Kontingent). Anthropic (Haiku/Sonnet) nach konfigurierter Preisliste. " +
+                "Groq: mit 0 USD bewertet (kostenloses Kontingent). Anthropic (Haiku/Sonnet) nach konfigurierter Preisliste. " +
                 "Die Tabelle unten listet alle konfigurierten LLM-Keys; 0 = heute keine Nutzung.",
         };
     }

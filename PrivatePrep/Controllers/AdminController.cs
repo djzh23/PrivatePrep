@@ -293,7 +293,7 @@ public sealed class AdminController(
                     ActiveUsers = 0,
                 }).ToList(),
                 LlmCostPolicyNote =
-                    "Groq: in SmartAssist mit 0 USD bewertet (kostenloses Kontingent). Anthropic (Haiku/Sonnet) nach konfigurierter Preisliste.",
+                    "Groq: mit 0 USD bewertet (kostenloses Kontingent). Anthropic (Haiku/Sonnet) nach konfigurierter Preisliste.",
             };
             return Ok(data);
         }

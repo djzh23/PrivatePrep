@@ -8,7 +8,7 @@ public sealed class Resume
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Owner identity (e.g. Clerk <c>sub</c>) when hosted inside SmartAssist; standalone API uses a fixed tenant id from configuration.
+    /// Owner identity (e.g. Clerk <c>sub</c>) when hosted inside PrivatePrep; standalone API uses a fixed tenant id from configuration.
     /// </summary>
     public string ClerkUserId { get; set; } = string.Empty;
 

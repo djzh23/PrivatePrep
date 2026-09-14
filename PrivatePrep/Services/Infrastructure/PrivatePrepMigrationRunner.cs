@@ -9,7 +9,7 @@ using PrivatePrep.Data;
 namespace PrivatePrep.Services.Infrastructure;
 
 /// <summary>
-/// Applies SmartAssist SQL migrations (Migrations/NNN_*.sql) idempotently at startup.
+/// Applies SQL migrations (Migrations/NNN_*.sql) idempotently at startup.
 /// Tracks applied files in a metadata table so subsequent deploys are no-ops.
 ///
 /// SQL files are embedded resources (see PrivatePrep.csproj &lt;EmbeddedResource&gt;).
@@ -84,7 +84,7 @@ public sealed class PrivatePrepMigrationRunner(
             logger.LogCritical(
                 ex,
                 "PrivatePrep migrations: failed. Fix Postgres permissions/connection; " +
-                "SmartAssist tables will be missing/incomplete until migrations succeed.");
+                "DB tables will be missing/incomplete until migrations succeed.");
             throw;
         }
     }

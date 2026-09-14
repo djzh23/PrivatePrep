@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
-using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Tracking;
 
 namespace PrivatePrep.Middleware;
 

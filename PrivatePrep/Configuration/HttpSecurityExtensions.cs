@@ -9,7 +9,7 @@ namespace PrivatePrep.Configuration;
 
 public static class HttpSecurityExtensions
 {
-    public static IServiceCollection AddSmartAssistRateLimiter(this IServiceCollection services)
+    public static IServiceCollection AddPrivatePrepRateLimiter(this IServiceCollection services)
     {
         services.AddRateLimiter(options =>
         {

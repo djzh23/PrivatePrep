@@ -10,7 +10,7 @@ namespace PrivatePrep.Configuration;
 public static class ObservabilityExtensions
 {
     /// <param name="registerPostgresCheck">When true, adds <see cref="PrivatePrepDbContext"/> connectivity check (requires DbContext registration and <c>DatabaseFeatures:PostgresEnabled</c>).</param>
-    public static IServiceCollection AddSmartAssistHealthChecks(this IServiceCollection services, bool registerPostgresCheck = false)
+    public static IServiceCollection AddPrivatePrepHealthChecks(this IServiceCollection services, bool registerPostgresCheck = false)
     {
         var checks = services.AddHealthChecks()
             .AddCheck<UpstashRedisHealthCheck>("upstash");

@@ -27,3 +27,7 @@ _build_verify_tests/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Dev tooling (not for remote)
+.claude/
+**/CLAUDE.md

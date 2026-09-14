@@ -8,7 +8,7 @@ namespace PrivatePrep.Health;
 public sealed class UpstashRedisHealthCheck(IServiceProvider services, ILogger<UpstashRedisHealthCheck> logger)
     : IHealthCheck
 {
-    private const string ProbeKey = "__smartassist_api_health__";
+    private const string ProbeKey = "__privateprep_api_health__";
 
     public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,

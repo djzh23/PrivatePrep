@@ -62,7 +62,7 @@ public class AzureSpeechService(HttpClient http, IConfiguration config) : ISpeec
         using var req = new HttpRequestMessage(HttpMethod.Post, endpoint);
         req.Headers.Add("Ocp-Apim-Subscription-Key", apiKey);
         req.Headers.Add("X-Microsoft-OutputFormat", "audio-24khz-48kbitrate-mono-mp3");
-        req.Headers.UserAgent.ParseAdd("SmartAssist/1.0");
+        req.Headers.UserAgent.ParseAdd("PrivatePrep/1.0");
         req.Content = new StringContent(ssml, Encoding.UTF8, "application/ssml+xml");
 
         using var response = await http.SendAsync(
