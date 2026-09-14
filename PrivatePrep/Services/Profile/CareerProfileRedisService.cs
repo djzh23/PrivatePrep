@@ -1,11 +1,11 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Profile;
 
 /// <summary>
 /// Redis (Upstash REST) storage for career profile keys and prompt-cache TTL keys.

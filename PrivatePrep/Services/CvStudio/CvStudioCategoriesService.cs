@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.CvStudio;
 
 public sealed class CvStudioCategoriesService(PrivatePrepDbContext db)
 {

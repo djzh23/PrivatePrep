@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.CvStudio;
 
 /// <summary>CV.Studio PDF export limits by subscription plan (aligned with Stripe plan slugs).</summary>
 public static class CvStudioPdfExportRules

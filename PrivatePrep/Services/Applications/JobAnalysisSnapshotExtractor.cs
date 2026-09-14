@@ -1,7 +1,7 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 /// <summary>
 /// Builds a compact text snapshot from a full JobAnalyzer markdown reply so follow-up turns can reference

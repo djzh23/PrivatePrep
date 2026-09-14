@@ -1,0 +1,12 @@
+global using PrivatePrep.Services.Agent;
+global using PrivatePrep.Services.Applications;
+global using PrivatePrep.Services.Auth;
+global using PrivatePrep.Services.Chat;
+global using PrivatePrep.Services.CvStudio;
+global using PrivatePrep.Services.Infrastructure;
+global using PrivatePrep.Services.Learning;
+global using PrivatePrep.Services.Notes;
+global using PrivatePrep.Services.Payments;
+global using PrivatePrep.Services.Profile;
+global using PrivatePrep.Services.Speech;
+global using PrivatePrep.Services.Tracking;

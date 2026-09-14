@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Infrastructure;
 
 namespace PrivatePrep.Health;
 

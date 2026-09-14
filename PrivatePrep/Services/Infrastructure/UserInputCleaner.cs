@@ -1,6 +1,6 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Infrastructure;
 
 /// <summary>
 /// Normalizes inbound user text before LLM calls. Does not run on server-side session context

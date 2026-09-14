@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PrivatePrep.Data;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Infrastructure;
 
 /// <summary>
 /// Applies SmartAssist SQL migrations (Migrations/NNN_*.sql) idempotently at startup.

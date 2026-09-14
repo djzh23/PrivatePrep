@@ -1,6 +1,6 @@
-using PrivatePrep.Models;
+﻿using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Learning;
 
 /// <summary>Shared in-memory transforms for learning insights (Redis and Postgres backends).</summary>
 internal static class LearningMemoryInsightMutations

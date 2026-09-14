@@ -1,7 +1,7 @@
-using Anthropic.SDK.Messaging;
+﻿using Anthropic.SDK.Messaging;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 public class ConversationService
 {

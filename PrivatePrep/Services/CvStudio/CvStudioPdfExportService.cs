@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
+using PrivatePrep.Services.Tracking;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.CvStudio;
 
 public sealed class CvStudioPdfExportService(PrivatePrepDbContext db, UsageService usage)
 {

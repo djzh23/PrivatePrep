@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Tracking;
 
 public sealed class UsageTrackingService(PrivatePrepDbContext db) : IUsageTrackingService
 {

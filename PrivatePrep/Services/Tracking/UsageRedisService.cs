@@ -1,7 +1,7 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Tracking;
 
 /// <summary>Usage limits and Stripe-related keys in Redis (Upstash).</summary>
 public class UsageRedisService(IConfiguration config, HttpClient http)

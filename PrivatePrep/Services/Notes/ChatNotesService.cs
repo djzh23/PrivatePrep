@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using PrivatePrep.Data;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Notes;
 
 /// <summary>Where chat notes are actually stored vs what was configured.</summary>
 public readonly record struct ChatNotesBackendInfo(

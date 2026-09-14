@@ -1,11 +1,11 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 /// <summary>Persists chat session index + transcripts in PostgreSQL (Supabase).</summary>
 public sealed class ChatSessionPostgresService(PrivatePrepDbContext db, ILogger<ChatSessionPostgresService> logger)

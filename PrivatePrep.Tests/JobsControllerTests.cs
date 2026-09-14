@@ -5,6 +5,8 @@ using Moq;
 using PrivatePrep.Controllers;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Applications;
 
 namespace PrivatePrep.Tests;
 

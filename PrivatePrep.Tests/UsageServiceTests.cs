@@ -7,6 +7,7 @@ using Moq;
 using Moq.Protected;
 using PrivatePrep.Data;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Tracking;
 
 namespace PrivatePrep.Tests;
 

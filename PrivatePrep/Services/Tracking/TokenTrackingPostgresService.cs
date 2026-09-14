@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -6,7 +6,7 @@ using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Tracking;
 
 /// <summary>Token usage metrics in PostgreSQL (Supabase).</summary>
 public sealed class TokenTrackingPostgresService(

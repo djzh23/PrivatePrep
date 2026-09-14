@@ -1,9 +1,10 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Agent;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Tracking;
 
 /// <summary>Shared pricing, sanitization, and display helpers for Redis and Postgres token tracking.</summary>
 public static class TokenTrackingCostHelper

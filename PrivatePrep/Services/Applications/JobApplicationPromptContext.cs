@@ -1,6 +1,6 @@
-using PrivatePrep.Models;
+﻿using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 /// <summary>Formats the compact German job-application block for the LLM system prompt.</summary>
 public static class JobApplicationPromptContext

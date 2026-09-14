@@ -1,6 +1,6 @@
-using PrivatePrep.Models;
+﻿using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Agent;
 
 /// <summary>Deckelt strukturierte Career-Payloads für TPM und Missbrauchsschutz.</summary>
 public static class AgentPayloadLimits

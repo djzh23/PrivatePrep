@@ -5,6 +5,7 @@ using Pgvector;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Embeddings;
 
 namespace PrivatePrep.Services.VectorStore;

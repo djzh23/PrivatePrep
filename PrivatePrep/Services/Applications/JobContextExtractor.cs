@@ -1,7 +1,7 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 public class JobContextExtractor(IHttpClientFactory httpClientFactory, ILogger<JobContextExtractor> logger)
     : IJobContextExtractor

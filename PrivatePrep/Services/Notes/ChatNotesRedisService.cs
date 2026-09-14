@@ -1,9 +1,10 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Infrastructure;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Notes;
 
 /// <summary>Chat notes in Redis (Upstash via <see cref="IRedisStringStore"/>).</summary>
 public class ChatNotesRedisService(IRedisStringStore redis, ILogger<ChatNotesRedisService> logger)

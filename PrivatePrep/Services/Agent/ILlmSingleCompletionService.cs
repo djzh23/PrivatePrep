@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Agent;
 
 /// <summary>
 /// Ein einzelner, nicht-streamender LLM-Aufruf (z. B. strukturierte CV-Extraktion).

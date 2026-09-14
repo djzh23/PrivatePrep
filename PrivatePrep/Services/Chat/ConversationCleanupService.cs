@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Chat;
 
 /// <summary>
 /// Background service that evicts conversation history and context

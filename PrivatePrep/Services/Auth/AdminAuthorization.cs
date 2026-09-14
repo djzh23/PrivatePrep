@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Auth;
 
 /// <summary>
 /// Admin allow-list: Clerk JWT <c>sub</c> must match an entry from configuration or <c>ADMIN_USER_IDS</c>.

@@ -1,7 +1,8 @@
-using System.Text;
+﻿using System.Text;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Agent;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 /// <summary>Baut die effektive Nutzerrolle aus kurzer Frage + strukturiertem Setup (Backend autoritativ).</summary>
 public static class CareerTurnAssembler

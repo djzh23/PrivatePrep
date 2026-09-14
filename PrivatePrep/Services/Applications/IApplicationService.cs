@@ -1,6 +1,6 @@
-using PrivatePrep.Models;
+﻿using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 /// <summary>Where job applications are stored vs what was configured.</summary>
 public readonly record struct ApplicationsBackendInfo(

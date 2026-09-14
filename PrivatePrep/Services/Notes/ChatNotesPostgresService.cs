@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +6,7 @@ using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Notes;
 
 /// <summary>Chat notes in Supabase/PostgreSQL via EF Core.</summary>
 public sealed class ChatNotesPostgresService(PrivatePrepDbContext db, ILogger<ChatNotesPostgresService> logger)

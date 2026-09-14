@@ -1,9 +1,13 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Applications;
+using PrivatePrep.Services.Chat;
+using PrivatePrep.Services.Learning;
+using PrivatePrep.Services.Profile;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Agent;
 
 /// <summary>
 /// Baut den gecachten System-Prefix: Kernpersönlichkeit, optional Profil, bestehende Tool-Regeln aus

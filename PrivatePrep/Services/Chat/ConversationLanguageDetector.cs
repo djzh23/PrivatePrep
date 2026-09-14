@@ -1,6 +1,6 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 public static class ConversationLanguageDetector
 {

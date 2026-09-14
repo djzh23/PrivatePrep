@@ -1,10 +1,10 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 /// <summary>
 /// Extrahiert lesbaren Stellentext aus Roh-HTML (z. B. nach URL-Fetch).

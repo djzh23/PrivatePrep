@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Tracking;
 
 public static class TokenCostCalculator
 {

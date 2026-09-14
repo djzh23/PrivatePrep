@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Agent;
 
 /// <summary>
 /// Default routing: Haiku 4.5 for all tools (cost). Sonnet is opt-in per tool via

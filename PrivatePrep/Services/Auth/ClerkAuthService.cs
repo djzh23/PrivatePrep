@@ -1,10 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Auth;
 
 /// <summary>
 /// Extracts and verifies the Clerk userId from the JWT Bearer token using JWKS.

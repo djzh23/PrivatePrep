@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Auth;
 
 /// <summary>
 /// Scoped request context populated by <see cref="UserResolutionMiddleware"/>.

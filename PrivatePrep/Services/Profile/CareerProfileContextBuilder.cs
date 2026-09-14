@@ -1,6 +1,6 @@
-using PrivatePrep.Models;
+﻿using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Profile;
 
 /// <summary>Builds the compact German profile block for the LLM system prompt.</summary>
 public static class CareerProfileContextBuilder

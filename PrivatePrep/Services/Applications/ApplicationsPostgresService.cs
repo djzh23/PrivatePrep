@@ -1,10 +1,10 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 /// <summary>Job applications in Supabase/PostgreSQL via EF Core.</summary>
 public sealed class ApplicationsPostgresService(PrivatePrepDbContext db, ILogger<ApplicationsPostgresService> logger)

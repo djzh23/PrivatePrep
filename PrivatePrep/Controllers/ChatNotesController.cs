@@ -2,7 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
-using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Notes;
 
 namespace PrivatePrep.Controllers;
 

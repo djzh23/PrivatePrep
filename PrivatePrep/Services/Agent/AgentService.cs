@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Anthropic.SDK;
@@ -6,13 +6,18 @@ using Anthropic.SDK.Common;
 using Anthropic.SDK.Messaging;
 using Microsoft.Extensions.Options;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Applications;
 using PrivatePrep.Services.Background;
+using PrivatePrep.Services.Chat;
 using PrivatePrep.Services.Groq;
+using PrivatePrep.Services.Infrastructure;
+using PrivatePrep.Services.Learning;
 using PrivatePrep.Services.Tools;
+using PrivatePrep.Services.Tracking;
 using PrivatePrep.Services.VectorStore;
 using Tool = Anthropic.SDK.Common.Tool;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Agent;
 
 public class AgentService(
     IConfiguration config,

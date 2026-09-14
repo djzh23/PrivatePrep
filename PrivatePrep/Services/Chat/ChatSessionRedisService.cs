@@ -1,9 +1,10 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Infrastructure;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 /// <summary>Chat session index + transcripts in Redis (Upstash).</summary>
 public class ChatSessionRedisService(IRedisStringStore redis, ILogger<ChatSessionRedisService> logger)

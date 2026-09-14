@@ -1,11 +1,11 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Tracking;
 
 /// <summary>Token usage metrics in Redis (Upstash REST pipeline).</summary>
 public class TokenTrackingRedisService(IConfiguration config, HttpClient http, ILogger<TokenTrackingRedisService> logger)

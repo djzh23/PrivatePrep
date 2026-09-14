@@ -1,7 +1,8 @@
-using Stripe;
-using Stripe.Checkout;
+﻿using global::Stripe;
+using global::Stripe.Checkout;
+using PrivatePrep.Services.Tracking;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Payments;
 
 public class StripeService
 {

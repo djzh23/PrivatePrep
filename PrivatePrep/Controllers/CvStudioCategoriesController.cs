@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.CvStudio;
 
 namespace PrivatePrep.Controllers;
 

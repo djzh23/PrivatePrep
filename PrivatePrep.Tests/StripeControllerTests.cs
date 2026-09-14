@@ -10,6 +10,9 @@ using PrivatePrep.Controllers;
 using PrivatePrep.Data;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Tracking;
+using PrivatePrep.Services.Payments;
 
 namespace PrivatePrep.Tests;
 

@@ -1,7 +1,7 @@
-using Stripe;
+﻿using Stripe;
 using Stripe.Checkout;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Payments;
 
 public interface IStripeApiClient
 {

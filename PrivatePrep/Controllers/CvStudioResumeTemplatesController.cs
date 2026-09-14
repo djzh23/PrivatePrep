@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CvStudio.Application.DTOs;
 using CvStudio.Application.Services;
-using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
 
 namespace PrivatePrep.Controllers;
 

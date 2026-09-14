@@ -1,8 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using PrivatePrep.Data;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Tracking;
 
 /// <summary>Where daily usage limits + plan rows are stored vs what was configured.</summary>
 public readonly record struct UsageBackendInfo(

@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Agent;
 
 /// <summary>Delegates <see cref="ILlmSingleCompletionService"/> to <see cref="AgentService.SingleCompletion"/>.</summary>
 public sealed class AgentLlmSingleCompletionService(AgentService agent) : ILlmSingleCompletionService

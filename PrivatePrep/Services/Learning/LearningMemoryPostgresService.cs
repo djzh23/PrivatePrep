@@ -1,11 +1,11 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Learning;
 
 /// <summary>Learning memory in PostgreSQL (Supabase).</summary>
 public sealed class LearningMemoryPostgresService(PrivatePrepDbContext db, ILogger<LearningMemoryPostgresService> logger)

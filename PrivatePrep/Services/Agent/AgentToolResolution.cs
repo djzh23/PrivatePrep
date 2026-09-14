@@ -1,6 +1,6 @@
-using PrivatePrep.Configuration;
+﻿using PrivatePrep.Configuration;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Agent;
 
 public static class AgentToolResolution
 {

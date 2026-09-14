@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
-using PrivatePrep.Services;
+using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Speech;
+using PrivatePrep.Services.Tracking;
 
 namespace PrivatePrep.Controllers;
 

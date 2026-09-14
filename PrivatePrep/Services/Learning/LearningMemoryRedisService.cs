@@ -1,9 +1,10 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using PrivatePrep.Models;
+using PrivatePrep.Services.Infrastructure;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Learning;
 
 /// <summary>Learning memory in Redis (Upstash via <see cref="IRedisStringStore"/>). Key: learning:{userId}</summary>
 public class LearningMemoryRedisService(IRedisStringStore redis, ILogger<LearningMemoryRedisService> logger)

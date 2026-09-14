@@ -1,4 +1,5 @@
 using PrivatePrep.Services;
+using PrivatePrep.Services.Profile;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;

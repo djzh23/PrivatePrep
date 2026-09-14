@@ -10,6 +10,8 @@ using PrivatePrep.Data;
 using PrivatePrep.Models;
 using PrivatePrep.Services;
 using PrivatePrep.Services.Background;
+using PrivatePrep.Services.Tracking;
+using PrivatePrep.Services.Payments;
 using Stripe;
 
 namespace PrivatePrep.Tests;

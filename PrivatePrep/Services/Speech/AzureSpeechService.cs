@@ -1,8 +1,8 @@
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Speech;
 
 /// <summary>
 /// TTS via Microsoft Azure Cognitive Services Speech (Neural voices).

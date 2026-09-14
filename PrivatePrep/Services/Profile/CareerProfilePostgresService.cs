@@ -1,11 +1,11 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Profile;
 
 /// <summary>Career profiles in Supabase/PostgreSQL via EF Core.</summary>
 public sealed class CareerProfilePostgresService(PrivatePrepDbContext db, ILogger<CareerProfilePostgresService> logger)

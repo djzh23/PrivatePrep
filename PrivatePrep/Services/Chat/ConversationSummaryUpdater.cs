@@ -1,6 +1,6 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 /// <summary>Regelbasierte Kurz-Zusammenfassung gegen Wiederholungen in Job- und Interview-Chats.</summary>
 public static class ConversationSummaryUpdater

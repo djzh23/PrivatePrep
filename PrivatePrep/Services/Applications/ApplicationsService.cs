@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using PrivatePrep.Data;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Applications;
 
 /// <summary>
 /// Routes job applications to Redis or PostgreSQL based on <see cref="DatabaseFeatureOptions"/>.

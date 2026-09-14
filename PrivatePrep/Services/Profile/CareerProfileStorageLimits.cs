@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Profile;
 
 /// <summary>Shared limits for Redis and Postgres career profile storage (aligned with PDF extraction / token caps).</summary>
 public static class CareerProfileStorageLimits

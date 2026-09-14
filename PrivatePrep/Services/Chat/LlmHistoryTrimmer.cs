@@ -1,8 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using Anthropic.SDK.Messaging;
 using PrivatePrep.Models;
 
-namespace PrivatePrep.Services;
+namespace PrivatePrep.Services.Chat;
 
 /// <summary>
 /// Begrenzt den für das LLM sichtbaren Verlauf: letzte N Nachrichten, ältere Assistant-Turns gekürzt.

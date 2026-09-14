@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Notes;
 
 /// <summary>Shared limits and normalization for Redis and Postgres chat-notes implementations.</summary>
 public static class ChatNotesValidation

@@ -1,4 +1,4 @@
-namespace PrivatePrep.Services;
+﻿namespace PrivatePrep.Services.Infrastructure;
 
 /// <summary>Minimal string get/set for Upstash-backed features (sessions, applications).</summary>
 public interface IRedisStringStore

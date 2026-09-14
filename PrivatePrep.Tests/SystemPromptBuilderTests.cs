@@ -1,5 +1,6 @@
 using PrivatePrep.Models;
 using PrivatePrep.Services;
+using PrivatePrep.Services.Agent;
 
 namespace PrivatePrep.Tests;
 

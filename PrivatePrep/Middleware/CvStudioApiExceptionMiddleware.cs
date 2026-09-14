@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using CvStudio.Application.Exceptions;
 using PrivatePrep.Services;
+using PrivatePrep.Services.CvStudio;
 
 namespace PrivatePrep.Middleware;
 
