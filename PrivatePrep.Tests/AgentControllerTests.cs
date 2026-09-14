@@ -74,13 +74,27 @@ public class AgentControllerTests
     {
         var controller = new AgentController(
             _agentServiceMock.Object,
-            _conversationService,
             _usageMock.Object,
             _userContextMock.Object,
             _tokenTrackingMock.Object,
             _speechMock.Object,
             _backgroundQueueMock.Object,
             _loggerMock.Object);
+
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        return controller;
+    }
+
+    private AgentContextController CreateContextController()
+    {
+        var controller = new AgentContextController(
+            _conversationService,
+            _userContextMock.Object,
+            Mock.Of<ILogger<AgentContextController>>());
 
         controller.ControllerContext = new ControllerContext
         {
@@ -224,7 +238,7 @@ public class AgentControllerTests
     public async Task SetContext_MissingSessionId_Returns400()
     {
         SetupSignedInUser();
-        var controller = CreateController();
+        var controller = CreateContextController();
 
         var result = await controller.SetContext(new SetContextRequest
         {
@@ -244,7 +258,7 @@ public class AgentControllerTests
     public async Task SetContext_ThenGetContext_ReturnsStoredValues()
     {
         SetupSignedInUser();
-        var controller = CreateController();
+        var controller = CreateContextController();
         var sessionId = "s-ctx-1";
 
         var setResult = await controller.SetContext(new SetContextRequest
@@ -273,7 +287,7 @@ public class AgentControllerTests
     public async Task SetContext_ProgrammingLanguage_IsReturnedByGetContext()
     {
         SetupSignedInUser();
-        var controller = CreateController();
+        var controller = CreateContextController();
         var sessionId = "s-ctx-2";
 
         var setResult = await controller.SetContext(new SetContextRequest

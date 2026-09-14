@@ -242,7 +242,6 @@ public class StripeServiceTests
         });
         var controller = new AgentController(
             agentServiceMock.Object,
-            new ConversationService(),
             usage,
             userContextMock.Object,
             tokenTrackingMock.Object,
