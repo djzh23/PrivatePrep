@@ -31,4 +31,5 @@ Thumbs.db
 # Dev tooling (not for remote)
 .claude/
 **/CLAUDE.md
-**/docs/
+# Local career-ops blueprints (do not publish)
+**/docs/blueprint/

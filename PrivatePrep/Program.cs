@@ -268,6 +268,7 @@ app.Use(async (context, next) =>
 
 app.UseRateLimiter();
 app.UsePrivatePrepSecurityHeaders();
+app.UseStaticFiles();
 app.UseMiddleware<PrivatePrep.Middleware.UserResolutionMiddleware>();
 
 app.MapHealthChecks("/api/health");

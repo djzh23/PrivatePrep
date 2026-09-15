@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datenschutzerklärung — PrivatePrep</title>
+</head>
+<body>
+<!--
+TODO für Zouhair:
+Dieser Text ist ein Rohgerüst. Vor Launch:
+1. Über e-recht24.de oder datenschutz-generator.de einen echten Text generieren
+2. Alle Auftragsverarbeiter mit AVV bestätigen (DPAs unterzeichnen)
+3. Von einem Anwalt reviewen lassen, wenn Budget erlaubt
+V1 sendet keine Bewerberdaten an Google Gemini. Wenn ein zweiter LLM-Anbieter
+dazukommt, muss diese Seite und die AVV-Liste aktualisiert werden.
+-->
+  <h1>Datenschutzerklärung</h1>
+  <p><strong>Stand:</strong> [TODO: Datum] — Rohgerüst, nicht rechtsverbindlich.</p>
+
+  <h2>1. Verantwortlicher</h2>
+  <p>[TODO: Voller Name]<br>[TODO: Straße und Hausnummer]<br>[TODO: PLZ Ort]<br>Deutschland<br>E-Mail: [TODO: Kontakt-E-Mail]</p>
+
+  <h2>2. Erhobene Daten</h2>
+  <ul>
+    <li>Account-Daten über Clerk (z. B. User-ID, E-Mail je nach Clerk-Konfiguration)</li>
+    <li>Karriereprofil, Lebenslauf-Text und optionale Story</li>
+    <li>Eingefügte Stellenanzeigen und daraus erzeugte Analyse-Reports</li>
+    <li>Nutzungs- und Token-Zähler für das Tageslimit</li>
+    <li>Zahlungsdaten über Stripe (keine vollständigen Kartendaten auf unseren Servern)</li>
+  </ul>
+
+  <h2>3. Rechtsgrundlage</h2>
+  <p>[TODO: Art. 6 Abs. 1 lit. b DSGVO (Vertrag) und lit. f (berechtigte Interessen) konkretisieren. Einwilligung nur wo nötig.]</p>
+
+  <h2>4. Empfänger / Auftragsverarbeiter</h2>
+  <p>V1 nutzt folgende Dienstleister. Keine Datenübermittlung an Google Gemini.</p>
+  <ul>
+    <li>Groq (USA) — LLM-Inferenz</li>
+    <li>Clerk (USA) — Authentifizierung</li>
+    <li>Stripe (Irland/USA) — Zahlungen</li>
+    <li>Render (USA) — Hosting</li>
+    <li>Supabase (EU/USA) — PostgreSQL-Datenbank</li>
+  </ul>
+  <p>[TODO: DPAs/AVVs für jeden Empfänger bestätigen und verlinken, wo üblich.]</p>
+
+  <h2>5. Speicherdauer</h2>
+  <p>[TODO: Profil- und CV-Daten bis zur Löschung durch den Nutzer bzw. nach Account-Kündigung. Zahlungsdaten gemäß gesetzlicher Aufbewahrung. Logs: [TODO].]</p>
+
+  <h2>6. Nutzerrechte</h2>
+  <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. [TODO: Kontaktweg für Anfragen.]</p>
+
+  <h2>7. Widerspruchsrecht</h2>
+  <p>[TODO: Widerspruch gegen Verarbeitung auf Grundlage berechtigter Interessen, Art. 21 DSGVO.]</p>
+
+  <h2>8. Beschwerderecht</h2>
+  <p>Du kannst dich bei einer Datenschutzaufsichtsbehörde beschweren, insbesondere am Ort deines gewöhnlichen Aufenthalts. [TODO: zuständige Behörde verlinken.]</p>
+
+  <p><a href="/legal/impressum.html">Impressum</a></p>
+</body>
+</html>
