@@ -36,6 +36,20 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db, ILogge
         return DeserializeProfile(row.ProfileJson, userId);
     }
 
+    public async Task<string?> GetCvRawTextAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (string.IsNullOrWhiteSpace(userId))
+            return null;
+
+        return await db.CareerProfiles
+            .AsNoTracking()
+            .Where(x => x.ClerkUserId == userId)
+            .Select(x => x.CvRawText)
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
+    }
+
     public async Task SaveProfile(string userId, CareerProfile profile, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

@@ -22,6 +22,9 @@ public class CareerProfile
     public List<Education> EducationEntries { get; set; } = new();
     public List<ProfileLanguageEntry> Languages { get; set; } = new();
 
+    /// <summary>Free-text story; stored in profile_json (no dedicated column).</summary>
+    public string? Story { get; set; }
+
     // === CV-DATEN ===
     public string? CvRawText { get; set; }
     /// <summary>Anonyme Kurz-Zusammenfassung für den Assistenten (Deutsch).</summary>

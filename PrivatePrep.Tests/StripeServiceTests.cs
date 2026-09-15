@@ -8,7 +8,8 @@ using Moq;
 using PrivatePrep.Controllers;
 using PrivatePrep.Data;
 using PrivatePrep.Models;
-using PrivatePrep.Services;
+using PrivatePrep.Services.Agent;
+using PrivatePrep.Services.Profile;
 using PrivatePrep.Services.Tracking;
 using PrivatePrep.Services.Payments;
 using Stripe;
@@ -194,7 +195,8 @@ public class StripeServiceTests
 
         await stripeService.HandleStripeEventAsync(stripeEvent);
 
-        var agentServiceMock = new Mock<IAgentService>();
+        var analyzeMock = new Mock<IAnalyzeService>();
+        var profileMock = new Mock<ICareerProfileReader>();
         var userContextMock = new Mock<IAppUserContext>();
         var agentLoggerMock = new Mock<ILogger<AgentController>>();
         userContextMock.Setup(u => u.UserId).Returns("user_flow");
@@ -202,7 +204,8 @@ public class StripeServiceTests
 
         var tokenTrackingMock = new Mock<TokenTrackingService>();
         var controller = new AgentController(
-            agentServiceMock.Object,
+            analyzeMock.Object,
+            profileMock.Object,
             usage,
             userContextMock.Object,
             tokenTrackingMock.Object,

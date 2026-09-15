@@ -20,6 +20,9 @@
 			<LogicalName>PrivatePrep.Services.SkillGap.skill-taxonomy.en.json</LogicalName>
 			<WithCulture>false</WithCulture>
 		</EmbeddedResource>
+		<EmbeddedResource Include="Services\Agent\Prompts\analyze-system-prompt.md">
+			<LogicalName>PrivatePrep.Services.Agent.Prompts.analyze-system-prompt.md</LogicalName>
+		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">

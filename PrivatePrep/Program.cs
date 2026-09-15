@@ -111,6 +111,7 @@ if (registerPostgres)
     builder.Services.AddScoped<UsageService>();
     builder.Services.AddScoped<TokenTrackingService>();
     builder.Services.AddScoped<CareerProfileService>();
+    builder.Services.AddScoped<ICareerProfileReader>(sp => sp.GetRequiredService<CareerProfileService>());
 }
 
 var databaseFeaturesPreview = builder.Configuration.GetSection(DatabaseFeatureOptions.SectionName)
@@ -148,6 +149,8 @@ builder.Services.AddSingleton<ISkillGapService, SkillGapService>();
 builder.Services.AddSingleton<IFactGateService, FactGateService>();
 builder.Services.AddScoped<IJobContextExtractor, JobContextExtractor>();
 builder.Services.AddScoped<CvParsingService>();
+builder.Services.AddScoped<ILlmRouter, GroqLlmRouter>();
+builder.Services.AddScoped<IAnalyzeService, AnalyzeService>();
 builder.Services.AddScoped<AgentService>();
 builder.Services.AddScoped<IAgentService>(sp => sp.GetRequiredService<AgentService>());
 builder.Services.AddScoped<ILlmSingleCompletionService, AgentLlmSingleCompletionService>();

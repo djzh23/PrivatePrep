@@ -10,12 +10,15 @@ public readonly record struct CareerProfileBackendInfo(
     string? DegradedReason);
 
 /// <summary>Career profile persistence (PostgreSQL only in V1).</summary>
-public sealed class CareerProfileService(CareerProfilePostgresService postgres)
+public sealed class CareerProfileService(CareerProfilePostgresService postgres) : ICareerProfileReader
 {
     public CareerProfileBackendInfo GetBackendInfo() =>
         new("postgres", "postgres", Degraded: false, DegradedReason: null);
 
     public Task<CareerProfile?> GetProfile(string userId) => postgres.GetProfile(userId);
+
+    public Task<string?> GetCvRawTextAsync(string userId, CancellationToken cancellationToken = default) =>
+        postgres.GetCvRawTextAsync(userId, cancellationToken);
 
     public Task SaveProfile(string userId, CareerProfile profile) => postgres.SaveProfile(userId, profile);
 

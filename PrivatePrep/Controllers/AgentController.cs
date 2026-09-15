@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using PrivatePrep.Configuration;
-using PrivatePrep.Models;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Profile;
 using PrivatePrep.Services.Tracking;
 
 namespace PrivatePrep.Controllers;
@@ -11,72 +10,14 @@ namespace PrivatePrep.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public sealed class AgentController(
-    IAgentService agentService,
+    IAnalyzeService analyzeService,
+    ICareerProfileReader profileReader,
     UsageService usageService,
     IAppUserContext userContext,
     TokenTrackingService tokenTrackingService,
     ILogger<AgentController> logger) : ControllerBase
 {
-    private async Task<(ActionResult? Error, AgentRequest Normalized)> TryNormalizeAgentRequestAsync(
-        AgentRequest request,
-        string scopeUserId,
-        bool isAnonymous,
-        bool enforcePlan)
-    {
-        var resolved = AgentToolResolution.TryResolve(request.ToolType);
-        if (resolved is null)
-        {
-            return (BadRequest(new { error = "unknown_tool", message = "Unbekanntes Werkzeug." }), request);
-        }
-
-        var skill = resolved.Skill;
-        if (!skill.IsEnabled)
-        {
-            return (StatusCode(403, new
-            {
-                error = "coming_soon",
-                message = $"{skill.Name} ist bald verfügbar.",
-            }), request);
-        }
-
-        if (enforcePlan)
-        {
-            var plan = isAnonymous ? "anonymous" : await usageService.GetPlanAsync(scopeUserId);
-            if (!SkillRegistry.IsToolAccessible(plan, skill))
-            {
-                return (StatusCode(403, new
-                {
-                    error = "plan_required",
-                    message = "Für dieses Werkzeug ist ein höherer Tarif nötig.",
-                }), request);
-            }
-        }
-
-        var truncatedSetup = AgentPayloadLimits.TruncateCareerSetup(request.CareerToolSetup);
-        var probe = request with { CareerToolSetup = truncatedSetup };
-        var payloadErr = AgentPayloadLimits.ValidateTotalPayload(probe);
-        if (payloadErr is not null)
-        {
-            return (BadRequest(new
-            {
-                error = payloadErr,
-                message = payloadErr == "payload_too_large"
-                    ? "Gesamtgröße von Nachricht und Setup-Feldern zu groß."
-                    : "Nachricht zu lang.",
-            }), request);
-        }
-
-        var normalized = request with
-        {
-            ToolType = resolved.ApiToolType,
-            CareerProfileUserId = isAnonymous ? null : scopeUserId,
-            ConversationScopeUserId = scopeUserId,
-            JobApplicationId = isAnonymous ? null : request.JobApplicationId,
-            CareerToolSetup = truncatedSetup,
-        };
-
-        return (null, normalized);
-    }
+    public const int MaxJobDescriptionChars = AnalyzeService.MaxJobDescriptionLength;
 
     private void AppendDailyUsageAndTokenTrackingHeaders()
     {
@@ -101,45 +42,29 @@ public sealed class AgentController(
         }
     }
 
-    [HttpPost("ask")]
+    [HttpPost("analyze")]
     [EnableRateLimiting("agent_chat")]
-    public async Task<ActionResult<AgentResponse>> Ask([FromBody] AgentRequest request)
+    public async Task<ActionResult<AnalyzeReport>> Analyze([FromBody] AnalyzeRequestDto? request)
     {
-        if (string.IsNullOrWhiteSpace(request.Message))
-            return BadRequest(new { error = "message_empty", message = "Message must not be empty." });
-
-        var askPayloadProbe = request with { CareerToolSetup = AgentPayloadLimits.TruncateCareerSetup(request.CareerToolSetup) };
-        if (AgentPayloadLimits.ValidateTotalPayload(askPayloadProbe) is { } askPayloadErr)
-        {
-            return BadRequest(new
-            {
-                error = askPayloadErr,
-                message = askPayloadErr == "payload_too_large"
-                    ? "Gesamtgröße von Nachricht und Setup-Feldern zu groß."
-                    : $"Message must not exceed {AgentPayloadLimits.MaxMessageChars} characters.",
-            });
-        }
-
         var userId = userContext.UserId;
         var isAnonymous = userContext.IsAnonymous;
+        if (isAnonymous || string.IsNullOrEmpty(userId))
+            return Unauthorized(new { error = "auth_required", message = "Bitte anmelden." });
 
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized(new { error = "auth_failed", message = "Invalid authentication token." });
-
-        logger.LogInformation(
-            "Ask request. UserId {UserId} IsAnonymous {IsAnonymous} ToolType {ToolType}",
-            userId, isAnonymous, request.ToolType ?? "jobanalyzer");
+        var jd = request?.JobDescription?.Trim() ?? "";
+        if (jd.Length < AnalyzeService.MinimumJobDescriptionLength)
+            return BadRequest(new { error = "jd_too_short", message = "JD zu kurz" });
+        if (jd.Length > MaxJobDescriptionChars)
+            return BadRequest(new { error = "jd_too_long", message = $"Stellenanzeige zu lang (max. {MaxJobDescriptionChars} Zeichen)." });
 
         UsageCheckResult usageCheck;
         try
         {
-            usageCheck = await usageService.CheckAndIncrementAsync(userId, isAnonymous);
+            usageCheck = await usageService.CheckAndIncrementAsync(userId, isAnonymous: false);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex,
-                "Usage check failed (storage). UserId {UserId} IsAnonymous {IsAnonymous}",
-                userId, isAnonymous);
+            logger.LogError(ex, "Usage check failed (storage). UserId {UserId}", userId);
             return StatusCode(503, new
             {
                 error = "usage_check_failed",
@@ -170,20 +95,34 @@ public sealed class AgentController(
 
         try
         {
-            var (normErr, agentRequest) = await TryNormalizeAgentRequestAsync(request, userId, isAnonymous, true);
-            if (normErr != null)
-                return normErr;
+            var profile = await profileReader.GetProfile(userId).ConfigureAwait(false);
+            var cvColumn = await profileReader.GetCvRawTextAsync(userId, HttpContext.RequestAborted).ConfigureAwait(false);
+            var cv = PickCvText(cvColumn, profile?.CvRawText);
+            var story = profile?.Story ?? "";
 
-            var result = await agentService.RunAsync(agentRequest);
-            await FireTokenTrackingAsync(userId, agentRequest.ToolType, result).ConfigureAwait(false);
-            return Ok(result);
+            var report = await analyzeService
+                .AnalyzeAsync(new AnalyzeRequest(userId, cv, story, jd), HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+
+            await FireTokenTrackingAsync(userId, report).ConfigureAwait(false);
+            return Ok(report);
+        }
+        catch (AnalyzeException ex)
+        {
+            logger.LogWarning(ex, "Analyze rejected. UserId {UserId} Code {Code}", userId, ex.ErrorCode);
+            return ex.ErrorCode switch
+            {
+                "jd_too_short" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "profile_incomplete" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "llm_parse_failed" => StatusCode(500, new { error = ex.ErrorCode, message = ex.Message }),
+                "llm_unavailable" => StatusCode(502, new { error = ex.ErrorCode, message = ex.Message }),
+                _ => StatusCode(500, new { error = "analyze_error", message = "An internal error occurred. Please try again." }),
+            };
         }
         catch (Exception ex)
         {
-            logger.LogError(ex,
-                "Agent execution failed. UserId {UserId} ToolType {ToolType}",
-                userId, request.ToolType ?? "jobanalyzer");
-            return StatusCode(500, new { error = "agent_error", message = "An internal error occurred. Please try again." });
+            logger.LogError(ex, "Analyze execution failed. UserId {UserId}", userId);
+            return StatusCode(500, new { error = "analyze_error", message = "An internal error occurred. Please try again." });
         }
     }
 
@@ -233,75 +172,24 @@ public sealed class AgentController(
         }
     }
 
-    [HttpGet("health")]
-    public IActionResult Health() => Ok(new { status = "ok", timestamp = DateTime.UtcNow });
-
-    [HttpPost("demo")]
-    [EnableRateLimiting("agent_chat")]
-    public async Task<ActionResult<AgentResponse>> Demo([FromBody] AgentRequest request)
+    private static string PickCvText(string? column, string? jsonField)
     {
-        if (string.IsNullOrWhiteSpace(request.Message))
-            return BadRequest(new { error = "message_empty" });
-
-        if (request.Message.Length > 4000)
-            return BadRequest(new { error = "message_too_long" });
-
-        var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-        var demoUserId = $"demo_agent:{ip}";
-        const int demoLimit = 5;
-
-        int currentUsage;
-        try
-        {
-            currentUsage = await usageService.GetUsageTodayAsync(demoUserId);
-        }
-        catch (Exception ex)
-        {
-            logger.LogWarning(ex, "Demo usage check failed for IP {IP}", ip);
-            return StatusCode(503, new { error = "usage_check_failed" });
-        }
-
-        if (currentUsage >= demoLimit)
-            return StatusCode(429, new
-            {
-                error = "demo_limit_reached",
-                reason = "demo_limit",
-                message = "Demo-Limit erreicht. Melde dich an für 3 kostenlose Analysen pro Tag.",
-            });
-
-        try
-        {
-            var (normErr, normalizedDemo) = await TryNormalizeAgentRequestAsync(request, demoUserId, isAnonymous: false, enforcePlan: false);
-            if (normErr is not null)
-                return normErr;
-
-            await usageService.IncrementUsageAsync(demoUserId);
-            var result = await agentService.RunAsync(normalizedDemo);
-            await FireTokenTrackingAsync(demoUserId, normalizedDemo.ToolType, result).ConfigureAwait(false);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Demo agent execution failed. IP {IP} ToolType {ToolType}", ip, request.ToolType);
-            return StatusCode(500, new { error = "agent_error", message = "An internal error occurred. Please try again." });
-        }
+        var a = column?.Trim() ?? "";
+        var b = jsonField?.Trim() ?? "";
+        return a.Length >= b.Length ? a : b;
     }
 
-    private async Task FireTokenTrackingAsync(string userId, string? toolTypeRaw, AgentResponse result)
+    private async Task FireTokenTrackingAsync(string userId, AnalyzeReport report)
     {
-        var tool = string.IsNullOrWhiteSpace(toolTypeRaw) ? "jobanalyzer" : toolTypeRaw.ToLowerInvariant();
-        if (result.InputTokens is not { } i || result.OutputTokens is not { } o)
+        var i = report.InputTokens ?? 0;
+        var o = report.OutputTokens ?? 0;
+        if (i == 0 && o == 0)
             return;
 
-        var cc = result.CacheCreationInputTokens ?? 0;
-        var cr = result.CacheReadInputTokens ?? 0;
-        if (i == 0 && o == 0 && cc == 0 && cr == 0)
-            return;
-
-        var model = result.Model ?? "unknown";
+        var model = report.ModelUsed ?? "unknown";
         try
         {
-            await tokenTrackingService.TrackUsageAsync(userId, tool, model, i, o, cc, cr).ConfigureAwait(false);
+            await tokenTrackingService.TrackUsageAsync(userId, "jobanalyzer", model, i, o, 0, 0).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
