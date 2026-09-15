@@ -6,6 +6,6 @@
 /// </summary>
 public interface ILlmSingleCompletionService
 {
-    /// <summary>Delegiert an Groq/Anthropic mit internem Token-Deckel (max. 800).</summary>
+    /// <summary>Delegiert an Groq mit internem Token-Deckel (max. 800).</summary>
     Task<string> CompleteAsync(string prompt, int maxTokens, CancellationToken cancellationToken = default);
 }

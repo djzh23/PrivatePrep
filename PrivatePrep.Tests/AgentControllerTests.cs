@@ -1,21 +1,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Moq;
 using PrivatePrep.Controllers;
-using PrivatePrep.Data;
 using PrivatePrep.Models;
-using PrivatePrep.Services;
 using PrivatePrep.Services.Agent;
-using PrivatePrep.Services.Chat;
 using PrivatePrep.Services.Auth;
-using PrivatePrep.Services.Speech;
 using PrivatePrep.Services.Tracking;
-using PrivatePrep.Services.Background;
 
 namespace PrivatePrep.Tests;
 
@@ -23,38 +14,12 @@ public class AgentControllerTests
 {
     private readonly Mock<IAgentService> _agentServiceMock = new();
     private readonly Mock<ILogger<AgentController>> _loggerMock = new();
-    private readonly Mock<UsageService> _usageMock;
+    private readonly Mock<UsageService> _usageMock = new();
     private readonly Mock<IAppUserContext> _userContextMock = new();
-    private readonly Mock<ISpeechService> _speechMock = new();
-    private readonly Mock<IAgentBackgroundQueue> _backgroundQueueMock = new();
-    private readonly Mock<TokenTrackingService> _tokenTrackingMock;
-    private readonly ConversationService _conversationService = new();
-    private readonly IConfiguration _config;
+    private readonly Mock<TokenTrackingService> _tokenTrackingMock = new();
 
     public AgentControllerTests()
     {
-        _config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["Upstash:RestUrl"] = "https://fake.upstash.io",
-                ["Upstash:RestToken"] = "fake-token",
-            })
-            .Build();
-
-        var optMock = new Mock<IOptionsSnapshot<DatabaseFeatureOptions>>();
-        optMock.Setup(o => o.Value).Returns(new DatabaseFeatureOptions
-        {
-            PostgresEnabled = false,
-            ChatSessionStorage = "redis",
-            TokenUsageStorage = "redis",
-            UsageStorage = "redis",
-        });
-        var sp = new ServiceCollection().BuildServiceProvider();
-        _usageMock = new Mock<UsageService>(optMock.Object, new UsageRedisService(_config, new HttpClient()), sp);
-        _tokenTrackingMock = new Mock<TokenTrackingService>(
-            optMock.Object,
-            new TokenTrackingRedisService(_config, new HttpClient(), Mock.Of<ILogger<TokenTrackingRedisService>>()),
-            sp);
         _tokenTrackingMock
             .Setup(t => t.TrackUsageAsync(
                 It.IsAny<string>(),
@@ -65,9 +30,8 @@ public class AgentControllerTests
                 It.IsAny<int>(),
                 It.IsAny<int>()))
             .Returns(Task.CompletedTask);
-        _usageMock.Setup(u => u.GetBackendInfo()).Returns(new UsageBackendInfo("redis", "redis", false, null));
-        _tokenTrackingMock.Setup(t => t.GetBackendInfo()).Returns(new TokenTrackingBackendInfo("redis", "redis", false, null));
-
+        _usageMock.Setup(u => u.GetBackendInfo()).Returns(new UsageBackendInfo("postgres", "postgres", false, null));
+        _tokenTrackingMock.Setup(t => t.GetBackendInfo()).Returns(new TokenTrackingBackendInfo("postgres", "postgres", false, null));
     }
 
     private AgentController CreateController()
@@ -77,8 +41,6 @@ public class AgentControllerTests
             _usageMock.Object,
             _userContextMock.Object,
             _tokenTrackingMock.Object,
-            _speechMock.Object,
-            _backgroundQueueMock.Object,
             _loggerMock.Object);
 
         controller.ControllerContext = new ControllerContext
@@ -87,28 +49,6 @@ public class AgentControllerTests
         };
 
         return controller;
-    }
-
-    private AgentContextController CreateContextController()
-    {
-        var controller = new AgentContextController(
-            _conversationService,
-            _userContextMock.Object,
-            Mock.Of<ILogger<AgentContextController>>());
-
-        controller.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext()
-        };
-
-        return controller;
-    }
-
-    /// <summary>SetContext/GetContext require a signed-in user (not anonymous).</summary>
-    private void SetupSignedInUser(string userId = "user_agent_controller_tests")
-    {
-        _userContextMock.Setup(u => u.UserId).Returns(userId);
-        _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
     }
 
     [Fact]
@@ -132,16 +72,6 @@ public class AgentControllerTests
     }
 
     [Fact]
-    public async Task Ask_MissingSessionId_Returns400()
-    {
-        var controller = CreateController();
-        var result = await controller.Ask(new AgentRequest("Hello world"));
-
-        var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
-        Assert.Equal(400, badRequest.StatusCode);
-    }
-
-    [Fact]
     public async Task Ask_ValidMessage_Returns200WithAgentResponse()
     {
         _userContextMock.Setup(u => u.UserId).Returns("user_abc");
@@ -152,20 +82,20 @@ public class AgentControllerTests
             {
                 Allowed = true,
                 UsageToday = 1,
-                DailyLimit = 20,
+                DailyLimit = 3,
                 Plan = "free"
             });
 
         _agentServiceMock.Setup(s => s.RunAsync(It.IsAny<AgentRequest>()))
-            .ReturnsAsync(new AgentResponse("Test reply", null));
+            .ReturnsAsync(new AgentResponse("Test reply", "jobanalyzer"));
 
         var controller = CreateController();
-        var result = await controller.Ask(new AgentRequest("What is the weather?", SessionId: "sess-1"));
+        var result = await controller.Ask(new AgentRequest("What is the weather?", ToolType: "jobanalyzer"));
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<AgentResponse>(ok.Value);
         Assert.Equal("Test reply", response.Reply);
-        Assert.Null(response.ToolUsed);
+        Assert.Equal("jobanalyzer", response.ToolUsed);
     }
 
     [Fact]
@@ -184,10 +114,10 @@ public class AgentControllerTests
             });
 
         _agentServiceMock.Setup(s => s.RunAsync(It.IsAny<AgentRequest>()))
-            .ReturnsAsync(new AgentResponse("Berlin weather is sunny.", null));
+            .ReturnsAsync(new AgentResponse("Berlin weather is sunny.", "jobanalyzer"));
 
         var controller = CreateController();
-        var result = await controller.Ask(new AgentRequest("Wie ist das Wetter in Berlin?", SessionId: "demo-1", ToolType: "general"));
+        var result = await controller.Ask(new AgentRequest("Wie ist das Wetter in Berlin?", ToolType: "jobanalyzer"));
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<AgentResponse>(ok.Value);
@@ -205,14 +135,14 @@ public class AgentControllerTests
             {
                 Allowed = false,
                 Reason = "anonymous_limit",
-                Message = "Sign in to get 20 free responses per day",
+                Message = "Melde dich an, um 3 kostenlose Analysen pro Tag zu erhalten.",
                 UsageToday = 2,
                 DailyLimit = 2,
                 Plan = "anonymous"
             });
 
         var controller = CreateController();
-        var result = await controller.Ask(new AgentRequest("Third message", SessionId: "demo-1"));
+        var result = await controller.Ask(new AgentRequest("Third message", ToolType: "jobanalyzer"));
 
         var obj = Assert.IsType<ObjectResult>(result.Result);
         Assert.Equal(429, obj.StatusCode);
@@ -225,89 +155,13 @@ public class AgentControllerTests
         _userContextMock.Setup(u => u.IsAnonymous).Returns(true);
 
         _usageMock.Setup(u => u.CheckAndIncrementAsync("ip:127.0.0.1", true))
-            .ThrowsAsync(new InvalidOperationException("Upstash connection refused"));
+            .ThrowsAsync(new InvalidOperationException("Postgres connection refused"));
 
         var controller = CreateController();
-        var result = await controller.Ask(new AgentRequest("Hello", SessionId: "demo-1"));
+        var result = await controller.Ask(new AgentRequest("Hello", ToolType: "jobanalyzer"));
 
         var obj = Assert.IsType<ObjectResult>(result.Result);
         Assert.Equal(503, obj.StatusCode);
-    }
-
-    [Fact]
-    public async Task SetContext_MissingSessionId_Returns400()
-    {
-        SetupSignedInUser();
-        var controller = CreateContextController();
-
-        var result = await controller.SetContext(new SetContextRequest
-        {
-            SessionId = null,
-            ToolType = "interviewprep",
-            CVText = "my cv",
-            JobTitle = "Software Engineer",
-            CompanyName = "SmartAssist",
-            ProgrammingLanguage = null,
-        });
-
-        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequest.StatusCode);
-    }
-
-    [Fact]
-    public async Task SetContext_ThenGetContext_ReturnsStoredValues()
-    {
-        SetupSignedInUser();
-        var controller = CreateContextController();
-        var sessionId = "s-ctx-1";
-
-        var setResult = await controller.SetContext(new SetContextRequest
-        {
-            SessionId = sessionId,
-            ToolType = "interviewprep",
-            CVText = "CV data here",
-            JobTitle = "Backend Developer",
-            CompanyName = "Acme",
-            ProgrammingLanguage = null,
-        });
-
-        Assert.IsType<OkObjectResult>(setResult);
-
-        var getResult = await controller.GetContext(sessionId, "interviewprep");
-        var ok = Assert.IsType<OkObjectResult>(getResult);
-
-        var payloadJson = System.Text.Json.JsonSerializer.Serialize(ok.Value);
-        Assert.Contains("\"hasCV\":true", payloadJson);
-        Assert.Contains("Backend Developer", payloadJson);
-        Assert.Contains("Acme", payloadJson);
-        Assert.Contains("\"toolType\":\"interviewprep\"", payloadJson);
-    }
-
-    [Fact]
-    public async Task SetContext_ProgrammingLanguage_IsReturnedByGetContext()
-    {
-        SetupSignedInUser();
-        var controller = CreateContextController();
-        var sessionId = "s-ctx-2";
-
-        var setResult = await controller.SetContext(new SetContextRequest
-        {
-            SessionId = sessionId,
-            ToolType = "programming",
-            CVText = null,
-            JobTitle = null,
-            CompanyName = null,
-            ProgrammingLanguage = "csharp",
-        });
-
-        Assert.IsType<OkObjectResult>(setResult);
-
-        var getResult = await controller.GetContext(sessionId, "programming");
-        var ok = Assert.IsType<OkObjectResult>(getResult);
-        var payloadJson = System.Text.Json.JsonSerializer.Serialize(ok.Value);
-
-        Assert.Contains("\"hasProgrammingLang\":true", payloadJson);
-        Assert.Contains("\"programmingLanguage\":\"csharp\"", payloadJson);
     }
 
     [Fact]

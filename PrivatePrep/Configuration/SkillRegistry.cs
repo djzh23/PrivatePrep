@@ -63,7 +63,7 @@ public static class SkillRegistry
             ToolTypeAliases = ["job", "stellenanalyse", "job_analysis", "jobanalyzer"],
             ApiToolType = "jobanalyzer",
             MaxTokens = 900,
-            Temperature = 0.3f,
+            Temperature = 0.4f,
         },
         new CareerSkill
         {
@@ -75,6 +75,7 @@ public static class SkillRegistry
             Badge = "Karriere",
             BadgeColor = "orange",
             MinPlan = "free",
+            IsEnabled = false,
             ToolTypeAliases = ["interview", "vorstellungsgespräch", "interview_coach", "interviewprep"],
             ApiToolType = "interviewprep",
             MaxTokens = 1000,
@@ -90,6 +91,7 @@ public static class SkillRegistry
             Badge = "Flex",
             BadgeColor = "gray",
             MinPlan = "free",
+            IsEnabled = false,
             ToolTypeAliases = ["general", "chat", "allgemein"],
             ApiToolType = "general",
             MaxTokens = 600,
@@ -105,6 +107,7 @@ public static class SkillRegistry
             Badge = "Tech",
             BadgeColor = "blue",
             MinPlan = "free",
+            IsEnabled = false,
             ToolTypeAliases = ["code", "programmierung", "programming"],
             ApiToolType = "programming",
             MaxTokens = 1000,
@@ -120,6 +123,7 @@ public static class SkillRegistry
             Badge = "Sprache",
             BadgeColor = "teal",
             MinPlan = "free",
+            IsEnabled = false,
             ToolTypeAliases = ["language", "sprachen", "sprachen lernen"],
             ApiToolType = "language",
             MaxTokens = 400,
@@ -185,7 +189,7 @@ public static class SkillRegistry
     {
         var normalized = toolType?.Trim().ToLowerInvariant() ?? "";
         if (normalized.Length == 0)
-            normalized = "general";
+            normalized = "jobanalyzer";
 
         return AllSkills.FirstOrDefault(s =>
             string.Equals(s.ApiToolType, normalized, StringComparison.OrdinalIgnoreCase)

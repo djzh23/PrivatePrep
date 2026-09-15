@@ -3,26 +3,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Context;
 using PrivatePrep.Data;
-using PrivatePrep.Health;
 
 namespace PrivatePrep.Configuration;
 
 public static class ObservabilityExtensions
 {
-    /// <param name="registerPostgresCheck">When true, adds <see cref="PrivatePrepDbContext"/> connectivity check (requires DbContext registration and <c>DatabaseFeatures:PostgresEnabled</c>).</param>
+    /// <param name="registerPostgresCheck">When true, adds <see cref="PrivatePrepDbContext"/> connectivity check.</param>
     public static IServiceCollection AddPrivatePrepHealthChecks(this IServiceCollection services, bool registerPostgresCheck = false)
     {
-        var checks = services.AddHealthChecks()
-            .AddCheck<UpstashRedisHealthCheck>("upstash");
+        var checks = services.AddHealthChecks();
         if (registerPostgresCheck)
             checks.AddDbContextCheck<PrivatePrepDbContext>("postgres");
         return services;
     }
 
-    /// <summary>
-    /// Ensures every response has <c>X-Request-Id</c> and adds <c>RequestId</c> to Serilog <see cref="LogContext"/> for the request.
-    /// Run before <c>UseSerilogRequestLogging</c> so completion logs include the id.
-    /// </summary>
     public static IApplicationBuilder UseRequestId(this IApplicationBuilder app)
     {
         return app.Use(async (context, next) =>

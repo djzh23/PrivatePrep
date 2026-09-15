@@ -40,9 +40,7 @@ public class StripeControllerTests
             })
             .Build();
 
-        var usageOpts = new Mock<IOptionsSnapshot<DatabaseFeatureOptions>>();
-        usageOpts.Setup(o => o.Value).Returns(new DatabaseFeatureOptions { PostgresEnabled = false, UsageStorage = "redis", TokenUsageStorage = "redis" });
-        _usageServiceMock = new Mock<UsageService>(usageOpts.Object, new UsageRedisService(_config, new HttpClient()), new ServiceCollection().BuildServiceProvider());
+        _usageServiceMock = new Mock<UsageService>();
 
         var stripeApiMock = new Mock<IStripeApiClient>();
         var stripeLoggerMock = new Mock<ILogger<StripeService>>();

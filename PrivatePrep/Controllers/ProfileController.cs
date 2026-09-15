@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
-using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Auth;
 using PrivatePrep.Services.Profile;
-using PrivatePrep.Services.Background;
-using PrivatePrep.Services.VectorStore;
 
 namespace PrivatePrep.Controllers;
 
@@ -14,29 +11,8 @@ namespace PrivatePrep.Controllers;
 public sealed class ProfileController(
     CareerProfileService profileService,
     IAppUserContext userContext,
-    IAgentBackgroundQueue backgroundQueue,
     ILogger<ProfileController> logger) : ControllerBase
 {
-    private static void QueueProfileIngestion(
-        IAgentBackgroundQueue queue,
-        ILogger logger,
-        string userId,
-        CareerProfile profile)
-    {
-        queue.TryEnqueue("profile-ingestion", async (sp, ct) =>
-        {
-            try
-            {
-                var ingester = sp.GetRequiredService<ICareerMemoryIngester>();
-                await ingester.IngestProfileAsync(userId, profile, ct).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                logger.LogWarning(ex, "Profile memory ingestion failed for user {UserId}", userId);
-            }
-        });
-    }
-
     private void SetCareerProfileStorageHeaders()
     {
         var info = profileService.GetBackendInfo();
@@ -96,9 +72,6 @@ public sealed class ProfileController(
             return Unauthorized();
 
         await profileService.SetSkills(userId, request.Skills ?? new List<string>());
-        var skillsProfile = await profileService.GetProfile(userId).ConfigureAwait(false);
-        if (skillsProfile is not null)
-            QueueProfileIngestion(backgroundQueue, logger, userId, skillsProfile);
         SetCareerProfileStorageHeaders();
         return Ok(new { success = true });
     }
@@ -158,7 +131,6 @@ public sealed class ProfileController(
         try
         {
             await profileService.SaveProfile(userId, profile);
-            QueueProfileIngestion(backgroundQueue, logger, userId, profile);
             SetCareerProfileStorageHeaders();
             return Ok(new { success = true });
         }

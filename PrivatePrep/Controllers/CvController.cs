@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Auth;
-using PrivatePrep.Services.Background;
 using PrivatePrep.Services.Profile;
-using PrivatePrep.Services.VectorStore;
 
 namespace PrivatePrep.Controllers;
 
@@ -16,33 +14,9 @@ public sealed class CvController(
     CareerProfileService profileService,
     IAppUserContext userContext,
     ILlmSingleCompletionService llmSingleCompletion,
-    IAgentBackgroundQueue backgroundQueue,
     CvParsingService cvParsingService,
     ILogger<CvController> logger) : ControllerBase
 {
-    private static void QueueCvIngestion(
-        IAgentBackgroundQueue queue,
-        ILogger logger,
-        string userId,
-        string cvText)
-    {
-        if (string.IsNullOrWhiteSpace(cvText))
-            return;
-
-        queue.TryEnqueue("cv-ingestion", async (sp, ct) =>
-        {
-            try
-            {
-                var ingester = sp.GetRequiredService<ICareerMemoryIngester>();
-                await ingester.IngestCvAsync(userId, cvText, ct).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                logger.LogWarning(ex, "CV memory ingestion failed for user {UserId}", userId);
-            }
-        });
-    }
-
     private void SetCareerProfileStorageHeaders()
     {
         var info = profileService.GetBackendInfo();
@@ -174,7 +148,6 @@ public sealed class CvController(
             return BadRequest(new { error = "CV-Text darf nicht leer sein." });
 
         await profileService.SetCvText(userId, request.Text);
-        QueueCvIngestion(backgroundQueue, logger, userId, request.Text);
         SetCareerProfileStorageHeaders();
         return Ok(new { success = true, length = request.Text.Length });
     }
@@ -217,7 +190,6 @@ public sealed class CvController(
                 .ConfigureAwait(false);
 
             await profileService.SetCvText(userId, rawText).ConfigureAwait(false);
-            QueueCvIngestion(backgroundQueue, logger, userId, rawText);
 
             SetCareerProfileStorageHeaders();
             return Ok(new

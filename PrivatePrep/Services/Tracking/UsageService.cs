@@ -1,127 +1,92 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Caching.Memory;
 using PrivatePrep.Data;
 
 namespace PrivatePrep.Services.Tracking;
 
-/// <summary>Where daily usage limits + plan rows are stored vs what was configured.</summary>
 public readonly record struct UsageBackendInfo(
     string EffectiveStorage,
     string ConfiguredUsageStorage,
     bool Degraded,
     string? DegradedReason);
 
-/// <summary>
-/// Routes daily usage and plan to Redis or PostgreSQL; Stripe-related keys stay in Redis.
-/// </summary>
-public class UsageService(
-    IOptionsSnapshot<DatabaseFeatureOptions> options,
-    UsageRedisService redis,
-    IServiceProvider serviceProvider)
+/// <summary>Daily usage limits and Stripe customer mapping (PostgreSQL; webhook idempotency in memory).</summary>
+public class UsageService
 {
-    private readonly DatabaseFeatureOptions _opts = options.Value;
+    private readonly UsagePostgresService? _postgres;
+    private readonly IMemoryCache? _cache;
 
-    private UsagePostgresService? Postgres =>
-        serviceProvider.GetService(typeof(UsagePostgresService)) as UsagePostgresService;
-
-    private bool UsePostgres =>
-        _opts.PostgresEnabled
-        && string.Equals(_opts.UsageStorage, "postgres", StringComparison.OrdinalIgnoreCase)
-        && Postgres is not null;
-
-    /// <summary>Used for response headers and client-visible degraded-mode disclosure.</summary>
-    public virtual UsageBackendInfo GetBackendInfo()
+    /// <summary>Moq-friendly constructor.</summary>
+    protected UsageService()
     {
-        var configured = string.IsNullOrWhiteSpace(_opts.UsageStorage)
-            ? "redis"
-            : _opts.UsageStorage.Trim();
-        var wantsPostgres = _opts.PostgresEnabled
-            && string.Equals(configured, "postgres", StringComparison.OrdinalIgnoreCase);
-        var effective = UsePostgres ? "postgres" : "redis";
-        var degraded = wantsPostgres && !UsePostgres;
-        string? reason = null;
-        if (degraded)
-            reason = Postgres is null ? "no_valid_supabase_connection" : "postgres_unavailable";
-
-        return new UsageBackendInfo(effective, configured, degraded, reason);
     }
 
-    public virtual Task<int> GetUsageTodayAsync(string userId) =>
-        UsePostgres ? Postgres!.GetUsageTodayAsync(userId) : redis.GetUsageTodayAsync(userId);
+    public UsageService(UsagePostgresService postgres, IMemoryCache cache)
+    {
+        _postgres = postgres;
+        _cache = cache;
+    }
 
-    public virtual Task<int> GetUsageTodayStrictAsync(string userId) =>
-        UsePostgres ? Postgres!.GetUsageTodayStrictAsync(userId) : redis.GetUsageTodayStrictAsync(userId);
+    private UsagePostgresService Postgres =>
+        _postgres ?? throw new InvalidOperationException("UsageService was constructed without PostgreSQL.");
 
-    public virtual Task<int> IncrementUsageAsync(string userId) =>
-        UsePostgres ? Postgres!.IncrementUsageAsync(userId) : redis.IncrementUsageAsync(userId);
+    public virtual UsageBackendInfo GetBackendInfo() =>
+        new("postgres", "postgres", Degraded: false, DegradedReason: null);
 
-    public virtual Task<string> GetPlanAsync(string userId) =>
-        UsePostgres ? Postgres!.GetPlanAsync(userId) : redis.GetPlanAsync(userId);
+    public virtual Task<int> GetUsageTodayAsync(string userId) => Postgres.GetUsageTodayAsync(userId);
 
-    public virtual Task<string> GetPlanStrictAsync(string userId) =>
-        UsePostgres ? Postgres!.GetPlanStrictAsync(userId) : redis.GetPlanStrictAsync(userId);
+    public virtual Task<int> GetUsageTodayStrictAsync(string userId) => Postgres.GetUsageTodayStrictAsync(userId);
+
+    public virtual Task<int> IncrementUsageAsync(string userId) => Postgres.IncrementUsageAsync(userId);
+
+    public virtual Task<string> GetPlanAsync(string userId) => Postgres.GetPlanAsync(userId);
+
+    public virtual Task<string> GetPlanStrictAsync(string userId) => Postgres.GetPlanStrictAsync(userId);
 
     public virtual Task<(string Plan, int UsageToday)> GetUsageSnapshotAsync(string userId) =>
-        UsePostgres ? Postgres!.GetUsageSnapshotAsync(userId) : redis.GetUsageSnapshotAsync(userId);
+        Postgres.GetUsageSnapshotAsync(userId);
 
-    public virtual Task SetPlanAsync(string userId, string plan) =>
-        UsePostgres ? Postgres!.SetPlanAsync(userId, plan) : redis.SetPlanAsync(userId, plan);
+    public virtual Task SetPlanAsync(string userId, string plan) => Postgres.SetPlanAsync(userId, plan);
 
-    public virtual async Task SetStripeCustomerIdAsync(string userId, string customerId)
+    public virtual Task SetStripeCustomerIdAsync(string userId, string customerId) =>
+        Postgres.SetStripeCustomerIdAsync(userId, customerId);
+
+    public virtual Task<string?> GetUserIdByStripeCustomerIdAsync(string customerId) =>
+        Postgres.GetUserIdByStripeCustomerIdAsync(customerId);
+
+    public virtual Task<string?> GetStripeCustomerIdAsync(string userId) =>
+        Postgres.GetStripeCustomerIdAsync(userId);
+
+    public virtual Task<bool> TryAcquireStripeEventAsync(string eventId)
     {
-        // Always write to Redis (for backward compat and idempotency lookups)
-        await redis.SetStripeCustomerIdAsync(userId, customerId);
-        // Also persist in Postgres if available
-        if (UsePostgres)
-            await Postgres!.SetStripeCustomerIdAsync(userId, customerId);
-    }
+        var cache = _cache ?? throw new InvalidOperationException("UsageService was constructed without memory cache.");
+        var key = $"stripe:event:{eventId}";
+        if (cache.TryGetValue(key, out _))
+            return Task.FromResult(false);
 
-    public virtual async Task<string?> GetUserIdByStripeCustomerIdAsync(string customerId)
-    {
-        if (UsePostgres)
-        {
-            var fromPg = await Postgres!.GetUserIdByStripeCustomerIdAsync(customerId);
-            if (!string.IsNullOrWhiteSpace(fromPg)) return fromPg;
-        }
-        return await redis.GetUserIdByStripeCustomerIdAsync(customerId);
+        cache.Set(key, true, TimeSpan.FromHours(48));
+        return Task.FromResult(true);
     }
-
-    public virtual async Task<string?> GetStripeCustomerIdAsync(string userId)
-    {
-        if (UsePostgres)
-        {
-            var fromPg = await Postgres!.GetStripeCustomerIdAsync(userId);
-            if (!string.IsNullOrWhiteSpace(fromPg)) return fromPg;
-        }
-        return await redis.GetStripeCustomerIdAsync(userId);
-    }
-
-    public virtual Task<bool> TryAcquireStripeEventAsync(string eventId) =>
-        redis.TryAcquireStripeEventAsync(eventId);
 
     public virtual Task RecordStripeWebhookAuditAsync(StripeWebhookAuditRecord audit) =>
-        redis.RecordStripeWebhookAuditAsync(audit);
+        Task.CompletedTask;
 
     public virtual async Task<StripeDebugInfo> GetStripeDebugInfoAsync(string userId)
     {
         var currentPlan = await GetPlanStrictAsync(userId).ConfigureAwait(false);
-        var lastEventId = await redis.GetStripeLastEventIdAsync(userId).ConfigureAwait(false);
-        var lastEventAt = await redis.GetStripeLastEventAtAsync(userId).ConfigureAwait(false);
-        var lastSessionId = await redis.GetStripeLastSessionIdAsync(userId).ConfigureAwait(false);
-        return new StripeDebugInfo(userId, currentPlan, lastEventId, lastEventAt, lastSessionId);
+        return new StripeDebugInfo(userId, currentPlan, null, null, null);
     }
 
     public static int GetDailyLimit(string plan) => plan switch
     {
         "anonymous" => 2,
-        "free" => 20,
-        "premium" => 200,
+        "free" => 3,
+        "premium" => int.MaxValue,
         "pro" => int.MaxValue,
         _ => 2,
     };
 
     public virtual Task<UsageCheckResult> CheckAndIncrementAsync(string userId, bool isAnonymous) =>
-        UsePostgres ? Postgres!.CheckAndIncrementAsync(userId, isAnonymous) : redis.CheckAndIncrementAsync(userId, isAnonymous);
+        Postgres.CheckAndIncrementAsync(userId, isAnonymous);
 }
 
 public sealed class UsageCheckResult

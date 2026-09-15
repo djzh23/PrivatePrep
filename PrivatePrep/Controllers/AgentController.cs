@@ -1,14 +1,10 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Configuration;
 using PrivatePrep.Models;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Auth;
-using PrivatePrep.Services.Chat;
-using PrivatePrep.Services.Speech;
 using PrivatePrep.Services.Tracking;
-using PrivatePrep.Services.Background;
 
 namespace PrivatePrep.Controllers;
 
@@ -19,8 +15,6 @@ public sealed class AgentController(
     UsageService usageService,
     IAppUserContext userContext,
     TokenTrackingService tokenTrackingService,
-    ISpeechService speechService,
-    IAgentBackgroundQueue backgroundQueue,
     ILogger<AgentController> logger) : ControllerBase
 {
     private async Task<(ActionResult? Error, AgentRequest Normalized)> TryNormalizeAgentRequestAsync(
@@ -126,9 +120,6 @@ public sealed class AgentController(
             });
         }
 
-        if (string.IsNullOrWhiteSpace(request.SessionId))
-            return BadRequest(new { error = "session_id_required", message = "SessionId must not be empty." });
-
         var userId = userContext.UserId;
         var isAnonymous = userContext.IsAnonymous;
 
@@ -136,8 +127,8 @@ public sealed class AgentController(
             return Unauthorized(new { error = "auth_failed", message = "Invalid authentication token." });
 
         logger.LogInformation(
-            "Ask request. UserId {UserId} IsAnonymous {IsAnonymous} SessionId {SessionId} ToolType {ToolType}",
-            userId, isAnonymous, request.SessionId, request.ToolType ?? "general");
+            "Ask request. UserId {UserId} IsAnonymous {IsAnonymous} ToolType {ToolType}",
+            userId, isAnonymous, request.ToolType ?? "jobanalyzer");
 
         UsageCheckResult usageCheck;
         try
@@ -147,8 +138,8 @@ public sealed class AgentController(
         catch (Exception ex)
         {
             logger.LogError(ex,
-                "Usage check failed (storage). UserId {UserId} IsAnonymous {IsAnonymous} SessionId {SessionId}",
-                userId, isAnonymous, request.SessionId);
+                "Usage check failed (storage). UserId {UserId} IsAnonymous {IsAnonymous}",
+                userId, isAnonymous);
             return StatusCode(503, new
             {
                 error = "usage_check_failed",
@@ -163,18 +154,18 @@ public sealed class AgentController(
                 userId, usageCheck.Plan, usageCheck.UsageToday, usageCheck.DailyLimit);
             return StatusCode(429, new
             {
-                error      = "usage_limit_reached",
-                reason     = usageCheck.Reason,
-                message    = usageCheck.Message,
+                error = "usage_limit_reached",
+                reason = usageCheck.Reason,
+                message = usageCheck.Message,
                 usageToday = usageCheck.UsageToday,
                 dailyLimit = usageCheck.DailyLimit,
-                plan       = usageCheck.Plan,
+                plan = usageCheck.Plan,
             });
         }
 
-        Response.Headers.Append("X-Usage-Today",  usageCheck.UsageToday.ToString());
-        Response.Headers.Append("X-Usage-Limit",  usageCheck.DailyLimit == int.MaxValue ? "unlimited" : usageCheck.DailyLimit.ToString());
-        Response.Headers.Append("X-Usage-Plan",   usageCheck.Plan);
+        Response.Headers.Append("X-Usage-Today", usageCheck.UsageToday.ToString());
+        Response.Headers.Append("X-Usage-Limit", usageCheck.DailyLimit == int.MaxValue ? "unlimited" : usageCheck.DailyLimit.ToString());
+        Response.Headers.Append("X-Usage-Plan", usageCheck.Plan);
         AppendDailyUsageAndTokenTrackingHeaders();
 
         try
@@ -184,202 +175,15 @@ public sealed class AgentController(
                 return normErr;
 
             var result = await agentService.RunAsync(agentRequest);
-            FireTokenTracking(userId, agentRequest.ToolType, result);
-            if (!isAnonymous)
-            {
-                var uid = userId!;
-                var sid = request.SessionId!;
-                var msg = request.Message ?? "";
-                backgroundQueue.TryEnqueue("session-notify", async (sp, ct) =>
-                {
-                    try
-                    {
-                        await sp.GetRequiredService<ChatSessionService>()
-                            .NotifyAfterAgentMessageAsync(uid, sid, msg, ct)
-                            .ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogWarning(ex, "Chat session notify failed for user {UserId} session {SessionId}", uid, sid);
-                    }
-                });
-            }
-
+            await FireTokenTrackingAsync(userId, agentRequest.ToolType, result).ConfigureAwait(false);
             return Ok(result);
         }
         catch (Exception ex)
         {
             logger.LogError(ex,
-                "Agent execution failed. UserId {UserId} SessionId {SessionId} ToolType {ToolType}",
-                userId, request.SessionId, request.ToolType ?? "general");
+                "Agent execution failed. UserId {UserId} ToolType {ToolType}",
+                userId, request.ToolType ?? "jobanalyzer");
             return StatusCode(500, new { error = "agent_error", message = "An internal error occurred. Please try again." });
-        }
-    }
-
-    [HttpPost("stream")]
-    [EnableRateLimiting("agent_chat")]
-    public async Task AskStream([FromBody] AgentRequest request)
-    {
-        var streamProbe = request with { CareerToolSetup = AgentPayloadLimits.TruncateCareerSetup(request.CareerToolSetup) };
-        if (string.IsNullOrWhiteSpace(request.Message)
-            || AgentPayloadLimits.ValidateTotalPayload(streamProbe) is not null)
-        {
-            Response.StatusCode = 400;
-            await Response.WriteAsync(JsonSerializer.Serialize(new
-            {
-                error = "message_invalid",
-                message = "Message must not be empty; total payload (message + career setup) must be within limits.",
-            }));
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(request.SessionId))
-        {
-            Response.StatusCode = 400;
-            await Response.WriteAsync(JsonSerializer.Serialize(new { error = "session_id_required", message = "SessionId must not be empty." }));
-            return;
-        }
-
-        var userId = userContext.UserId;
-        var isAnonymous = userContext.IsAnonymous;
-        if (string.IsNullOrEmpty(userId))
-        {
-            Response.StatusCode = 401;
-            await Response.WriteAsync(JsonSerializer.Serialize(new { error = "auth_failed", message = "Invalid authentication token." }));
-            return;
-        }
-
-        logger.LogInformation(
-            "Stream request. UserId {UserId} IsAnonymous {IsAnonymous} SessionId {SessionId} ToolType {ToolType}",
-            userId, isAnonymous, request.SessionId, request.ToolType ?? "general");
-
-        UsageCheckResult usageCheck;
-        try
-        {
-            usageCheck = await usageService.CheckAndIncrementAsync(userId, isAnonymous);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex,
-                "Usage check failed (storage). UserId {UserId} IsAnonymous {IsAnonymous} SessionId {SessionId}",
-                userId, isAnonymous, request.SessionId);
-            Response.StatusCode = 503;
-            await Response.WriteAsync(JsonSerializer.Serialize(new
-            {
-                error = "usage_check_failed",
-                message = "Usage service temporarily unavailable. Please retry.",
-            }));
-            return;
-        }
-
-        if (!usageCheck.Allowed)
-        {
-            logger.LogInformation(
-                "Usage limit reached. UserId {UserId} Plan {Plan} UsageToday {UsageToday} DailyLimit {DailyLimit}",
-                userId, usageCheck.Plan, usageCheck.UsageToday, usageCheck.DailyLimit);
-            Response.StatusCode = 429;
-            await Response.WriteAsync(JsonSerializer.Serialize(new
-            {
-                error      = "usage_limit_reached",
-                reason     = usageCheck.Reason,
-                usageToday = usageCheck.UsageToday,
-                dailyLimit = usageCheck.DailyLimit,
-                plan       = usageCheck.Plan,
-            }));
-            return;
-        }
-
-        var (normErr, agentRequest) = await TryNormalizeAgentRequestAsync(request, userId, isAnonymous, true);
-        if (normErr is not null)
-        {
-            var status = normErr switch
-            {
-                BadRequestObjectResult => 400,
-                StatusCodeResult scr => scr.StatusCode,
-                ObjectResult { StatusCode: { } c } => c,
-                _ => 400,
-            };
-            Response.StatusCode = status;
-            var payload = normErr is ObjectResult obr && obr.Value is not null
-                ? obr.Value
-                : new { error = "request_invalid" };
-            await Response.WriteAsync(JsonSerializer.Serialize(payload));
-            return;
-        }
-
-        Response.ContentType = "text/event-stream; charset=utf-8";
-        Response.Headers["Cache-Control"]    = "no-cache";
-        Response.Headers["X-Accel-Buffering"] = "no";
-        Response.Headers.Append("X-Usage-Today", usageCheck.UsageToday.ToString());
-        Response.Headers.Append("X-Usage-Limit", usageCheck.DailyLimit == int.MaxValue ? "unlimited" : usageCheck.DailyLimit.ToString());
-        Response.Headers.Append("X-Usage-Plan",  usageCheck.Plan);
-        AppendDailyUsageAndTokenTrackingHeaders();
-
-        try
-        {
-            await foreach (var chunk in agentService.StreamAsync(agentRequest, HttpContext.RequestAborted))
-            {
-                string json;
-                if (chunk.IsDone)
-                {
-                    FireTokenTracking(
-                        userId,
-                        agentRequest.ToolType,
-                        chunk.InputTokens,
-                        chunk.OutputTokens,
-                        chunk.Model,
-                        chunk.CacheCreationInputTokens,
-                        chunk.CacheReadInputTokens);
-                    if (!isAnonymous)
-                    {
-                        var uid = userId!;
-                        var sid = request.SessionId!;
-                        var msg = request.Message ?? "";
-                        backgroundQueue.TryEnqueue("session-notify", async (sp, ct) =>
-                        {
-                            try
-                            {
-                                await sp.GetRequiredService<ChatSessionService>()
-                                    .NotifyAfterAgentMessageAsync(uid, sid, msg, ct)
-                                    .ConfigureAwait(false);
-                            }
-                            catch (Exception ex)
-                            {
-                                logger.LogWarning(ex, "Chat session notify failed for user {UserId} session {SessionId}", uid, sid);
-                            }
-                        });
-                    }
-
-                    json = JsonSerializer.Serialize(new
-                    {
-                        type = "done",
-                        toolUsed = chunk.ToolUsed ?? "",
-                        inputTokens = chunk.InputTokens,
-                        outputTokens = chunk.OutputTokens,
-                        model = chunk.Model,
-                        cacheCreationInputTokens = chunk.CacheCreationInputTokens,
-                        cacheReadInputTokens = chunk.CacheReadInputTokens,
-                    });
-                }
-                else
-                    json = JsonSerializer.Serialize(new { type = "chunk", text = chunk.Text ?? "" });
-
-                await Response.WriteAsync($"data: {json}\n\n");
-                await Response.Body.FlushAsync(HttpContext.RequestAborted);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // Client disconnected — normal
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex,
-                "Streaming error. UserId {UserId} SessionId {SessionId} ToolType {ToolType}",
-                userId, request.SessionId, request.ToolType ?? "general");
-            var err = JsonSerializer.Serialize(new { type = "error", message = "An unexpected error occurred. Please try again." });
-            await Response.WriteAsync($"data: {err}\n\n");
-            await Response.Body.FlushAsync();
         }
     }
 
@@ -407,14 +211,6 @@ public sealed class AgentController(
             }
             var limit = UsageService.GetDailyLimit(plan);
 
-            logger.LogDebug(
-                "Usage read. UserId {UserId} Plan {Plan} UsageToday {UsageToday} DailyLimit {DailyLimit} IsAnonymous {IsAnonymous}",
-                userId,
-                plan,
-                usage,
-                limit,
-                isAnonymous);
-
             return Ok(new
             {
                 plan,
@@ -429,7 +225,6 @@ public sealed class AgentController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to read usage and plan for user {UserId}", userId);
-            // 503 = temporary storage unavailability, not a code bug — lets the client retry
             return StatusCode(503, new
             {
                 error = "usage_read_failed",
@@ -441,11 +236,6 @@ public sealed class AgentController(
     [HttpGet("health")]
     public IActionResult Health() => Ok(new { status = "ok", timestamp = DateTime.UtcNow });
 
-    /// <summary>
-    /// Public demo endpoint — no Clerk auth required. Uses its own per-IP daily counter
-    /// (separate from regular anonymous quota) so demo users never see a 429 error.
-    /// Limit: 5 requests per IP per day.
-    /// </summary>
     [HttpPost("demo")]
     [EnableRateLimiting("agent_chat")]
     public async Task<ActionResult<AgentResponse>> Demo([FromBody] AgentRequest request)
@@ -458,7 +248,7 @@ public sealed class AgentController(
 
         var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
         var demoUserId = $"demo_agent:{ip}";
-        const int demoLimit = 10; // 5 tools × 2 messages each
+        const int demoLimit = 5;
 
         int currentUsage;
         try
@@ -476,27 +266,18 @@ public sealed class AgentController(
             {
                 error = "demo_limit_reached",
                 reason = "demo_limit",
-                message = "Demo limit reached. Sign up for 20 free messages per day.",
+                message = "Demo-Limit erreicht. Melde dich an für 3 kostenlose Analysen pro Tag.",
             });
-
-        var sessionId = string.IsNullOrWhiteSpace(request.SessionId)
-            ? $"demo_{ip}_{DateTime.UtcNow:yyyyMMdd}"
-            : request.SessionId;
-
-        var demoRequest = request with { SessionId = sessionId };
-
-        logger.LogInformation("Demo request. IP {IP} Usage {Usage}/{Limit} ToolType {ToolType}",
-            ip, currentUsage + 1, demoLimit, request.ToolType ?? "general");
 
         try
         {
-            var (normErr, normalizedDemo) = await TryNormalizeAgentRequestAsync(demoRequest, demoUserId, false, false);
+            var (normErr, normalizedDemo) = await TryNormalizeAgentRequestAsync(request, demoUserId, isAnonymous: false, enforcePlan: false);
             if (normErr is not null)
                 return normErr;
 
             await usageService.IncrementUsageAsync(demoUserId);
             var result = await agentService.RunAsync(normalizedDemo);
-            FireTokenTracking(demoUserId, normalizedDemo.ToolType, result);
+            await FireTokenTrackingAsync(demoUserId, normalizedDemo.ToolType, result).ConfigureAwait(false);
             return Ok(result);
         }
         catch (Exception ex)
@@ -506,48 +287,9 @@ public sealed class AgentController(
         }
     }
 
-    /// <summary>ElevenLabs TTS via same contract as <c>/api/speech/tts</c>; path alias for agent clients.</summary>
-    [HttpPost("speak")]
-    [EnableRateLimiting("agent_chat")]
-    public async Task<IActionResult> Speak([FromBody] SpeechRequest request, CancellationToken cancellationToken)
+    private async Task FireTokenTrackingAsync(string userId, string? toolTypeRaw, AgentResponse result)
     {
-        if (userContext.IsAnonymous)
-            return Unauthorized(new { error = "auth_required", message = "You must be signed in to use audio." });
-
-        if (string.IsNullOrWhiteSpace(request.Text))
-            return BadRequest(new { error = "Text must not be empty." });
-
-        if (request.Text.Length > 1200)
-            return BadRequest(new { error = $"Text must not exceed 1200 characters (received {request.Text.Length})." });
-
-        if (string.IsNullOrWhiteSpace(request.LanguageCode))
-            return BadRequest(new { error = "LanguageCode must not be empty." });
-
-        try
-        {
-            var speech = await speechService.SynthesizeAsync(request, cancellationToken);
-            return File(speech.Audio, speech.ContentType);
-        }
-        catch (InvalidOperationException ex)
-        {
-            logger.LogWarning(ex, "Speech configuration error (agent speak)");
-            return StatusCode(500, new { error = "speech_config_error", message = "Speech service is not configured correctly." });
-        }
-        catch (HttpRequestException ex)
-        {
-            logger.LogError(ex, "Speech provider request failed (agent speak)");
-            return StatusCode(502, new { error = "speech_provider_error", message = "Speech provider returned an error." });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Agent speak endpoint failed");
-            return StatusCode(500, new { error = "speech_error", message = "An internal error occurred." });
-        }
-    }
-
-    private void FireTokenTracking(string userId, string? toolTypeRaw, AgentResponse result)
-    {
-        var tool = string.IsNullOrWhiteSpace(toolTypeRaw) ? "general" : toolTypeRaw.ToLowerInvariant();
+        var tool = string.IsNullOrWhiteSpace(toolTypeRaw) ? "jobanalyzer" : toolTypeRaw.ToLowerInvariant();
         if (result.InputTokens is not { } i || result.OutputTokens is not { } o)
             return;
 
@@ -557,32 +299,13 @@ public sealed class AgentController(
             return;
 
         var model = result.Model ?? "unknown";
-        backgroundQueue.TryEnqueue("token-tracking", (sp, ct) =>
-            sp.GetRequiredService<TokenTrackingService>()
-              .TrackUsageAsync(userId, tool, model, i, o, cc, cr));
-    }
-
-    private void FireTokenTracking(
-        string userId,
-        string? toolTypeRaw,
-        int? inputTokens,
-        int? outputTokens,
-        string? model,
-        int? cacheCreationInputTokens = null,
-        int? cacheReadInputTokens = null)
-    {
-        var tool = string.IsNullOrWhiteSpace(toolTypeRaw) ? "general" : toolTypeRaw.ToLowerInvariant();
-        if (inputTokens is not { } i || outputTokens is not { } o)
-            return;
-
-        var cc = cacheCreationInputTokens ?? 0;
-        var cr = cacheReadInputTokens ?? 0;
-        if (i == 0 && o == 0 && cc == 0 && cr == 0)
-            return;
-
-        var resolvedModel = model ?? "unknown";
-        backgroundQueue.TryEnqueue("token-tracking", (sp, ct) =>
-            sp.GetRequiredService<TokenTrackingService>()
-              .TrackUsageAsync(userId, tool, resolvedModel, i, o, cc, cr));
+        try
+        {
+            await tokenTrackingService.TrackUsageAsync(userId, tool, model, i, o, cc, cr).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Token tracking failed for user {UserId}", userId);
+        }
     }
 }

@@ -3,8 +3,7 @@
 namespace PrivatePrep.Services.Infrastructure;
 
 /// <summary>
-/// Normalizes inbound user text before LLM calls. Does not run on server-side session context
-/// (job/CV blobs injected from <see cref="SessionContext"/>).
+/// Normalizes inbound user text before LLM calls.
 /// </summary>
 public static class UserInputCleaner
 {

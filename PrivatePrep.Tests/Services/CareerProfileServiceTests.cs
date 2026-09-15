@@ -118,8 +118,8 @@ public class CareerProfileServiceTests
             Skills = new List<string> { "A", "B" },
             Goals = new List<string> { "g1" },
         };
-        var json = System.Text.Json.JsonSerializer.Serialize(original, CareerProfileRedisService.JsonOpts);
-        var back = System.Text.Json.JsonSerializer.Deserialize<CareerProfile>(json, CareerProfileRedisService.JsonOpts);
+        var json = System.Text.Json.JsonSerializer.Serialize(original);
+        var back = System.Text.Json.JsonSerializer.Deserialize<CareerProfile>(json);
         Assert.NotNull(back);
         Assert.Equal(2, back!.Skills.Count);
         Assert.Equal("A", back.Skills[0]);

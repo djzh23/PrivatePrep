@@ -4,26 +4,14 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>privateprep-31e7bfee-4f6f-470c-9a75-tts</UserSecretsId>
-		<!-- vendor/cv-studio is ProjectReference-only; SDK globs would compile those sources into this app -->
-		<DefaultItemExcludes>$(DefaultItemExcludes);vendor\**\*</DefaultItemExcludes>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="vendor\cv-studio\src\CvStudio.Infrastructure\CvStudio.Infrastructure.csproj" />
-	</ItemGroup>
-	<ItemGroup>
 		<InternalsVisibleTo Include="PrivatePrep.Tests" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Update="Models\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</None>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Migrations\*.sql" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Anthropic.SDK" Version="4.1.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,7 +19,6 @@
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0" />
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.3.0" />
-		<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.20.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
 		<PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.2.2" />
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />

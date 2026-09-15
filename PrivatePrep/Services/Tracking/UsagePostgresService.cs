@@ -138,7 +138,7 @@ public sealed class UsagePostgresService(PrivatePrepDbContext db)
                 {
                     Allowed = false,
                     Reason = "anonymous_limit",
-                    Message = "Sign in to get 20 free responses per day",
+                    Message = "Melde dich an, um 3 kostenlose Analysen pro Tag zu erhalten.",
                     UsageToday = anonUsage,
                     DailyLimit = anonLimit,
                     Plan = "anonymous",
@@ -157,7 +157,9 @@ public sealed class UsagePostgresService(PrivatePrepDbContext db)
             {
                 Allowed = false,
                 Reason = plan == "free" ? "free_limit" : "plan_limit",
-                Message = plan == "free" ? "Upgrade to Premium for 200 responses/day" : "Daily limit reached",
+                Message = plan == "free"
+                    ? "Upgrade auf Premium für unbegrenzte Analysen."
+                    : "Tageslimit erreicht.",
                 UsageToday = usage,
                 DailyLimit = limit,
                 Plan = plan,
