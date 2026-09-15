@@ -9,10 +9,12 @@ using PrivatePrep.Data;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Applications;
 using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.FactGate;
 using PrivatePrep.Services.Groq;
 using PrivatePrep.Services.Infrastructure;
 using PrivatePrep.Services.Payments;
 using PrivatePrep.Services.Profile;
+using PrivatePrep.Services.SkillGap;
 using PrivatePrep.Services.Tracking;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -141,6 +143,9 @@ builder.Services.AddHttpClient<GroqChatCompletionService>(client =>
     options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(180);
 });
 builder.Services.AddHostedService<PrivatePrepMigrationRunner>();
+builder.Services.AddSingleton(SkillTaxonomyCatalog.LoadEmbedded());
+builder.Services.AddSingleton<ISkillGapService, SkillGapService>();
+builder.Services.AddSingleton<IFactGateService, FactGateService>();
 builder.Services.AddScoped<IJobContextExtractor, JobContextExtractor>();
 builder.Services.AddScoped<CvParsingService>();
 builder.Services.AddScoped<AgentService>();
