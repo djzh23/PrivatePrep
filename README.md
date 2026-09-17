@@ -152,9 +152,8 @@ Admin-Autorisierung ab.
 
 ## Docs
 
-- `PrivatePrep/docs/blueprint/`: Prompt- und Rubrik-Analyse, Quelle für das V1-Design
-  (Attribution in `NOTICE.md`)
-- `PrivatePrep/docs/blueprint/00-v1-v2-decisions.md`: V1- und V2-Scope-Definition
+- `PrivatePrep/docs/blueprint/`: Prompt- und Rubrik-Analyse, Quelle für das V1-Design.
+  Nicht Teil dieses Repositorys (siehe `NOTICE.md`), lokal bei Bedarf anfragen.
 - `docs/history/`: archivierte Dokumente aus früheren Versionen
 - `docs/deployment/`: Pre-Launch-Checkliste und offene technische Schulden
 
