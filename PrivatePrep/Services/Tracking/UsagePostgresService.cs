@@ -62,10 +62,9 @@ public sealed class UsagePostgresService(PrivatePrepDbContext db)
 
     public async Task<(string Plan, int UsageToday)> GetUsageSnapshotAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var planTask = GetPlanAsync(userId, cancellationToken);
-        var usageTask = GetUsageTodayAsync(userId, cancellationToken);
-        await Task.WhenAll(planTask, usageTask).ConfigureAwait(false);
-        return (await planTask.ConfigureAwait(false), await usageTask.ConfigureAwait(false));
+        var plan = await GetPlanAsync(userId, cancellationToken).ConfigureAwait(false);
+        var usage = await GetUsageTodayAsync(userId, cancellationToken).ConfigureAwait(false);
+        return (plan, usage);
     }
 
     public async Task SetPlanAsync(string userId, string plan, CancellationToken cancellationToken = default)
