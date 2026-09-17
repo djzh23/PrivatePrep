@@ -8,7 +8,7 @@ using PrivatePrep.Models;
 namespace PrivatePrep.Services.Profile;
 
 /// <summary>Career profiles in Supabase/PostgreSQL via EF Core.</summary>
-public sealed class CareerProfilePostgresService(PrivatePrepDbContext db, ILogger<CareerProfilePostgresService> logger)
+public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
 {
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web)
     {
