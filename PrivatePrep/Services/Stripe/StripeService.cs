@@ -408,13 +408,13 @@ public class StripeService
     }
 
     /// <summary>
-    /// Looks up the user's active Stripe subscription and updates Redis to match.
+    /// Looks up the user's active Stripe subscription and updates Postgres to match.
     /// This is the authoritative fallback when both the webhook and confirm-plan have failed.
     ///
     /// Strategy:
-    ///   1. Look up Stripe customer ID from Redis (set during normal checkout/webhook).
+    ///   1. Look up Stripe customer ID from Postgres (set during normal checkout/webhook).
     ///   2. If not found and email is provided, search Stripe by email (webhook never fired).
-    ///   3. List the customer's active subscriptions, map the price to a plan, update Redis.
+    ///   3. List the customer's active subscriptions, map the price to a plan, update Postgres.
     ///
     /// Returns the confirmed plan ("premium" | "pro") or "free" if no active subscription found.
     /// </summary>
@@ -426,7 +426,7 @@ public class StripeService
         if (string.IsNullOrWhiteSpace(customerId) && !string.IsNullOrWhiteSpace(userEmail))
         {
             _logger.LogInformation(
-                "SyncPlanFromStripe: no Redis customer mapping — searching Stripe by email. UserId {UserId} Email {Email}",
+                "SyncPlanFromStripe: no Postgres customer mapping, searching Stripe by email. UserId {UserId} Email {Email}",
                 userId, userEmail);
 
             var customers = await _stripeApiClient.SearchCustomersByEmailAsync(userEmail);
@@ -441,7 +441,7 @@ public class StripeService
                 return "free";
             }
 
-            // Persist the mapping so future lookups hit Redis, not Stripe.
+            // Persist the mapping so future lookups hit Postgres, not Stripe.
             await _usageService.SetStripeCustomerIdAsync(userId, customerId);
 
             _logger.LogInformation(
@@ -478,7 +478,7 @@ public class StripeService
             return "free";
         }
 
-        // ── 3. Persist in Redis ───────────────────────────────────────────────────
+        // 3. Persist in Postgres
         await _usageService.SetPlanAsync(userId, plan);
 
         _logger.LogInformation(
