@@ -6,7 +6,7 @@ using PrivatePrep.Services.Agent;
 
 namespace PrivatePrep.Services.Tracking;
 
-/// <summary>Shared pricing, sanitization, and display helpers for Redis and Postgres token tracking.</summary>
+/// <summary>Shared pricing, sanitization, and display helpers for Postgres token tracking.</summary>
 public static class TokenTrackingCostHelper
 {
     private static readonly Dictionary<string, (decimal InputPerMillion, decimal OutputPerMillion)> ModelPricing = new(StringComparer.OrdinalIgnoreCase)
@@ -39,7 +39,7 @@ public static class TokenTrackingCostHelper
         return inputCost + cacheWriteCost + cacheReadCost + outputCost;
     }
 
-    /// <summary>Safe Redis segment: keeps model ids readable (e.g. groq/llama-3.3-70b → groq_llama-3.3-70b).</summary>
+    /// <summary>Safe storage-key segment: keeps model ids readable (e.g. groq/llama-3.3-70b → groq_llama-3.3-70b).</summary>
     public static string SanitizeSegment(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -60,9 +60,9 @@ public static class TokenTrackingCostHelper
     public static string InferProviderFromModelKey(string modelKey) =>
         modelKey.StartsWith("groq_", StringComparison.OrdinalIgnoreCase) ? "Groq" : "Anthropic";
 
-    /// <summary>Redis stores legacy Groq $ from old pricing; dashboard treats Groq keys as 0 USD.</summary>
-    public static decimal AdjustStoredCostUsdForDisplay(string redisModelKey, decimal storedCostUsd) =>
-        redisModelKey.StartsWith("groq_", StringComparison.OrdinalIgnoreCase) ? 0m : storedCostUsd;
+    /// <summary>Storage keeps legacy Groq $ from old pricing; dashboard treats Groq keys as 0 USD.</summary>
+    public static decimal AdjustStoredCostUsdForDisplay(string storedModelKey, decimal storedCostUsd) =>
+        storedModelKey.StartsWith("groq_", StringComparison.OrdinalIgnoreCase) ? 0m : storedCostUsd;
 
     /// <summary>Pick tool with highest tc_* count; ties broken by lexicographic tool name.</summary>
     public static string? ParseTopToolFromTcFields(Dictionary<string, string> map)

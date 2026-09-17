@@ -1,8 +1,8 @@
 namespace PrivatePrep.Models;
 
 /// <summary>
-/// Das Karriereprofil eines Users. Wird in Redis als JSON gespeichert.
-/// Kann schrittweise aufgebaut werden — alle Felder sind optional.
+/// Das Karriereprofil eines Users. Wird in Postgres als JSON gespeichert.
+/// Kann schrittweise aufgebaut werden, alle Felder sind optional.
 /// </summary>
 public class CareerProfile
 {

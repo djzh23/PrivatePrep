@@ -29,7 +29,7 @@ public class UserUsageSummary
 public class ModelUsage
 {
     public string Model { get; set; } = string.Empty;
-    /// <summary>Groq vs Anthropic (from Redis model key after sanitization).</summary>
+    /// <summary>Groq vs Anthropic (from the stored model key after sanitization).</summary>
     public string Provider { get; set; } = "Anthropic";
     public int Messages { get; set; }
     public int InputTokens { get; set; }

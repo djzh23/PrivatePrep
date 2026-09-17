@@ -275,68 +275,6 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         return v.ToString();
     }
 
-    /// <summary>Upserts from Redis backfill; preserves <paramref name="cacheVersion"/> when set.</summary>
-    public async Task ImportFromRedisAsync(
-        string userId,
-        CareerProfile profile,
-        string? cvRawFull,
-        long? cacheVersion,
-        CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
-
-
-        profile.UserId = userId;
-        profile.CvRawText = Truncate(profile.CvRawText, CareerProfileStorageLimits.CvRawTextInProfileMax);
-        profile.CvSummary = Truncate(profile.CvSummary, CareerProfileStorageLimits.CvSummaryMaxChars);
-        profile.CvSummaryEn = Truncate(profile.CvSummaryEn, CareerProfileStorageLimits.CvSummaryMaxChars);
-        foreach (var job in profile.TargetJobs)
-        {
-            job.Description = Truncate(job.Description, CareerProfileStorageLimits.TargetJobDescriptionMax);
-        }
-
-        var json = JsonSerializer.Serialize(profile, JsonOpts);
-        var rawCol = string.IsNullOrEmpty(cvRawFull)
-            ? null
-            : (cvRawFull.Length > CareerProfileStorageLimits.CvRawSeparateKeyMax
-                ? cvRawFull[..CareerProfileStorageLimits.CvRawSeparateKeyMax]
-                : cvRawFull);
-
-        var now = DateTime.UtcNow;
-        var existing = await db.CareerProfiles
-            .FirstOrDefaultAsync(x => x.ClerkUserId == userId, cancellationToken)
-            .ConfigureAwait(false);
-
-        var version = cacheVersion ?? (existing?.CacheVersion ?? 0);
-        if (version < 0)
-            version = 0;
-
-        if (existing is null)
-        {
-            db.CareerProfiles.Add(new CareerProfileEntity
-            {
-                ClerkUserId = userId,
-                CreatedAt = profile.CreatedAt == default ? now : profile.CreatedAt,
-                UpdatedAt = profile.UpdatedAt == default ? now : profile.UpdatedAt,
-                ProfileJson = json,
-                CvRawText = rawCol,
-                CacheVersion = version == 0 ? 1 : version,
-            });
-        }
-        else
-        {
-            existing.UpdatedAt = profile.UpdatedAt == default ? now : profile.UpdatedAt;
-            existing.ProfileJson = json;
-            existing.CvRawText = rawCol;
-            if (cacheVersion.HasValue)
-                existing.CacheVersion = cacheVersion.Value;
-        }
-
-        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-    }
-
-
     private static CareerProfile DeserializeProfile(string profileJson, string userId)
     {
         var profile = JsonSerializer.Deserialize<CareerProfile>(profileJson, JsonOpts) ?? new CareerProfile();

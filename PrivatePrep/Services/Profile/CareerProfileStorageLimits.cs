@@ -1,6 +1,6 @@
 ﻿namespace PrivatePrep.Services.Profile;
 
-/// <summary>Shared limits for Redis and Postgres career profile storage (aligned with PDF extraction / token caps).</summary>
+/// <summary>Shared limits for Postgres career profile storage (aligned with PDF extraction / token caps).</summary>
 public static class CareerProfileStorageLimits
 {
     public const int CvRawTextInProfileMax = 3000;

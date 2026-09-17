@@ -124,9 +124,9 @@ public sealed class StripeController(
     }
 
     /// <summary>
-    /// Queries Stripe directly for the user's active subscription and updates Redis to match.
+    /// Queries Stripe directly for the user's active subscription and updates Postgres to match.
     /// Accepts an optional { email } in the request body so that a Stripe customer can be
-    /// located even when the customer-ID mapping was never written to Redis (webhook missed).
+    /// located even when the customer-ID mapping was never written to Postgres (webhook missed).
     /// </summary>
     [HttpPost("sync-plan")]
     [EnableRateLimiting("stripe_write")]
