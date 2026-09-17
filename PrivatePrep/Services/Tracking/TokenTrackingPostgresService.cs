@@ -398,24 +398,6 @@ public sealed class TokenTrackingPostgresService(
             .ToList();
     }
 
-    private async Task<(decimal CostUsd, bool HadRows)> SumUserRangeLlmCostUsdAsync(
-        string userId,
-        DateOnly start,
-        DateOnly end,
-        CancellationToken cancellationToken)
-    {
-        var rows = await db.TokenUsageDailyUserModels.AsNoTracking()
-            .Where(x => x.ClerkUserId == userId && x.UsageDate >= start && x.UsageDate <= end)
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-        if (rows.Count == 0)
-            return (0m, false);
-        decimal s = 0;
-        foreach (var r in rows)
-            s += TokenTrackingCostHelper.AdjustStoredCostUsdForDisplay(r.ModelKey, r.CostUsd);
-        return (s, true);
-    }
-
     public Task<List<UserUsageSummary>> GetTopUsersForDateRangeQueryAsync(
         string startDate,
         string endDate,
@@ -489,16 +471,6 @@ public sealed class TokenTrackingPostgresService(
         return list;
     }
 
-    private async Task<(int Messages, int InputTokens, int OutputTokens, decimal CostUsd)> ReadGlobalDayAsync(DateOnly date, CancellationToken cancellationToken)
-    {
-        var row = await db.TokenUsageGlobalDaily.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.UsageDate == date, cancellationToken)
-            .ConfigureAwait(false);
-        if (row is null)
-            return (0, 0, 0, 0m);
-        return ((int)row.MessageCount, (int)row.InputTokens, (int)row.OutputTokens, row.CostUsd);
-    }
-
     private async Task<Dictionary<string, ModelUsage>> ReadModelAggregatesAsync(DateOnly date, CancellationToken cancellationToken)
     {
         var rows = await db.TokenUsageDailyUserModels.AsNoTracking()
@@ -562,48 +534,6 @@ public sealed class TokenTrackingPostgresService(
         }
 
         return dict;
-    }
-
-    private async Task<(decimal CostUsd, bool HadPerModelRows)> SumUserDayLlmCostUsdAsync(
-        string userId,
-        DateOnly date,
-        CancellationToken cancellationToken)
-    {
-        var models = await db.TokenUsageDailyUserModels.AsNoTracking()
-            .Where(x => x.ClerkUserId == userId && x.UsageDate == date)
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-        if (models.Count == 0)
-            return (0m, false);
-        decimal s = 0;
-        foreach (var m in models)
-            s += TokenTrackingCostHelper.AdjustStoredCostUsdForDisplay(m.ModelKey, m.CostUsd);
-        return (s, true);
-    }
-
-    private async Task<string?> GetTopToolForUserDayAsync(string userId, DateOnly ds, CancellationToken cancellationToken)
-    {
-        var row = await db.TokenUsageDailyUserTools.AsNoTracking()
-            .Where(x => x.ClerkUserId == userId && x.UsageDate == ds)
-            .OrderByDescending(x => x.MessageCount)
-            .ThenBy(x => x.Tool)
-            .Select(x => x.Tool)
-            .FirstOrDefaultAsync(cancellationToken)
-            .ConfigureAwait(false);
-        return row;
-    }
-
-    private async Task<string?> GetTopToolForUserRangeAsync(string userId, DateOnly start, DateOnly end, CancellationToken cancellationToken)
-    {
-        var q = await db.TokenUsageDailyUserTools.AsNoTracking()
-            .Where(x => x.ClerkUserId == userId && x.UsageDate >= start && x.UsageDate <= end)
-            .GroupBy(x => x.Tool)
-            .Select(g => new { Tool = g.Key, C = g.Sum(x => x.MessageCount) })
-            .OrderByDescending(x => x.C)
-            .ThenBy(x => x.Tool)
-            .FirstOrDefaultAsync(cancellationToken)
-            .ConfigureAwait(false);
-        return q?.Tool;
     }
 
     private static string ResolveDefaultPlan(string userId) =>

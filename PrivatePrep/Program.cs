@@ -107,7 +107,6 @@ if (registerPostgres)
     builder.Services.AddScoped<CareerProfilePostgresService>();
     builder.Services.AddScoped<UsagePostgresService>();
     builder.Services.AddScoped<TokenTrackingPostgresService>();
-    builder.Services.AddScoped<IUsageTrackingService, UsageTrackingService>();
     builder.Services.AddScoped<UsageService>();
     builder.Services.AddScoped<TokenTrackingService>();
     builder.Services.AddScoped<CareerProfileService>();

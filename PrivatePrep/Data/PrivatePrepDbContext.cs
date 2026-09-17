@@ -8,17 +8,7 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
 {
     public DbSet<AppUserEntity> AppUsers => Set<AppUserEntity>();
 
-    public DbSet<ChatNoteEntity> ChatNotes => Set<ChatNoteEntity>();
-
-    public DbSet<JobApplicationEntity> JobApplications => Set<JobApplicationEntity>();
-
     public DbSet<CareerProfileEntity> CareerProfiles => Set<CareerProfileEntity>();
-
-    public DbSet<ChatSessionEntity> ChatSessions => Set<ChatSessionEntity>();
-
-    public DbSet<ChatTranscriptEntity> ChatTranscripts => Set<ChatTranscriptEntity>();
-
-    public DbSet<LearningMemoryEntity> LearningMemories => Set<LearningMemoryEntity>();
 
     public DbSet<TokenUsageGlobalDailyEntity> TokenUsageGlobalDaily => Set<TokenUsageGlobalDailyEntity>();
 
@@ -34,16 +24,6 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
 
     public DbSet<UserPlanEntity> UserPlans => Set<UserPlanEntity>();
 
-    public DbSet<CvPdfExportEntity> CvPdfExports => Set<CvPdfExportEntity>();
-
-    public DbSet<CvUserCategoryEntity> CvUserCategories => Set<CvUserCategoryEntity>();
-
-    public DbSet<CvResumeCategoryAssignmentEntity> CvResumeCategoryAssignments => Set<CvResumeCategoryAssignmentEntity>();
-
-    public DbSet<CareerMemoryChunkEntity> CareerMemory => Set<CareerMemoryChunkEntity>();
-
-    public DbSet<UsageRecordEntity> UsageRecords => Set<UsageRecordEntity>();
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("vector");
@@ -54,45 +34,11 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
             e.HasKey(x => x.ClerkUserId);
         });
 
-        modelBuilder.Entity<ChatNoteEntity>(e =>
-        {
-            e.ToTable("chat_notes");
-            e.HasKey(x => x.Id);
-            e.HasIndex(x => new { x.ClerkUserId, x.UpdatedAt });
-            e.Property(x => x.Tags).HasColumnType("text[]");
-        });
-
-        modelBuilder.Entity<JobApplicationEntity>(e =>
-        {
-            e.ToTable("job_applications");
-            e.HasKey(x => new { x.ClerkUserId, x.ApplicationId });
-            e.HasIndex(x => new { x.ClerkUserId, x.UpdatedAt });
-        });
-
         modelBuilder.Entity<CareerProfileEntity>(e =>
         {
             e.ToTable("career_profiles");
             e.HasKey(x => x.ClerkUserId);
             e.HasIndex(x => x.UpdatedAt);
-        });
-
-        modelBuilder.Entity<ChatSessionEntity>(e =>
-        {
-            e.ToTable("chat_sessions");
-            e.HasKey(x => new { x.ClerkUserId, x.SessionId });
-            e.HasIndex(x => new { x.ClerkUserId, x.DisplayOrder });
-        });
-
-        modelBuilder.Entity<ChatTranscriptEntity>(e =>
-        {
-            e.ToTable("chat_transcripts");
-            e.HasKey(x => new { x.ClerkUserId, x.SessionId });
-        });
-
-        modelBuilder.Entity<LearningMemoryEntity>(e =>
-        {
-            e.ToTable("learning_memories");
-            e.HasKey(x => x.ClerkUserId);
         });
 
         modelBuilder.Entity<TokenUsageGlobalDailyEntity>(e =>
@@ -140,52 +86,5 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
             e.HasKey(x => x.ClerkUserId);
         });
 
-        modelBuilder.Entity<CvPdfExportEntity>(e =>
-        {
-            e.ToTable("cv_pdf_exports");
-            e.HasKey(x => x.Id);
-            e.HasIndex(x => new { x.ClerkUserId, x.CreatedAt });
-        });
-
-        modelBuilder.Entity<CvUserCategoryEntity>(e =>
-        {
-            e.ToTable("cv_user_categories");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id");
-            e.Property(x => x.ClerkUserId).HasColumnName("clerk_user_id").HasMaxLength(128).IsRequired();
-            e.Property(x => x.Name).HasColumnName("name").HasMaxLength(80).IsRequired();
-            e.Property(x => x.SortOrder).HasColumnName("sort_order");
-            e.Property(x => x.CreatedAtUtc).HasColumnName("created_at_utc");
-            e.HasIndex(x => x.ClerkUserId);
-        });
-
-        modelBuilder.Entity<CvResumeCategoryAssignmentEntity>(e =>
-        {
-            e.ToTable("cv_resume_category_assignments");
-            e.HasKey(x => x.ResumeId);
-            e.Property(x => x.ResumeId).HasColumnName("resume_id");
-            e.Property(x => x.ClerkUserId).HasColumnName("clerk_user_id").HasMaxLength(128).IsRequired();
-            e.Property(x => x.CategoryId).HasColumnName("category_id");
-            e.HasIndex(x => x.ClerkUserId);
-        });
-
-        modelBuilder.Entity<CareerMemoryChunkEntity>(e =>
-        {
-            e.ToTable("career_memory");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Embedding).HasColumnType("vector(384)");
-            e.HasIndex(x => x.UserId);
-            e.HasIndex(x => new { x.UserId, x.ContentHash }).IsUnique();
-        });
-
-        modelBuilder.Entity<UsageRecordEntity>(e =>
-        {
-            e.ToTable("usage_records");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.EstimatedCostUsd).HasPrecision(10, 6);
-            e.HasIndex(x => new { x.UserId, x.CreatedAt });
-            e.HasIndex(x => x.CreatedAt);
-            e.HasIndex(x => new { x.ToolType, x.CreatedAt });
-        });
     }
 }
