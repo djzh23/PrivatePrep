@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Pgvector.EntityFrameworkCore;
 using PrivatePrep.Data.Entities;
 
 namespace PrivatePrep.Data;
@@ -26,8 +25,6 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasPostgresExtension("vector");
-
         modelBuilder.Entity<AppUserEntity>(e =>
         {
             e.ToTable("app_users");

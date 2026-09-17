@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Http.Resilience;
 using Npgsql;
-using Pgvector.EntityFrameworkCore;
 using Polly;
 using Serilog;
 using PrivatePrep.Configuration;
@@ -103,7 +102,7 @@ var registerPostgres = !string.IsNullOrWhiteSpace(supabaseConnectionString);
 if (registerPostgres)
 {
     builder.Services.AddDbContext<PrivatePrepDbContext>(options =>
-        options.UseNpgsql(supabaseConnectionString, npgsql => npgsql.UseVector()));
+        options.UseNpgsql(supabaseConnectionString));
     builder.Services.AddScoped<CareerProfilePostgresService>();
     builder.Services.AddScoped<UsagePostgresService>();
     builder.Services.AddScoped<TokenTrackingPostgresService>();
