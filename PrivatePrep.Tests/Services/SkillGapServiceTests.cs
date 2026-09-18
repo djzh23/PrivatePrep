@@ -147,6 +147,53 @@ public class SkillGapServiceTests
     }
 
     [Fact]
+    public void Classify_GermanOfficeJd_ExtractsDocumentationAndScheduling()
+    {
+        var cv = """
+            Kenntnisse
+            MS Office, Terminplanung, Reisekostenabrechnung
+
+            Berufserfahrung
+            Teamassistenz in einer Verwaltung.
+            """;
+        var jd = PadJob("""
+            Voraussetzungen
+            Sie bringen mit: Terminplanung und Microsoft Office.
+            Außerdem erwarten wir Reisekostenabrechnung im Sekretariat.
+            """);
+
+        var report = _sut.Classify(cv, jd);
+
+        Assert.Equal(SkillGapReasonCodes.Ok, report.ReasonCode);
+        Assert.Contains("Terminplanung", report.Existing);
+        Assert.Contains("Microsoft Office", report.Existing);
+        Assert.Contains("Reisekostenabrechnung", report.Existing);
+    }
+
+    [Fact]
+    public void Classify_GermanPflegeJd_ReportsGapWhenDocumentationMissing()
+    {
+        var cv = """
+            Kenntnisse
+            Behandlungspflege, Grundpflege
+
+            Berufserfahrung
+            Pflegefachkraft auf einer internistischen Station.
+            """;
+        var jd = PadJob("""
+            Ihr Profil
+            Behandlungspflege und Pflegedokumentation sind Voraussetzung für die Station.
+            """);
+
+        var report = _sut.Classify(cv, jd);
+
+        Assert.Equal(SkillGapReasonCodes.Ok, report.ReasonCode);
+        Assert.Contains("Behandlungspflege", report.Existing);
+        Assert.Contains("Pflegedokumentation", report.Gap);
+        Assert.DoesNotContain("Pflegedokumentation", report.Existing);
+    }
+
+    [Fact]
     public void Classify_Matching_IsCaseInsensitive()
     {
         var cv = """

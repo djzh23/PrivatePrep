@@ -7,7 +7,13 @@ public sealed class SkillGapService : ISkillGapService
     private static readonly string[] RequirementHeaders =
     [
         "technische anforderungen",
+        "fachliche anforderungen",
+        "persönliche anforderungen",
         "anforderungsprofil",
+        "voraussetzungen",
+        "das bringen sie mit",
+        "das erwarten wir",
+        "sie verfügen über",
         "what we're looking for",
         "what we are looking for",
         "what you'll bring",
@@ -75,6 +81,9 @@ public sealed class SkillGapService : ISkillGapService
         "technical skills",
         "it-kenntnisse",
         "it kenntnisse",
+        "edv-kenntnisse",
+        "edv kenntnisse",
+        "softwarekenntnisse",
         "fachkenntnisse",
         "hard skills",
         "tech-stack",

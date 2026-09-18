@@ -52,7 +52,7 @@ public static class CareerProfileContextBuilder
                 if (!string.IsNullOrEmpty(exp.Summary))
                 {
                     var s = TruncateOneLine(exp.Summary.Replace('\n', ' '), 80);
-                    line += $" — {s}";
+                    line += $": {s}";
                 }
 
                 body.Add(TruncateOneLine(line, MaxExperienceLineChars));
@@ -133,19 +133,19 @@ public static class CareerProfileContextBuilder
         var lines = new List<string>();
         if (juniorish)
         {
-            lines.Add("Einstieg/Junior-Level erkennbar — keine Senior- oder Lead-Behauptungen; Produktions-Ownership nur wenn belegt.");
+            lines.Add("Einstiegs- oder Junior-Level erkennbar: keine Senior- oder Lead-Behauptungen; Verantwortung nur behaupten, wenn sie im Profil steht.");
         }
         else if (level.Contains("senior", StringComparison.Ordinal) || label.Contains("senior", StringComparison.Ordinal))
         {
-            lines.Add("Senior-Level erkennbar — trotzdem keine erfundenen Metriken oder Teamgrößen.");
+            lines.Add("Senior-Level erkennbar: trotzdem keine erfundenen Metriken oder Teamgrößen.");
         }
         else
         {
-            lines.Add("Nur aus den gelieferten Profilzeilen argumentieren — nichts hinzudichten.");
+            lines.Add("Nur aus den gelieferten Profilzeilen argumentieren. Nichts hinzudichten.");
         }
 
         if (string.IsNullOrEmpty(profile.CvSummary) && string.IsNullOrEmpty(profile.CvRawText) && profile.Experience.Count == 0)
-            lines.Add("Wenig strukturierte Werdegang-Daten — vorsichtige Formulierungen, Lücken offen nennen.");
+            lines.Add("Wenig strukturierte Werdegang-Daten: vorsichtige Formulierungen, Lücken offen nennen.");
 
         return lines.Count == 0 ? null : string.Join(" ", lines);
     }

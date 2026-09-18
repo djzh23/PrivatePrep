@@ -5,7 +5,7 @@
 - [ ] Datenschutzerklärung von e-recht24.de generiert und live
 - [ ] DPAs / AVVs bei Groq, Clerk, Stripe, Render, Supabase akzeptiert
 - [ ] Kein Google-Gemini-DPA nötig, solange V1 nur Groq nutzt — bestätigt
-- [ ] Cookie-Banner nicht nötig (keine Analytics in V1) — bestätigt
+- [ ] Cookie-Banner: Pirsch ist cookielos und nur aktiv, wenn VITE_PIRSCH_CODE gesetzt ist. Banner nur nötig, wenn zusätzliche Tracker mit Cookies dazukommen.
 
 ## Technisch
 - [ ] Render von Free auf Starter ($7/Monat) hochgestuft ODER auf Hetzner CX22 migriert

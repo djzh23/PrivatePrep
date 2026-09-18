@@ -47,8 +47,8 @@ public class CvParsingService
 
             {
               "currentRole": "aktuelle oder letzte Berufsbezeichnung",
-              "field": "it|marketing|finance|healthcare|engineering|education|sales|hr|legal|trades|design|other",
-              "level": "entry|junior|mid|senior|lead",
+              "field": "healthcare|office|sales|trades|finance|it|engineering|education|marketing|hr|design|legal|other",
+              "level": "entry|junior|mid|senior|lead|career_change",
               "skills": ["Skill1", "Skill2"],
               "experience": [{"title": "Titel", "company": "Firma", "duration": "2022-2024"}],
               "education": [{"degree": "Abschluss", "institution": "Uni/Schule", "year": "2024"}],
