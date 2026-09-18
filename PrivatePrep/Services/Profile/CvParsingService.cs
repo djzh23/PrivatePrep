@@ -30,8 +30,8 @@ public class CvParsingService
         fullText = Regex.Replace(fullText, @"\s{3,}", "\n");
         fullText = fullText.Trim();
 
-        if (fullText.Length > 3000)
-            fullText = fullText[..3000];
+        if (fullText.Length > CareerProfileStorageLimits.CvRawSeparateKeyMax)
+            fullText = fullText[..CareerProfileStorageLimits.CvRawSeparateKeyMax];
 
         return fullText;
     }

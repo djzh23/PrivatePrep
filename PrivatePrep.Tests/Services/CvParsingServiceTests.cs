@@ -44,15 +44,17 @@ public class CvParsingServiceTests
     }
 
     [Fact]
-    public void ExtractTextFromPdf_TruncatesAt3000Chars()
+    public void ExtractTextFromPdf_TruncatesAtCvRawSeparateKeyMax()
     {
-        var longBody = new string('x', 5000);
+        var longBody = new string('x', CareerProfileStorageLimits.CvRawSeparateKeyMax + 5000);
         var bytes = BuildPdfWithText(longBody);
         var b64 = Convert.ToBase64String(bytes);
 
         var text = _service.ExtractTextFromPdf(b64);
 
-        Assert.True(text.Length <= 3000, $"expected <= 3000, got {text.Length}");
+        Assert.True(
+            text.Length <= CareerProfileStorageLimits.CvRawSeparateKeyMax,
+            $"expected <= {CareerProfileStorageLimits.CvRawSeparateKeyMax}, got {text.Length}");
     }
 
     [Fact]
