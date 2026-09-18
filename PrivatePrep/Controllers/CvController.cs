@@ -186,7 +186,7 @@ public sealed class CvController(
                 return BadRequest(new { error = "Konnte keinen Text aus der PDF extrahieren. Ist es ein Bild-PDF?" });
 
             var parsed = await cvParsingService
-                .ParseCvWithAi(rawText, p => llmSingleCompletion.CompleteAsync(p, 800, HttpContext.RequestAborted))
+                .ParseCvWithAi(rawText, p => llmSingleCompletion.CompleteAsync(p, 2000, HttpContext.RequestAborted))
                 .ConfigureAwait(false);
 
             await profileService.SetCvText(userId, rawText).ConfigureAwait(false);

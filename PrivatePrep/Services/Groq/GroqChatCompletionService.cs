@@ -86,6 +86,11 @@ public sealed class GroqChatCompletionService
         if (model.Contains("qwen", StringComparison.OrdinalIgnoreCase))
             body["reasoning_effort"] = "none";
 
+        // gpt-oss models don't support "none"; reasoning tokens still count against max_tokens, so
+        // an unbounded effort can exhaust the budget before any visible content is produced.
+        if (model.Contains("gpt-oss", StringComparison.OrdinalIgnoreCase))
+            body["reasoning_effort"] = "low";
+
         try
         {
             using var req = new HttpRequestMessage(HttpMethod.Post, "chat/completions")

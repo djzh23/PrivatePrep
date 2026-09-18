@@ -9,7 +9,7 @@ public sealed class AgentService(GroqChatCompletionService groqChat)
     public async Task<string> SingleCompletion(string prompt, int maxTokens = 600)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
-        var capped = Math.Min(int.Clamp(maxTokens, 1, 800), 800);
+        var capped = Math.Min(int.Clamp(maxTokens, 1, 2000), 2000);
         var groqMessages = new List<GroqChatMessage> { new() { Role = "user", Content = prompt } };
         var sampling = new GroqSamplingOptions(Temperature: 0.1, FrequencyPenalty: 0.1, PresencePenalty: 0.05);
 
