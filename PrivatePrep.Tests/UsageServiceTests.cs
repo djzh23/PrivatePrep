@@ -5,10 +5,10 @@ namespace PrivatePrep.Tests;
 public class UsageServiceTests
 {
     [Theory]
-    [InlineData("anonymous", 2)]
-    [InlineData("free", 3)]
-    [InlineData("premium", int.MaxValue)]
-    [InlineData("pro", int.MaxValue)]
+    [InlineData("anonymous", 1)]
+    [InlineData("free", 1)]
+    [InlineData("premium", 30)]
+    [InlineData("unknown", 1)]
     public void GetDailyLimit_MatchesV1Blueprint(string plan, int expected) =>
         Assert.Equal(expected, UsageService.GetDailyLimit(plan));
 }

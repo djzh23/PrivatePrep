@@ -130,14 +130,14 @@ public sealed class UsagePostgresService(PrivatePrepDbContext db)
         {
             var anonKey = $"anon:{userId}";
             var anonUsage = await GetUsageTodayAsync(anonKey, cancellationToken).ConfigureAwait(false);
-            const int anonLimit = 2;
+            var anonLimit = UsageService.GetDailyLimit("anonymous");
 
             if (anonUsage >= anonLimit)
                 return new UsageCheckResult
                 {
                     Allowed = false,
                     Reason = "anonymous_limit",
-                    Message = "Melde dich an, um 3 kostenlose Analysen pro Tag zu erhalten.",
+                    Message = "Melde dich kostenlos an, um weitere Analysen zu erhalten.",
                     UsageToday = anonUsage,
                     DailyLimit = anonLimit,
                     Plan = "anonymous",
@@ -157,7 +157,7 @@ public sealed class UsagePostgresService(PrivatePrepDbContext db)
                 Allowed = false,
                 Reason = plan == "free" ? "free_limit" : "plan_limit",
                 Message = plan == "free"
-                    ? "Upgrade auf Premium für unbegrenzte Analysen."
+                    ? "Upgrade auf Premium für deutlich mehr Analysen pro Tag."
                     : "Tageslimit erreicht.",
                 UsageToday = usage,
                 DailyLimit = limit,

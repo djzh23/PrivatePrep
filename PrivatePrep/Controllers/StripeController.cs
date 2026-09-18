@@ -38,8 +38,8 @@ public sealed class StripeController(
         }
 
         var normalizedPlan = request.Plan.ToLowerInvariant();
-        if (normalizedPlan != "premium" && normalizedPlan != "pro")
-            return BadRequest("Invalid plan. Must be 'premium' or 'pro'.");
+        if (normalizedPlan != "premium")
+            return BadRequest("Invalid plan. Must be 'premium'.");
 
         try
         {
@@ -184,14 +184,7 @@ public sealed class StripeController(
             premium = new
             {
                 priceId = appConfig["Stripe:PremiumPriceId"],
-                price = "4.99",
-                currency = "eur",
-                interval = "month"
-            },
-            pro = new
-            {
-                priceId = appConfig["Stripe:ProPriceId"],
-                price = "9.99",
+                price = "6.99",
                 currency = "eur",
                 interval = "month"
             }

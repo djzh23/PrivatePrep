@@ -222,7 +222,7 @@ public class StripeServiceTests
         var ok = Assert.IsType<OkObjectResult>(result);
         var json = System.Text.Json.JsonSerializer.Serialize(ok.Value);
         Assert.Contains("\"plan\":\"premium\"", json);
-        Assert.Contains("\"dailyLimit\":2147483647", json);
+        Assert.Contains("\"dailyLimit\":30", json);
     }
 
     private sealed class InMemoryUsageService : UsageService

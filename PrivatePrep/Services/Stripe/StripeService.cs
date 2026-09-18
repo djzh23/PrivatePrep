@@ -32,9 +32,7 @@ public class StripeService
         string plan,
         string? correlationId = null)
     {
-        var priceId = plan == "premium"
-            ? _config["Stripe:PremiumPriceId"]
-            : _config["Stripe:ProPriceId"];
+        var priceId = _config["Stripe:PremiumPriceId"];
 
         if (string.IsNullOrWhiteSpace(priceId))
             throw new InvalidOperationException($"Price ID for {plan} not configured");
@@ -121,19 +119,17 @@ public class StripeService
         await HandleStripeEventAsync(stripeEvent);
     }
 
-    // ── Plan rank — used to prevent stale webhooks from downgrading an account ──
+    // Plan rank: used to prevent stale webhooks from downgrading an account.
     private static readonly Dictionary<string, int> PlanRank = new(StringComparer.OrdinalIgnoreCase)
     {
         ["free"]    = 0,
         ["premium"] = 1,
-        ["pro"]     = 2,
     };
     private static int Rank(string plan) => PlanRank.GetValueOrDefault(plan, 0);
 
     private string? PlanFromPriceId(string? priceId)
     {
         if (string.IsNullOrWhiteSpace(priceId)) return null;
-        if (priceId == _config["Stripe:ProPriceId"])      return "pro";
         if (priceId == _config["Stripe:PremiumPriceId"]) return "premium";
         return null;
     }
@@ -210,7 +206,7 @@ public class StripeService
                 $"Stripe checkout metadata missing for event {stripeEvent.Id} and session {sessionId}.");
         }
 
-        if (plan is not ("premium" or "pro"))
+        if (plan is not "premium")
         {
             _logger.LogError(
                 "Stripe checkout metadata contains unsupported plan. EventId {StripeEventId} SessionId {StripeSessionId} Plan {Plan}",
@@ -392,7 +388,7 @@ public class StripeService
             return "free"; // Payment not completed
 
         var plan = session.Metadata?.GetValueOrDefault("plan");
-        if (plan is not ("premium" or "pro"))
+        if (plan is not "premium")
             throw new InvalidOperationException($"Unsupported plan in session metadata: '{plan}'.");
 
         await _usageService.SetPlanAsync(authedUserId, plan);
@@ -416,7 +412,7 @@ public class StripeService
     ///   2. If not found and email is provided, search Stripe by email (webhook never fired).
     ///   3. List the customer's active subscriptions, map the price to a plan, update Postgres.
     ///
-    /// Returns the confirmed plan ("premium" | "pro") or "free" if no active subscription found.
+    /// Returns the confirmed plan ("premium") or "free" if no active subscription found.
     /// </summary>
     public async Task<string> SyncPlanFromStripeAsync(string userId, string? userEmail = null)
     {

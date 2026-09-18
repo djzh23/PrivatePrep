@@ -78,11 +78,10 @@ public class UsageService
 
     public static int GetDailyLimit(string plan) => plan switch
     {
-        "anonymous" => 2,
-        "free" => 3,
-        "premium" => int.MaxValue,
-        "pro" => int.MaxValue,
-        _ => 2,
+        "anonymous" => 1,
+        "free" => 1,
+        "premium" => 30,
+        _ => 1,
     };
 
     public virtual Task<UsageCheckResult> CheckAndIncrementAsync(string userId, bool isAnonymous) =>
