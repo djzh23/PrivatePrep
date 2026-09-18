@@ -150,7 +150,6 @@ builder.Services.AddScoped<CvParsingService>();
 builder.Services.AddScoped<ILlmRouter, GroqLlmRouter>();
 builder.Services.AddScoped<IAnalyzeService, AnalyzeService>();
 builder.Services.AddScoped<AgentService>();
-builder.Services.AddScoped<IAgentService>(sp => sp.GetRequiredService<AgentService>());
 builder.Services.AddScoped<ILlmSingleCompletionService, AgentLlmSingleCompletionService>();
 builder.Services.AddSingleton<ClerkAuthService>();
 builder.Services.AddScoped<AppUserContext>();

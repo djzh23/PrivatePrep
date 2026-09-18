@@ -20,6 +20,11 @@ public sealed class GroqOptions
     public double Temperature { get; set; } = 0.4;
 }
 
+public sealed record GroqSamplingOptions(
+    double? Temperature,
+    double FrequencyPenalty,
+    double PresencePenalty);
+
 /// <summary>Groq OpenAI-compatible chat completions (primary LLM when configured).</summary>
 public sealed class GroqChatCompletionService
 {

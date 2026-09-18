@@ -91,26 +91,10 @@ public static class TokenTrackingCostHelper
 
     public static IReadOnlyList<(string Key, string Provider)> BuildConfiguredLlmModelCatalog(IConfiguration configuration)
     {
-        var list = new List<(string Key, string Provider)>();
         var groqModel = configuration["Groq:Model"];
         if (string.IsNullOrWhiteSpace(groqModel))
-            groqModel = "llama-3.3-70b-versatile";
-        list.Add((SanitizeSegment($"groq/{groqModel.Trim()}"), "Groq"));
-
-        var haiku = configuration["Anthropic:HaikuModel"];
-        if (string.IsNullOrWhiteSpace(haiku))
-            haiku = AgentModelSelector.DefaultHaikuModelId;
-        var haikuKey = SanitizeSegment(haiku.Trim());
-        list.Add((haikuKey, "Anthropic"));
-
-        var sonnet = configuration["Anthropic:Model"];
-        if (string.IsNullOrWhiteSpace(sonnet))
-            sonnet = AgentModelSelector.DefaultSonnetModelId;
-        var sonnetKey = SanitizeSegment(sonnet.Trim());
-        if (!string.Equals(sonnetKey, haikuKey, StringComparison.OrdinalIgnoreCase))
-            list.Add((sonnetKey, "Anthropic"));
-
-        return list;
+            groqModel = "openai/gpt-oss-120b";
+        return [(SanitizeSegment($"groq/{groqModel.Trim()}"), "Groq")];
     }
 
     public static Dictionary<string, ModelUsage> MergeWithConfiguredLlmPlaceholders(
