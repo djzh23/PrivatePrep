@@ -1,7 +1,7 @@
 {
   "skills": [
     { "name": "C#", "aliases": ["c#", "csharp", "c-sharp", "c sharp"] },
-    { "name": ".NET", "aliases": [".net", "dotnet", "dot net"] },
+    { "name": ".NET", "aliases": [".net", "dotnet", "dot net"], "coveredBy": ["C#"] },
     { "name": "ASP.NET Core", "aliases": ["asp.net core", "aspnet core", "asp.net", "aspnet"], "implies": [".NET"], "coveredBy": [".NET"] },
     { "name": "ASP.NET", "aliases": ["asp.net mvc", "aspnet mvc"], "implies": [".NET"], "coveredBy": [".NET"] },
     { "name": "Blazor", "aliases": ["blazor wasm", "blazor server"], "implies": [".NET"], "coveredBy": [".NET"] },

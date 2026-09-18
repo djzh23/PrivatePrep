@@ -1,7 +1,7 @@
 {
   "skills": [
     { "name": "C#", "aliases": ["c#", "csharp"] },
-    { "name": ".NET", "aliases": [".net", "dotnet"] },
+    { "name": ".NET", "aliases": [".net", "dotnet"], "coveredBy": ["C#"] },
     { "name": "ASP.NET Core", "aliases": ["asp.net core", "aspnet core", "asp.net"], "implies": [".NET"], "coveredBy": [".NET"] },
     { "name": "Blazor", "aliases": [] },
     { "name": "Entity Framework", "aliases": ["entity framework core", "ef core"] },

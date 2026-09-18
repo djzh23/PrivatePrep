@@ -31,6 +31,28 @@ public class SkillGapServiceTests
     }
 
     [Fact]
+    public void Classify_CvHasCsharpOnly_JdWantsDotnet_DotnetIsCoveredNotGap()
+    {
+        var cv = """
+            Kenntnisse
+            C#
+
+            Berufserfahrung
+            Backend-Entwickler in einem Produktteam.
+            """;
+        var jd = PadJob("""
+            Anforderungen
+            .NET-Kenntnisse sind für diese Rolle im Backend-Team erforderlich.
+            """);
+
+        var report = _sut.Classify(cv, jd);
+
+        Assert.Equal(SkillGapReasonCodes.Ok, report.ReasonCode);
+        Assert.Contains(".NET", report.Existing);
+        Assert.DoesNotContain(".NET", report.Gap);
+    }
+
+    [Fact]
     public void Classify_CvWithoutDocker_JdRequiresDocker_ReportsGap()
     {
         var cv = """
