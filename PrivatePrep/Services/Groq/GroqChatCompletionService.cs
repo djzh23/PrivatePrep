@@ -15,7 +15,7 @@ public sealed class GroqOptions
     public string ApiKey { get; set; } = "";
 
     /// <summary>Also read from env GROQ_MODEL (mapped in Program.cs).</summary>
-    public string Model { get; set; } = "llama-3.3-70b-versatile";
+    public string Model { get; set; } = "openai/gpt-oss-120b";
 
     public double Temperature { get; set; } = 0.4;
 }
@@ -56,7 +56,7 @@ public sealed class GroqChatCompletionService
             };
         }
 
-        var model = string.IsNullOrWhiteSpace(_opt.Model) ? "llama-3.3-70b-versatile" : _opt.Model.Trim();
+        var model = string.IsNullOrWhiteSpace(_opt.Model) ? "openai/gpt-oss-120b" : _opt.Model.Trim();
 
         var payloadMessages = new List<Dictionary<string, object>>();
         if (!string.IsNullOrWhiteSpace(systemPrompt))
