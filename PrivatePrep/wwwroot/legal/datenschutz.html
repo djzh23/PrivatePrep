@@ -7,52 +7,65 @@
 </head>
 <body>
 <!--
-TODO für Zouhair:
-1. Impressum ausfüllen, dann Verantwortlichen hier konkretisieren
-2. AVVs/DPAs mit Groq, Clerk, Stripe, Render, Vercel, Supabase, ggf. Pirsch bestätigen
-3. Text von einer Kanzlei prüfen lassen, wenn Budget da ist
-V1 sendet keine Bewerberdaten an Google Gemini.
+Anleitung für Zouhair:
+1. Adresse ausfüllen (identisch zum Impressum)
+2. Datum in der Stand-Zeile prüfen (Format: 2026-09-20)
+3. Gemini ist in V1 nicht aktiv. Nicht als Auftragsverarbeiter eintragen.
+4. AVVs in den Dashboards akzeptieren (Groq, Clerk, Stripe, Render, Vercel, Supabase, ggf. Pirsch)
+5. Diesen Kommentar entfernen
+6. Erst DANN live pushen
+
 Die kanonische Fassung für Nutzer ist https://www.betweenatna.de/datenschutz
 -->
   <h1>Datenschutzerklärung</h1>
-  <p><strong>Stand:</strong> 20. September 2026. Entwurf, nicht von einer Kanzlei geprüft.</p>
+  <p><strong>Stand:</strong> 2026-09-20. Status: Beta-Version, wird vor Public Launch überarbeitet.</p>
   <p><strong>Hinweis:</strong> AVVs mit den genannten Diensten sind noch nicht bestätigt. Dieser Text beschreibt den Datenfluss, er ist kein Nachweis unterschriebener Verträge.</p>
 
-  <h2>1. Verantwortlicher</h2>
-  <p>Siehe Impressum. Solange dort Platzhalter stehen, ist diese Erklärung unvollständig.</p>
+  <h2>Verantwortlicher</h2>
+  <p>
+    Zouhair Ijaad<br>
+    [STRASSE UND HAUSNUMMER]<br>
+    [PLZ] Hamburg-Langenhorn<br>
+    Deutschland<br>
+    E-Mail: <a href="mailto:ijd.zouh@yahoo.com">ijd.zouh@yahoo.com</a>
+  </p>
 
-  <h2>2. Welche Daten wir verarbeiten</h2>
+  <h2>Zweck und Rechtsgrundlage</h2>
+  <p>Bewerbungsanalyse. Kernbetrieb: Art. 6 Abs. 1 lit. b DSGVO. Pirsch, falls aktiv: Art. 6 Abs. 1 lit. f DSGVO.</p>
+
+  <h2>Verarbeitete Daten</h2>
   <ul>
     <li>Konto über Clerk (Nutzer-ID, ggf. E-Mail)</li>
-    <li>Karriereprofil (ohne Lebenslauf-Text)</li>
+    <li>Karriereprofil ohne Lebenslauf-Text</li>
     <li>Lebenslauf-Text nur im Browser; auf dem Server SHA-256-Hash und Zeichenzahl</li>
     <li>Stellenanzeigen nur für die laufende Analyse-Anfrage</li>
     <li>Analysebericht nur im Browser, nicht in der Datenbank</li>
     <li>Nutzungs- und Token-Zähler</li>
-    <li>Zahlungen über Stripe (keine vollständigen Kartendaten bei uns)</li>
+    <li>Stripe aktuell im Test-Modus, keine echten Kartenzahlungen bei uns</li>
     <li>Pirsch-Aufrufstatistik, wenn eingeschaltet</li>
   </ul>
 
-  <h2>3. Lebenslauf und KI</h2>
-  <p>Beim PDF-Upload und bei der Analyse geht der Text einmalig an Groq Inc., USA. Danach speichern wir ihn nicht. Ein Filter entfernt erkannte E-Mails, Telefonnummern und URLs. Das ist kein Namensfilter und keine vollständige Anonymisierung.</p>
+  <h2>Speicherdauer</h2>
+  <p>Kein CV-Text dauerhaft auf dem Server. Hash, Profil und Konto bis zur Kontolöschung. Bericht und CV-Text im Browser bis der Tab geschlossen wird.</p>
 
-  <h2>4. Auftragsverarbeiter</h2>
+  <h2>Auftragsverarbeiter</h2>
   <ul>
-    <li>Groq, Inc., 2700 Zanker Road, Suite 150, San Jose, CA 95134, USA - KI-Inferenz</li>
-    <li>Clerk, Inc., 660 King Street, Unit 345, San Francisco, CA 94107, USA - Anmeldung</li>
-    <li>Stripe Payments Europe, Ltd. / Stripe, Inc. - Zahlung</li>
-    <li>Render Services, Inc., USA - API-Hosting</li>
-    <li>Vercel Inc., USA - Website-Hosting</li>
-    <li>Supabase, Inc. - Datenbank</li>
-    <li>Pirsch (Emvi Software GmbH, Deutschland) - Aufrufstatistik, falls aktiv</li>
+    <li>Groq, Inc., 2700 Zanker Road, Suite 150, San Jose, CA 95134, USA: KI-Inferenz</li>
+    <li>Clerk, Inc., 660 King Street, Unit 345, San Francisco, CA 94107, USA: Anmeldung</li>
+    <li>Stripe Payments Europe, Ltd. / Stripe, Inc.: Zahlung, aktuell Test-Modus</li>
+    <li>Render Services, Inc., USA: API-Hosting</li>
+    <li>Vercel Inc., USA: Website-Hosting</li>
+    <li>Supabase, Inc.: PostgreSQL</li>
+    <li>Pirsch (Emvi Software GmbH, Deutschland): Aufrufstatistik, falls aktiv</li>
   </ul>
-  <p>Kein Google Gemini in V1. TODO: AVVs ablegen und verlinken.</p>
+  <p>Kein Google Gemini in dieser Version. AVVs noch nicht durch uns abgelegt.</p>
 
-  <h2>5. Speicherdauer</h2>
-  <p>Kein CV-Text auf dem Server. Hash und Profil bis zur Kontolöschung. Bericht und CV-Text im Browser bis der Tab geschlossen wird.</p>
+  <h2>Deine Rechte</h2>
+  <p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch, Beschwerde bei der Aufsichtsbehörde. Hamburg: Der Hamburgische Beauftragte für Datenschutz und Informationsfreiheit.</p>
+  <p>Kontakt: <a href="mailto:ijd.zouh@yahoo.com">ijd.zouh@yahoo.com</a></p>
 
-  <h2>6. Rechte</h2>
-  <p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch. Kontakt: Impressum. Beschwerde bei der Aufsichtsbehörde am Wohnsitz. Für Hamburg: Hamburgische Beauftragte für Datenschutz und Informationsfreiheit.</p>
+  <h2>Hinweis zur Beta-Phase</h2>
+  <p>Diese Erklärung ist eine Beta-Version. Vor dem Public Launch Überarbeitung geplant. Keine Behauptung vollständiger Anonymität oder anwaltsgeprüfter Sicherheit.</p>
 
   <p><a href="/legal/impressum.html">Impressum</a></p>
 </body>
