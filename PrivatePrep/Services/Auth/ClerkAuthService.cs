@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -17,7 +18,7 @@ public class ClerkAuthService
     private readonly string? _issuer;
     private readonly bool _jwksEnabled;
 
-    // Cached OIDC config — fetched once at startup, refreshed automatically by ConfigurationManager
+    // Cached OIDC config. Fetched once at startup, refreshed automatically by ConfigurationManager.
     private OpenIdConnectConfiguration? _cachedOidcConfig;
 
     public ClerkAuthService(IConfiguration config, IHostEnvironment env, ILogger<ClerkAuthService> logger)
@@ -41,7 +42,7 @@ public class ClerkAuthService
         {
             // Refuse to boot the API without verifiable Clerk auth outside Development.
             // An unverified-JWT path with no Clerk:Issuer would let any forged token pass as the user
-            // identified by its "sub" claim — full auth bypass.
+            // identified by its "sub" claim: full auth bypass.
             if (!env.IsDevelopment())
             {
                 throw new InvalidOperationException(
@@ -77,8 +78,11 @@ public class ClerkAuthService
         }
     }
 
-    /// <summary>Resolves the userId from the Bearer token via JWKS validation (or unverified parsing in Development).</summary>
-    public virtual async Task<(string? userId, bool isAnonymous)> ExtractUserIdAsync(HttpRequest request)
+    /// <summary>
+    /// Resolves the userId from the Bearer token via JWKS validation (or unverified parsing in Development).
+    /// The principal keeps Clerk claim names as issued, including the custom <c>email</c> claim.
+    /// </summary>
+    public virtual async Task<(string? userId, bool isAnonymous, ClaimsPrincipal? principal)> ExtractUserIdAsync(HttpRequest request)
     {
         var authHeader = request.Headers.Authorization.FirstOrDefault();
 
@@ -91,9 +95,10 @@ public class ClerkAuthService
 
         if (_jwksEnabled)
         {
-            var userId = await ValidateTokenWithJwksAsync(token);
-            if (userId is not null)
-                return (userId, false);
+            var principal = await ValidateTokenWithJwksAsync(token);
+            var userId = ReadUserId(principal);
+            if (userId is not null && principal is not null)
+                return (userId, false, principal);
 
             _logger.LogWarning("JWT signature verification failed. Treating as anonymous.");
             return AnonymousFallback(request);
@@ -102,7 +107,7 @@ public class ClerkAuthService
         return ExtractUnverified(token, request);
     }
 
-    private async Task<string?> ValidateTokenWithJwksAsync(string token)
+    private async Task<ClaimsPrincipal?> ValidateTokenWithJwksAsync(string token)
     {
         try
         {
@@ -128,14 +133,12 @@ public class ClerkAuthService
                 ValidateIssuerSigningKey = true,
             };
 
-            var handler = new JwtSecurityTokenHandler();
-            handler.InboundClaimTypeMap.Clear(); // Prevent "sub" → ClaimTypes.NameIdentifier remapping
-            var principal = handler.ValidateToken(token, validationParams, out var validatedToken);
-
-            var sub = principal.FindFirst("sub")?.Value
-                   ?? principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            return string.IsNullOrWhiteSpace(sub) ? null : sub;
+            var handler = new JwtSecurityTokenHandler
+            {
+                MapInboundClaims = false,
+            };
+            handler.InboundClaimTypeMap.Clear();
+            return handler.ValidateToken(token, validationParams, out _);
         }
         catch (SecurityTokenExpiredException)
         {
@@ -144,7 +147,7 @@ public class ClerkAuthService
         }
         catch (SecurityTokenSignatureKeyNotFoundException)
         {
-            _logger.LogWarning("JWT signing key not found in JWKS — requesting refresh");
+            _logger.LogWarning("JWT signing key not found in JWKS, requesting refresh");
             _oidcConfigManager!.RequestRefresh();
             return null;
         }
@@ -155,7 +158,7 @@ public class ClerkAuthService
         }
     }
 
-    private (string? userId, bool isAnonymous) ExtractUnverified(string token, HttpRequest request)
+    private (string? userId, bool isAnonymous, ClaimsPrincipal? principal) ExtractUnverified(string token, HttpRequest request)
     {
         try
         {
@@ -169,12 +172,26 @@ public class ClerkAuthService
 
             var json = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(payload));
             var claims = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
-            var userId = claims?.GetValueOrDefault("sub").GetString();
+            var userId = ReadJsonString(claims, "sub");
 
             if (string.IsNullOrEmpty(userId))
                 return AnonymousFallback(request);
 
-            return (userId, false);
+            var identity = new ClaimsIdentity("Clerk");
+            if (claims is not null)
+            {
+                foreach (var (key, el) in claims)
+                {
+                    if (el.ValueKind == JsonValueKind.String)
+                    {
+                        var value = el.GetString();
+                        if (!string.IsNullOrEmpty(value))
+                            identity.AddClaim(new Claim(key, value));
+                    }
+                }
+            }
+
+            return (userId, false, new ClaimsPrincipal(identity));
         }
         catch
         {
@@ -182,9 +199,26 @@ public class ClerkAuthService
         }
     }
 
-    private static (string? userId, bool isAnonymous) AnonymousFallback(HttpRequest request)
+    private static string? ReadUserId(ClaimsPrincipal? principal)
+    {
+        if (principal is null)
+            return null;
+
+        var sub = principal.FindFirst("sub")?.Value
+               ?? principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return string.IsNullOrWhiteSpace(sub) ? null : sub;
+    }
+
+    private static string? ReadJsonString(Dictionary<string, JsonElement>? claims, string key)
+    {
+        if (claims is null || !claims.TryGetValue(key, out var el) || el.ValueKind != JsonValueKind.String)
+            return null;
+        return el.GetString();
+    }
+
+    private static (string? userId, bool isAnonymous, ClaimsPrincipal? principal) AnonymousFallback(HttpRequest request)
     {
         var ip = request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-        return ($"ip:{ip}", true);
+        return ($"ip:{ip}", true, null);
     }
 }

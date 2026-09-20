@@ -28,10 +28,12 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
         ILogger<UserResolutionMiddleware> logger)
     {
         var userCtx = (AppUserContext)appUserContext;
-        var (userId, isAnonymous) = await authService.ExtractUserIdAsync(context.Request);
+        var (userId, isAnonymous, principal) = await authService.ExtractUserIdAsync(context.Request);
 
         userCtx.UserId = userId ?? "";
         userCtx.IsAnonymous = isAnonymous;
+        if (principal is not null)
+            context.User = principal;
 
         if (isAnonymous || string.IsNullOrWhiteSpace(userId))
         {

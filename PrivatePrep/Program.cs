@@ -46,6 +46,15 @@ if (string.Equals(betaMode, "true", StringComparison.OrdinalIgnoreCase)
 {
     builder.Configuration["BetaMode:Enabled"] = "true";
 }
+else if (string.Equals(betaMode, "false", StringComparison.OrdinalIgnoreCase)
+    || betaMode == "0")
+{
+    builder.Configuration["BetaMode:Enabled"] = "false";
+}
+
+var betaAllowedEmails = Environment.GetEnvironmentVariable("BETA_ALLOWED_EMAILS")?.Trim();
+if (!string.IsNullOrWhiteSpace(betaAllowedEmails))
+    builder.Configuration["BetaMode:AllowedEmails"] = betaAllowedEmails;
 
 var renderPort = Environment.GetEnvironmentVariable("PORT");
 if (!string.IsNullOrWhiteSpace(renderPort))
