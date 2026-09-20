@@ -7,6 +7,7 @@ _build_verify_tests/
 # IDE/user files
 .vs/
 **/.vs/
+.idea/
 **/*.user
 **/*.suo
 **/*.userosscache
@@ -15,7 +16,20 @@ _build_verify_tests/
 # Local environment and secrets
 **/.env
 **/.env.*
+.env.local
+.env.production
 !**/.env.example
+
+# Do not add new secret-filled copies. The tracked
+# PrivatePrep/appsettings.Development.json and
+# PrivatePrep/appsettings.Production.json currently contain no secrets
+# (empty keys, public CORS URLs) and stay in git until untracked on purpose.
+appsettings.Production.json
+appsettings.Development.json
+
+# JS leftovers if mixed tooling is used locally
+node_modules/
+dist/
 
 # Tool caches
 .dotnet/

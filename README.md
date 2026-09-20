@@ -1,14 +1,12 @@
 # PrivatePrep
 
+> Status: geschlossene Beta. Live-URL nicht öffentlich verlinkt. Für Zugang:
+> ijd.zouh@yahoo.com
+
 Deutsche KI-gestützte Bewerbungsanalyse: Lebenslauf plus Stellenausschreibung
 ergeben einen strukturierten Match-Report mit konkreten Bullet-Point-Vorschlägen.
 
-Live: [betweenatna.com](https://betweenatna.com)
-
 [![Build, Test & Deploy](https://github.com/djzh23/PrivatePrep/actions/workflows/deploy.yml/badge.svg)](https://github.com/djzh23/PrivatePrep/actions/workflows/deploy.yml)
-
-PrivatePrep befindet sich in aktiver Entwicklung. Einzelne Funktionen können
-zeitweise eingeschränkt sein, während neue Verbesserungen eingebaut werden.
 
 ## Über das Projekt
 
@@ -48,6 +46,11 @@ nicht im CV oder in der Story stehen.
 - xUnit für Tests
 - GitHub Actions für CI
 
+## Live-Zugang
+
+Aktuell nur für eingeladene Beta-Tester über [betweenatna.com](https://betweenatna.com).
+Anfragen für Beta-Zugang: ijd.zouh@yahoo.com
+
 ## Lokale Entwicklung
 
 Voraussetzung: .NET 9 SDK sowie Zugriff auf Groq und eine Postgres-Instanz.
@@ -68,6 +71,12 @@ Für das Frontend siehe das separate Repo
 dotnet test
 ```
 
+## Deploy-Prozess
+
+Vor jedem Deploy wird die Release-Checkliste durchgegangen. Siehe
+[docs/deployment/RELEASE-CHECKLIST.md](docs/deployment/RELEASE-CHECKLIST.md).
+Branch-Mapping: [docs/BRANCHES.md](docs/BRANCHES.md).
+
 ## Attribution
 
 Die Scoring- und Prompt-Struktur ist inspiriert von
@@ -76,4 +85,5 @@ Santiago Fernández de Valderrama). Details siehe [NOTICE.md](NOTICE.md).
 
 ## License
 
-Proprietäre Software. Alle Rechte vorbehalten. Kontakt: [betweenatna.com](https://betweenatna.com).
+Proprietäre Software. Alle Rechte vorbehalten. Kontakt für Beta-Zugang:
+ijd.zouh@yahoo.com.
