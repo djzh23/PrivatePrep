@@ -40,6 +40,13 @@ if (!string.IsNullOrWhiteSpace(groqKey)) builder.Configuration["Groq:ApiKey"] = 
 var groqModel = Environment.GetEnvironmentVariable("GROQ_MODEL");
 if (!string.IsNullOrWhiteSpace(groqModel)) builder.Configuration["Groq:Model"] = groqModel;
 
+var betaMode = Environment.GetEnvironmentVariable("BETA_MODE")?.Trim();
+if (string.Equals(betaMode, "true", StringComparison.OrdinalIgnoreCase)
+    || betaMode == "1")
+{
+    builder.Configuration["BetaMode:Enabled"] = "true";
+}
+
 var renderPort = Environment.GetEnvironmentVariable("PORT");
 if (!string.IsNullOrWhiteSpace(renderPort))
 {
@@ -122,6 +129,7 @@ builder.Services.AddPrivatePrepRateLimiter();
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
 builder.Services.Configure<GroqOptions>(builder.Configuration.GetSection(GroqOptions.SectionName));
+builder.Services.Configure<BetaModeOptions>(builder.Configuration.GetSection(BetaModeOptions.SectionName));
 builder.Services.AddHttpClient<GroqChatCompletionService>(client =>
 {
     client.BaseAddress = new Uri("https://api.groq.com/openai/v1/");
@@ -270,6 +278,7 @@ app.UseRateLimiter();
 app.UsePrivatePrepSecurityHeaders();
 app.UseStaticFiles();
 app.UseMiddleware<PrivatePrep.Middleware.UserResolutionMiddleware>();
+app.UseMiddleware<PrivatePrep.Middleware.BetaModeMiddleware>();
 
 app.MapHealthChecks("/api/health");
 app.MapControllers().RequireCors("PrivatePrepWeb");
