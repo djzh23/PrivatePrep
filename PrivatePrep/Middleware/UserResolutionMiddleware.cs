@@ -23,7 +23,6 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
         HttpContext context,
         ClerkAuthService authService,
         IAppUserContext appUserContext,
-        UsageService usageService,
         IMemoryCache cache,
         ILogger<UserResolutionMiddleware> logger)
     {
@@ -61,7 +60,7 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
 
             if (appUser is null)
             {
-                // First-time user — create row
+                // First-time user: create row
                 var now = DateTime.UtcNow;
                 var newUser = new AppUserEntity
                 {
@@ -78,7 +77,7 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
                 }
                 catch (DbUpdateException)
                 {
-                    // Concurrent insert race — row already exists, which is fine
+                    // Concurrent insert race: row already exists, which is fine
                     db.Entry(newUser).State = EntityState.Detached;
                 }
 
@@ -90,12 +89,12 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
             }
         }
 
-        // Resolve plan
-        var plan = await usageService.GetPlanAsync(userId);
-        userCtx.Plan = plan;
+        var usageService = context.RequestServices.GetService<UsageService>();
+        userCtx.Plan = usageService is null
+            ? "free"
+            : await usageService.GetPlanAsync(userId);
 
-        // Cache the resolved state
-        cache.Set(cacheKey, new ResolvedUser(plan, userCtx.FirstSeenAt), CacheDuration);
+        cache.Set(cacheKey, new ResolvedUser(userCtx.Plan, userCtx.FirstSeenAt), CacheDuration);
 
         await next(context);
     }

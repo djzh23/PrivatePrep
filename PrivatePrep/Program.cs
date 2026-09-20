@@ -128,6 +128,7 @@ if (registerPostgres)
     builder.Services.AddScoped<CareerProfileService>();
     builder.Services.AddScoped<ICareerProfileReader>(sp => sp.GetRequiredService<CareerProfileService>());
     builder.Services.AddScoped<ICvUploadService, CvUploadService>();
+    builder.Services.AddScoped<StripeService>();
 }
 
 var databaseFeaturesPreview = builder.Configuration.GetSection(DatabaseFeatureOptions.SectionName)
@@ -175,7 +176,6 @@ builder.Services.AddSingleton<ClerkAuthService>();
 builder.Services.AddScoped<AppUserContext>();
 builder.Services.AddScoped<IAppUserContext>(sp => sp.GetRequiredService<AppUserContext>());
 builder.Services.AddScoped<IStripeApiClient, StripeApiClient>();
-builder.Services.AddScoped<StripeService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PrivatePrepWeb", policy =>
