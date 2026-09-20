@@ -59,13 +59,35 @@ public class AgentControllerTests
         "Anforderungen\nC# und ASP.NET Core für das Backend-Team in Deutschland. "
         + "Die Stelle ist unbefristet und das Umfeld ist kollegial.";
 
+    private static string SampleCv => "Kenntnisse\nC#\nBerufserfahrung\nAPIs gebaut.";
+
+    private static AnalyzeRequestDto AnalyzeBody(string jd, string? cv = null)
+    {
+        var text = cv ?? SampleCv;
+        return new AnalyzeRequestDto
+        {
+            JobDescription = jd,
+            CvText = text,
+            CvContentHash = CvContentHasher.Sha256Hex(text.Trim()),
+        };
+    }
+
+    private void SetupStoredFingerprint(string? cv = null)
+    {
+        var text = (cv ?? SampleCv).Trim();
+        var hash = CvContentHasher.Sha256Hex(text);
+        _profileMock
+            .Setup(p => p.GetCvFingerprintAsync("user_abc", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CvFingerprint(hash, text.Length));
+    }
+
     [Fact]
     public async Task Analyze_Anonymous_Returns401()
     {
         _userContextMock.Setup(u => u.UserId).Returns("ip:127.0.0.1");
         _userContextMock.Setup(u => u.IsAnonymous).Returns(true);
 
-        var result = await CreateController().Analyze(new AnalyzeRequestDto(LongJd()));
+        var result = await CreateController().Analyze(new AnalyzeRequestDto { JobDescription = LongJd() });
 
         var obj = Assert.IsType<UnauthorizedObjectResult>(result.Result);
         Assert.Equal(401, obj.StatusCode);
@@ -77,7 +99,7 @@ public class AgentControllerTests
         _userContextMock.Setup(u => u.UserId).Returns("user_abc");
         _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
 
-        var result = await CreateController().Analyze(new AnalyzeRequestDto("zu kurz"));
+        var result = await CreateController().Analyze(new AnalyzeRequestDto { JobDescription = "zu kurz" });
 
         var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, badRequest.StatusCode);
@@ -88,6 +110,7 @@ public class AgentControllerTests
     {
         _userContextMock.Setup(u => u.UserId).Returns("user_abc");
         _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
+        SetupStoredFingerprint();
         _usageMock.Setup(u => u.CheckAndIncrementAsync("user_abc", false))
             .ReturnsAsync(new UsageCheckResult
             {
@@ -98,8 +121,6 @@ public class AgentControllerTests
             });
         _profileMock.Setup(p => p.GetProfile("user_abc"))
             .ReturnsAsync(new CareerProfile { UserId = "user_abc", Story = "Ich will Backend." });
-        _profileMock.Setup(p => p.GetCvRawTextAsync("user_abc", It.IsAny<CancellationToken>()))
-            .ReturnsAsync("Kenntnisse\nC#\nBerufserfahrung\nAPIs gebaut.");
         _analyzeMock.Setup(a => a.AnalyzeAsync(It.IsAny<AnalyzeRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new AnalyzeReport(
                 3.8m,
@@ -111,11 +132,50 @@ public class AgentControllerTests
                 "not_evaluated",
                 []));
 
-        var result = await CreateController().Analyze(new AnalyzeRequestDto(LongJd()));
+        var result = await CreateController().Analyze(AnalyzeBody(LongJd()));
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var report = Assert.IsType<AnalyzeReport>(ok.Value);
         Assert.Equal(3.8m, report.GlobalScore);
+        _analyzeMock.Verify(
+            a => a.AnalyzeAsync(
+                It.Is<AnalyzeRequest>(r => r.CvText == SampleCv.Trim() && r.StoryText == "Ich will Backend."),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task Analyze_HashMismatch_Returns400()
+    {
+        _userContextMock.Setup(u => u.UserId).Returns("user_abc");
+        _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
+
+        var result = await CreateController().Analyze(new AnalyzeRequestDto
+        {
+            JobDescription = LongJd(),
+            CvText = SampleCv,
+            CvContentHash = CvContentHasher.Sha256Hex("other-cv"),
+        });
+
+        var bad = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, bad.StatusCode);
+        _usageMock.Verify(u => u.CheckAndIncrementAsync(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Analyze_StaleCache_Returns400()
+    {
+        _userContextMock.Setup(u => u.UserId).Returns("user_abc");
+        _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
+        _profileMock
+            .Setup(p => p.GetCvFingerprintAsync("user_abc", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CvFingerprint(CvContentHasher.Sha256Hex("older-upload"), 12));
+
+        var result = await CreateController().Analyze(AnalyzeBody(LongJd()));
+
+        var bad = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, bad.StatusCode);
+        _usageMock.Verify(u => u.CheckAndIncrementAsync(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
     }
 
     [Fact]
@@ -123,6 +183,7 @@ public class AgentControllerTests
     {
         _userContextMock.Setup(u => u.UserId).Returns("user_abc");
         _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
+        SetupStoredFingerprint();
         _usageMock.Setup(u => u.CheckAndIncrementAsync("user_abc", false))
             .ReturnsAsync(new UsageCheckResult
             {
@@ -134,7 +195,7 @@ public class AgentControllerTests
                 Plan = "free"
             });
 
-        var result = await CreateController().Analyze(new AnalyzeRequestDto(LongJd()));
+        var result = await CreateController().Analyze(AnalyzeBody(LongJd()));
 
         var obj = Assert.IsType<ObjectResult>(result.Result);
         Assert.Equal(429, obj.StatusCode);
@@ -145,31 +206,26 @@ public class AgentControllerTests
     {
         _userContextMock.Setup(u => u.UserId).Returns("user_abc");
         _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
+        SetupStoredFingerprint();
         _usageMock.Setup(u => u.CheckAndIncrementAsync("user_abc", false))
             .ThrowsAsync(new InvalidOperationException("Postgres connection refused"));
 
-        var result = await CreateController().Analyze(new AnalyzeRequestDto(LongJd()));
+        var result = await CreateController().Analyze(AnalyzeBody(LongJd()));
 
         var obj = Assert.IsType<ObjectResult>(result.Result);
         Assert.Equal(503, obj.StatusCode);
     }
 
     [Fact]
-    public async Task Analyze_IncompleteProfile_Returns400()
+    public async Task Analyze_MissingCv_Returns400()
     {
         _userContextMock.Setup(u => u.UserId).Returns("user_abc");
         _userContextMock.Setup(u => u.IsAnonymous).Returns(false);
-        _usageMock.Setup(u => u.CheckAndIncrementAsync("user_abc", false))
-            .ReturnsAsync(new UsageCheckResult { Allowed = true, UsageToday = 1, DailyLimit = 3, Plan = "free" });
-        _profileMock.Setup(p => p.GetProfile("user_abc")).ReturnsAsync((CareerProfile?)null);
-        _profileMock.Setup(p => p.GetCvRawTextAsync("user_abc", It.IsAny<CancellationToken>()))
-            .ReturnsAsync((string?)null);
-        _analyzeMock.Setup(a => a.AnalyzeAsync(It.IsAny<AnalyzeRequest>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new AnalyzeException("profile_incomplete", "Bitte Profil vervollständigen"));
 
-        var result = await CreateController().Analyze(new AnalyzeRequestDto(LongJd()));
+        var result = await CreateController().Analyze(new AnalyzeRequestDto { JobDescription = LongJd() });
 
         var bad = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, bad.StatusCode);
+        _usageMock.Verify(u => u.CheckAndIncrementAsync(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
     }
 }

@@ -1,4 +1,5 @@
 using PrivatePrep.Services.FactGate;
+using PrivatePrep.Services.Privacy;
 using PrivatePrep.Services.SkillGap;
 
 namespace PrivatePrep.Services.Agent;
@@ -7,6 +8,7 @@ public sealed class AnalyzeService(
     ISkillGapService skillGap,
     IFactGateService factGate,
     ILlmRouter llm,
+    IPiiScrubberService piiScrubber,
     ILogger<AnalyzeService> logger) : IAnalyzeService
 {
     public const int MinimumJobDescriptionLength = 100;
@@ -30,6 +32,8 @@ public sealed class AnalyzeService(
             throw new AnalyzeException("profile_incomplete", "Bitte Profil vervollständigen");
         if (cv.Length > MaxCvChars)
             cv = cv[..MaxCvChars];
+
+        cv = piiScrubber.ScrubBestEffort(cv);
 
         var story = request.StoryText?.Trim() ?? "";
         var gap = skillGap.Classify(cv, jd);

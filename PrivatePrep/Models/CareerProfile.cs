@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace PrivatePrep.Models;
 
 /// <summary>
@@ -26,7 +28,16 @@ public class CareerProfile
     public string? Story { get; set; }
 
     // === CV-DATEN ===
+    /// <summary>Not persisted. Present only in-memory during a request if the client sent CV text.</summary>
+    [JsonIgnore]
     public string? CvRawText { get; set; }
+
+    /// <summary>SHA-256 hex of the last uploaded CV. Sourced from the column, not profile_json.</summary>
+    public string? CvContentHash { get; set; }
+
+    /// <summary>Character count of the last uploaded CV. Sourced from the column, not profile_json.</summary>
+    public int? CvContentLength { get; set; }
+
     /// <summary>Anonyme Kurz-Zusammenfassung für den Assistenten (Deutsch).</summary>
     public string? CvSummary { get; set; }
     /// <summary>English version of the anonymous summary (optional).</summary>

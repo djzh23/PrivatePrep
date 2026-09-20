@@ -12,6 +12,7 @@ using PrivatePrep.Services.FactGate;
 using PrivatePrep.Services.Groq;
 using PrivatePrep.Services.Infrastructure;
 using PrivatePrep.Services.Payments;
+using PrivatePrep.Services.Privacy;
 using PrivatePrep.Services.Profile;
 using PrivatePrep.Services.SkillGap;
 using PrivatePrep.Services.Tracking;
@@ -110,6 +111,7 @@ if (registerPostgres)
     builder.Services.AddScoped<TokenTrackingService>();
     builder.Services.AddScoped<CareerProfileService>();
     builder.Services.AddScoped<ICareerProfileReader>(sp => sp.GetRequiredService<CareerProfileService>());
+    builder.Services.AddScoped<ICvUploadService, CvUploadService>();
 }
 
 var databaseFeaturesPreview = builder.Configuration.GetSection(DatabaseFeatureOptions.SectionName)
@@ -145,6 +147,7 @@ builder.Services.AddHostedService<PrivatePrepMigrationRunner>();
 builder.Services.AddSingleton(SkillTaxonomyCatalog.LoadEmbedded());
 builder.Services.AddSingleton<ISkillGapService, SkillGapService>();
 builder.Services.AddSingleton<IFactGateService, FactGateService>();
+builder.Services.AddSingleton<IPiiScrubberService, PiiScrubberService>();
 builder.Services.AddScoped<IJobContextExtractor, JobContextExtractor>();
 builder.Services.AddScoped<CvParsingService>();
 builder.Services.AddScoped<ILlmRouter, GroqLlmRouter>();

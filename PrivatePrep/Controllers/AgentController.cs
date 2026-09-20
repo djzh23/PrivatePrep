@@ -57,6 +57,35 @@ public sealed class AgentController(
         if (jd.Length > MaxJobDescriptionChars)
             return BadRequest(new { error = "jd_too_long", message = $"Stellenanzeige zu lang (max. {MaxJobDescriptionChars} Zeichen)." });
 
+        var cvCheck = ValidateAnalyzeCv(request);
+        if (cvCheck is not null)
+            return cvCheck;
+
+        var cvText = request?.CvText?.Trim() ?? "";
+        var providedHash = request?.CvContentHash?.Trim() ?? "";
+
+        CvFingerprint? storedFingerprint;
+        try
+        {
+            storedFingerprint = await profileReader
+                .GetCvFingerprintAsync(userId, HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "CV fingerprint load failed. UserId {UserId}", userId);
+            return StatusCode(503, new
+            {
+                error = "profile_load_failed",
+                message = "Profil konnte nicht geladen werden. Bitte später erneut versuchen.",
+            });
+        }
+
+        if (storedFingerprint is null)
+            return BadRequest(new { error = "cv_not_uploaded", message = "Bitte zuerst einen Lebenslauf hochladen." });
+        if (!CvContentHasher.HexEquals(providedHash, storedFingerprint.Value.ContentHash))
+            return BadRequest(new { error = "cv_stale", message = "Der Lebenslauf in diesem Browser stimmt nicht mit dem letzten Upload überein. Bitte erneut hochladen." });
+
         UsageCheckResult usageCheck;
         try
         {
@@ -96,12 +125,10 @@ public sealed class AgentController(
         try
         {
             var profile = await profileReader.GetProfile(userId).ConfigureAwait(false);
-            var cvColumn = await profileReader.GetCvRawTextAsync(userId, HttpContext.RequestAborted).ConfigureAwait(false);
-            var cv = PickCvText(cvColumn, profile?.CvRawText);
             var story = profile?.Story ?? "";
 
             var report = await analyzeService
-                .AnalyzeAsync(new AnalyzeRequest(userId, cv, story, jd), HttpContext.RequestAborted)
+                .AnalyzeAsync(new AnalyzeRequest(userId, cvText, story, jd), HttpContext.RequestAborted)
                 .ConfigureAwait(false);
 
             await FireTokenTrackingAsync(userId, report).ConfigureAwait(false);
@@ -114,6 +141,11 @@ public sealed class AgentController(
             {
                 "jd_too_short" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
                 "profile_incomplete" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "cv_missing" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "cv_hash_invalid" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "cv_hash_mismatch" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "cv_not_uploaded" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
+                "cv_stale" => BadRequest(new { error = ex.ErrorCode, message = ex.Message }),
                 "llm_parse_failed" => StatusCode(500, new { error = ex.ErrorCode, message = ex.Message }),
                 "llm_unavailable" => StatusCode(502, new { error = ex.ErrorCode, message = ex.Message }),
                 _ => StatusCode(500, new { error = "analyze_error", message = "An internal error occurred. Please try again." }),
@@ -172,11 +204,21 @@ public sealed class AgentController(
         }
     }
 
-    private static string PickCvText(string? column, string? jsonField)
+    private BadRequestObjectResult? ValidateAnalyzeCv(AnalyzeRequestDto? request)
     {
-        var a = column?.Trim() ?? "";
-        var b = jsonField?.Trim() ?? "";
-        return a.Length >= b.Length ? a : b;
+        var cv = request?.CvText?.Trim() ?? "";
+        if (cv.Length == 0)
+            return BadRequest(new { error = "cv_missing", message = "Lebenslauf-Text fehlt. Bitte den Lebenslauf in diesem Browser erneut hochladen." });
+
+        var provided = request?.CvContentHash?.Trim() ?? "";
+        if (!CvContentHasher.IsSha256Hex(provided))
+            return BadRequest(new { error = "cv_hash_invalid", message = "Prüfwert des Lebenslaufs ist ungültig." });
+
+        var computed = CvContentHasher.Sha256Hex(cv);
+        if (!CvContentHasher.HexEquals(computed, provided))
+            return BadRequest(new { error = "cv_hash_mismatch", message = "Prüfwert und Lebenslauf-Text passen nicht zusammen." });
+
+        return null;
     }
 
     private async Task FireTokenTrackingAsync(string userId, AnalyzeReport report)

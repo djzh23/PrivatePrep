@@ -17,8 +17,8 @@ public sealed class CareerProfileService(CareerProfilePostgresService postgres) 
 
     public Task<CareerProfile?> GetProfile(string userId) => postgres.GetProfile(userId);
 
-    public Task<string?> GetCvRawTextAsync(string userId, CancellationToken cancellationToken = default) =>
-        postgres.GetCvRawTextAsync(userId, cancellationToken);
+    public Task<CvFingerprint?> GetCvFingerprintAsync(string userId, CancellationToken cancellationToken = default) =>
+        postgres.GetCvFingerprintAsync(userId, cancellationToken);
 
     public Task SaveProfile(string userId, CareerProfile profile) => postgres.SaveProfile(userId, profile);
 
@@ -34,7 +34,8 @@ public sealed class CareerProfileService(CareerProfilePostgresService postgres) 
 
     public Task SkipOnboardingAsync(string userId) => postgres.SkipOnboardingAsync(userId);
 
-    public Task SetCvText(string userId, string cvText) => postgres.SetCvText(userId, cvText);
+    public Task SetCvFingerprintAsync(string userId, string contentHash, int contentLength, CancellationToken cancellationToken = default) =>
+        postgres.SetCvFingerprintAsync(userId, contentHash, contentLength, cancellationToken);
 
     public Task SetSkills(string userId, List<string> skills) => postgres.SetSkills(userId, skills);
 

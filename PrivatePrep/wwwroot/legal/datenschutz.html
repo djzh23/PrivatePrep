@@ -3,58 +3,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Datenschutzerklärung — PrivatePrep</title>
+  <title>Datenschutzerklärung - PrivatePrep</title>
 </head>
 <body>
 <!--
 TODO für Zouhair:
-Dieser Text ist ein Rohgerüst. Vor Launch:
-1. Über e-recht24.de oder datenschutz-generator.de einen echten Text generieren
-2. Alle Auftragsverarbeiter mit AVV bestätigen (DPAs unterzeichnen)
-3. Von einem Anwalt reviewen lassen, wenn Budget erlaubt
-V1 sendet keine Bewerberdaten an Google Gemini. Wenn ein zweiter LLM-Anbieter
-dazukommt, muss diese Seite und die AVV-Liste aktualisiert werden.
+1. Impressum ausfüllen, dann Verantwortlichen hier konkretisieren
+2. AVVs/DPAs mit Groq, Clerk, Stripe, Render, Vercel, Supabase, ggf. Pirsch bestätigen
+3. Text von einer Kanzlei prüfen lassen, wenn Budget da ist
+V1 sendet keine Bewerberdaten an Google Gemini.
+Die kanonische Fassung für Nutzer ist https://www.betweenatna.de/datenschutz
 -->
   <h1>Datenschutzerklärung</h1>
-  <p><strong>Stand:</strong> [TODO: Datum] — Rohgerüst, nicht rechtsverbindlich.</p>
+  <p><strong>Stand:</strong> 20. September 2026. Entwurf, nicht von einer Kanzlei geprüft.</p>
+  <p><strong>Hinweis:</strong> AVVs mit den genannten Diensten sind noch nicht bestätigt. Dieser Text beschreibt den Datenfluss, er ist kein Nachweis unterschriebener Verträge.</p>
 
   <h2>1. Verantwortlicher</h2>
-  <p>[TODO: Voller Name]<br>[TODO: Straße und Hausnummer]<br>[TODO: PLZ Ort]<br>Deutschland<br>E-Mail: [TODO: Kontakt-E-Mail]</p>
+  <p>Siehe Impressum. Solange dort Platzhalter stehen, ist diese Erklärung unvollständig.</p>
 
-  <h2>2. Erhobene Daten</h2>
+  <h2>2. Welche Daten wir verarbeiten</h2>
   <ul>
-    <li>Account-Daten über Clerk (z. B. User-ID, E-Mail je nach Clerk-Konfiguration)</li>
-    <li>Karriereprofil, Lebenslauf-Text und optionale Story</li>
-    <li>Eingefügte Stellenanzeigen und daraus erzeugte Analyse-Reports</li>
-    <li>Nutzungs- und Token-Zähler für das Tageslimit</li>
-    <li>Zahlungsdaten über Stripe (keine vollständigen Kartendaten auf unseren Servern)</li>
+    <li>Konto über Clerk (Nutzer-ID, ggf. E-Mail)</li>
+    <li>Karriereprofil (ohne Lebenslauf-Text)</li>
+    <li>Lebenslauf-Text nur im Browser; auf dem Server SHA-256-Hash und Zeichenzahl</li>
+    <li>Stellenanzeigen nur für die laufende Analyse-Anfrage</li>
+    <li>Analysebericht nur im Browser, nicht in der Datenbank</li>
+    <li>Nutzungs- und Token-Zähler</li>
+    <li>Zahlungen über Stripe (keine vollständigen Kartendaten bei uns)</li>
+    <li>Pirsch-Aufrufstatistik, wenn eingeschaltet</li>
   </ul>
 
-  <h2>3. Rechtsgrundlage</h2>
-  <p>[TODO: Art. 6 Abs. 1 lit. b DSGVO (Vertrag) und lit. f (berechtigte Interessen) konkretisieren. Einwilligung nur wo nötig.]</p>
+  <h2>3. Lebenslauf und KI</h2>
+  <p>Beim PDF-Upload und bei der Analyse geht der Text einmalig an Groq Inc., USA. Danach speichern wir ihn nicht. Ein Filter entfernt erkannte E-Mails, Telefonnummern und URLs. Das ist kein Namensfilter und keine vollständige Anonymisierung.</p>
 
-  <h2>4. Empfänger / Auftragsverarbeiter</h2>
-  <p>V1 nutzt folgende Dienstleister. Keine Datenübermittlung an Google Gemini.</p>
+  <h2>4. Auftragsverarbeiter</h2>
   <ul>
-    <li>Groq (USA) — LLM-Inferenz</li>
-    <li>Clerk (USA) — Authentifizierung</li>
-    <li>Stripe (Irland/USA) — Zahlungen</li>
-    <li>Render (USA) — Hosting</li>
-    <li>Supabase (EU/USA) — PostgreSQL-Datenbank</li>
+    <li>Groq, Inc., 2700 Zanker Road, Suite 150, San Jose, CA 95134, USA - KI-Inferenz</li>
+    <li>Clerk, Inc., 660 King Street, Unit 345, San Francisco, CA 94107, USA - Anmeldung</li>
+    <li>Stripe Payments Europe, Ltd. / Stripe, Inc. - Zahlung</li>
+    <li>Render Services, Inc., USA - API-Hosting</li>
+    <li>Vercel Inc., USA - Website-Hosting</li>
+    <li>Supabase, Inc. - Datenbank</li>
+    <li>Pirsch (Emvi Software GmbH, Deutschland) - Aufrufstatistik, falls aktiv</li>
   </ul>
-  <p>[TODO: DPAs/AVVs für jeden Empfänger bestätigen und verlinken, wo üblich.]</p>
+  <p>Kein Google Gemini in V1. TODO: AVVs ablegen und verlinken.</p>
 
   <h2>5. Speicherdauer</h2>
-  <p>[TODO: Profil- und CV-Daten bis zur Löschung durch den Nutzer bzw. nach Account-Kündigung. Zahlungsdaten gemäß gesetzlicher Aufbewahrung. Logs: [TODO].]</p>
+  <p>Kein CV-Text auf dem Server. Hash und Profil bis zur Kontolöschung. Bericht und CV-Text im Browser bis der Tab geschlossen wird.</p>
 
-  <h2>6. Nutzerrechte</h2>
-  <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. [TODO: Kontaktweg für Anfragen.]</p>
-
-  <h2>7. Widerspruchsrecht</h2>
-  <p>[TODO: Widerspruch gegen Verarbeitung auf Grundlage berechtigter Interessen, Art. 21 DSGVO.]</p>
-
-  <h2>8. Beschwerderecht</h2>
-  <p>Du kannst dich bei einer Datenschutzaufsichtsbehörde beschweren, insbesondere am Ort deines gewöhnlichen Aufenthalts. [TODO: zuständige Behörde verlinken.]</p>
+  <h2>6. Rechte</h2>
+  <p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch. Kontakt: Impressum. Beschwerde bei der Aufsichtsbehörde am Wohnsitz. Für Hamburg: Hamburgische Beauftragte für Datenschutz und Informationsfreiheit.</p>
 
   <p><a href="/legal/impressum.html">Impressum</a></p>
 </body>

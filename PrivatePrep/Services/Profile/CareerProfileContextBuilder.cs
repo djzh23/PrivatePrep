@@ -7,7 +7,6 @@ public static class CareerProfileContextBuilder
 {
     private const int MaxProfileContextChars = 1100;
     private const int MaxSkillsInContext = 8;
-    private const int MaxCvRawExcerptChars = 280;
     private const int MaxCvSummaryChars = 360;
     private const int MaxTargetJobDescriptionChars = 420;
     private const int MaxExperienceLines = 3;
@@ -63,12 +62,6 @@ public static class CareerProfileContextBuilder
         {
             if (!string.IsNullOrEmpty(profile.CvSummary))
                 body.Add($"CV (Kurz): {TruncateOneLine(profile.CvSummary, MaxCvSummaryChars)}");
-            else if (!string.IsNullOrEmpty(profile.CvRawText))
-            {
-                var raw = profile.CvRawText.Replace('\n', ' ').Trim();
-                var n = Math.Min(MaxCvRawExcerptChars, raw.Length);
-                body.Add($"CV (Auszug, gekürzt): {raw[..n]}");
-            }
         }
 
         if (!string.IsNullOrEmpty(toggles.ActiveTargetJobId))
@@ -144,7 +137,7 @@ public static class CareerProfileContextBuilder
             lines.Add("Nur aus den gelieferten Profilzeilen argumentieren. Nichts hinzudichten.");
         }
 
-        if (string.IsNullOrEmpty(profile.CvSummary) && string.IsNullOrEmpty(profile.CvRawText) && profile.Experience.Count == 0)
+        if (string.IsNullOrEmpty(profile.CvSummary) && profile.Experience.Count == 0)
             lines.Add("Wenig strukturierte Werdegang-Daten: vorsichtige Formulierungen, Lücken offen nennen.");
 
         return lines.Count == 0 ? null : string.Join(" ", lines);

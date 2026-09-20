@@ -104,12 +104,13 @@ public sealed class GroqChatCompletionService
 
             if (!resp.IsSuccessStatusCode)
             {
-                _logger.LogWarning("Groq API error {Status}: {Body}", (int)resp.StatusCode, raw.Length > 500 ? raw[..500] : raw);
+                var summary = SummarizeGroqError(raw, (int)resp.StatusCode);
+                _logger.LogWarning("Groq API error {Status}: {Summary}", (int)resp.StatusCode, summary);
                 return new GroqCompletionResult
                 {
                     Success = false,
                     Model = model,
-                    Error = $"Groq HTTP {(int)resp.StatusCode}: {raw}",
+                    Error = $"Groq HTTP {(int)resp.StatusCode}: {summary}",
                 };
             }
 
@@ -146,6 +147,31 @@ public sealed class GroqChatCompletionService
                 Error = $"Groq exception: {ex.Message}",
             };
         }
+    }
+
+    private static string SummarizeGroqError(string raw, int status)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(raw);
+            if (doc.RootElement.TryGetProperty("error", out var err) && err.ValueKind == JsonValueKind.Object)
+            {
+                if (err.TryGetProperty("message", out var msg))
+                {
+                    var m = (msg.GetString() ?? string.Empty).Trim();
+                    if (m.Length > 160)
+                        m = m[..160];
+                    if (m.Length > 0)
+                        return m;
+                }
+            }
+        }
+        catch (JsonException)
+        {
+            // Response is not JSON; never log the raw body (it can echo prompt/CV text).
+        }
+
+        return $"HTTP {status}";
     }
 
     private static readonly Regex ThinkTagRegex =

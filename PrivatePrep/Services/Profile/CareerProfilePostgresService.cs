@@ -21,33 +21,36 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         if (string.IsNullOrWhiteSpace(userId))
             return null;
 
-        // Project to only the columns needed for display — cv_raw_text (potentially 100 KB+
-        // of parsed PDF text) is excluded here because it is never needed for profile reads.
         var row = await db.CareerProfiles
             .AsNoTracking()
             .Where(x => x.ClerkUserId == userId)
-            .Select(x => new { x.ProfileJson, x.CreatedAt })
+            .Select(x => new { x.ProfileJson, x.CreatedAt, x.CvContentHash, x.CvContentLength })
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
 
         if (row is null)
             return null;
 
-        return DeserializeProfile(row.ProfileJson, userId);
+        return DeserializeProfile(row.ProfileJson, userId, row.CvContentHash, row.CvContentLength);
     }
 
-    public async Task<string?> GetCvRawTextAsync(string userId, CancellationToken cancellationToken = default)
+    public async Task<CvFingerprint?> GetCvFingerprintAsync(string userId, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(userId))
             return null;
 
-        return await db.CareerProfiles
+        var row = await db.CareerProfiles
             .AsNoTracking()
             .Where(x => x.ClerkUserId == userId)
-            .Select(x => x.CvRawText)
+            .Select(x => new { x.CvContentHash, x.CvContentLength })
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
+
+        if (row is null || string.IsNullOrWhiteSpace(row.CvContentHash))
+            return null;
+
+        return new CvFingerprint(row.CvContentHash.Trim(), row.CvContentLength ?? 0);
     }
 
     public async Task SaveProfile(string userId, CareerProfile profile, CancellationToken cancellationToken = default)
@@ -70,7 +73,7 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         else if (profile.CreatedAt == default)
             profile.CreatedAt = DateTime.UtcNow;
 
-        profile.CvRawText = Truncate(profile.CvRawText, CareerProfileStorageLimits.CvRawTextInProfileMax);
+        StripNonPersistedCvFields(profile);
         profile.CvSummary = Truncate(profile.CvSummary, CareerProfileStorageLimits.CvSummaryMaxChars);
         profile.CvSummaryEn = Truncate(profile.CvSummaryEn, CareerProfileStorageLimits.CvSummaryMaxChars);
         foreach (var job in profile.TargetJobs)
@@ -89,7 +92,6 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
                 CreatedAt = profile.CreatedAt,
                 UpdatedAt = now,
                 ProfileJson = json,
-                CvRawText = null,
                 CacheVersion = 1,
             });
         }
@@ -134,18 +136,25 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         await SaveProfile(userId, profile, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task SetCvText(string userId, string cvText, CancellationToken cancellationToken = default)
+    public async Task SetCvFingerprintAsync(
+        string userId,
+        string contentHash,
+        int contentLength,
+        CancellationToken cancellationToken = default)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+        if (!CvContentHasher.IsSha256Hex(contentHash))
+            throw new ArgumentException("CV content hash must be a 64-character SHA-256 hex string.", nameof(contentHash));
+        if (contentLength < 0)
+            throw new ArgumentOutOfRangeException(nameof(contentLength));
+
+        var normalizedHash = contentHash.Trim().ToLowerInvariant();
         var profile = await GetProfile(userId, cancellationToken).ConfigureAwait(false)
             ?? new CareerProfile { UserId = userId, CreatedAt = DateTime.UtcNow };
-        var rawForColumn = cvText.Length > CareerProfileStorageLimits.CvRawSeparateKeyMax
-            ? cvText[..CareerProfileStorageLimits.CvRawSeparateKeyMax]
-            : cvText;
-        profile.CvRawText = cvText.Length > CareerProfileStorageLimits.CvRawTextInProfileMax
-            ? cvText[..CareerProfileStorageLimits.CvRawTextInProfileMax]
-            : cvText;
         profile.CvUploadedAt = DateTime.UtcNow;
-
+        StripNonPersistedCvFields(profile);
+        profile.CvSummary = Truncate(profile.CvSummary, CareerProfileStorageLimits.CvSummaryMaxChars);
+        profile.CvSummaryEn = Truncate(profile.CvSummaryEn, CareerProfileStorageLimits.CvSummaryMaxChars);
 
         var existing = await db.CareerProfiles
             .FirstOrDefaultAsync(x => x.ClerkUserId == userId, cancellationToken)
@@ -162,7 +171,8 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
                 CreatedAt = profile.CreatedAt == default ? now : profile.CreatedAt,
                 UpdatedAt = now,
                 ProfileJson = json,
-                CvRawText = rawForColumn,
+                CvContentHash = normalizedHash,
+                CvContentLength = contentLength,
                 CacheVersion = 1,
             });
         }
@@ -170,7 +180,8 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         {
             existing.UpdatedAt = now;
             existing.ProfileJson = json;
-            existing.CvRawText = rawForColumn;
+            existing.CvContentHash = normalizedHash;
+            existing.CvContentLength = contentLength;
             existing.CacheVersion = existing.CacheVersion + 1;
         }
 
@@ -275,7 +286,11 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         return v.ToString();
     }
 
-    private static CareerProfile DeserializeProfile(string profileJson, string userId)
+    private static CareerProfile DeserializeProfile(
+        string profileJson,
+        string userId,
+        string? contentHash = null,
+        int? contentLength = null)
     {
         var profile = JsonSerializer.Deserialize<CareerProfile>(profileJson, JsonOpts) ?? new CareerProfile();
         profile.UserId = userId;
@@ -285,7 +300,21 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         profile.EducationEntries ??= [];
         profile.Languages ??= [];
         profile.TargetJobs ??= [];
+        StripNonPersistedCvFields(profile);
+        if (!string.IsNullOrWhiteSpace(contentHash))
+        {
+            profile.CvContentHash = contentHash.Trim().ToLowerInvariant();
+            profile.CvContentLength = contentLength;
+        }
+
         return profile;
+    }
+
+    private static void StripNonPersistedCvFields(CareerProfile profile)
+    {
+        profile.CvRawText = null;
+        profile.CvContentHash = null;
+        profile.CvContentLength = null;
     }
 
     private static string? Truncate(string? s, int max)

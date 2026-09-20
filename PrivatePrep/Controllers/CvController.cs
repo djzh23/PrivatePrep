@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using PrivatePrep.Models;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Auth;
+using PrivatePrep.Services.Privacy;
 using PrivatePrep.Services.Profile;
 
 namespace PrivatePrep.Controllers;
@@ -12,6 +13,8 @@ namespace PrivatePrep.Controllers;
 [Route("api/profile/cv")]
 public sealed class CvController(
     CareerProfileService profileService,
+    ICvUploadService cvUploadService,
+    IPiiScrubberService piiScrubber,
     IAppUserContext userContext,
     ILlmSingleCompletionService llmSingleCompletion,
     CvParsingService cvParsingService,
@@ -30,17 +33,17 @@ public sealed class CvController(
         }
     }
 
-    private static bool HasEnoughForAnonymousSummary(CareerProfile p)
+    private static bool HasEnoughForAnonymousSummary(CareerProfile p, string? cvText)
     {
         if ((p.Skills?.Count ?? 0) > 0)
             return true;
         if ((p.Experience?.Count ?? 0) > 0)
             return true;
-        var cv = p.CvRawText?.Trim();
+        var cv = cvText?.Trim();
         return cv is { Length: >= 50 };
     }
 
-    private static string BuildAnonymousCvSummaryPrompt(CareerProfile p, bool isEnglish)
+    private static string BuildAnonymousCvSummaryPrompt(CareerProfile p, bool isEnglish, string? cvText)
     {
         var sb = new StringBuilder();
         if (isEnglish)
@@ -114,13 +117,15 @@ public sealed class CvController(
                     .Select(l => string.IsNullOrWhiteSpace(l.Level) ? l.Name!.Trim() : $"{l.Name!.Trim()} ({l.Level.Trim()})")));
         }
 
-        var rawCv = p.CvRawText?.Trim();
+        var rawCv = cvText?.Trim();
         if (!string.IsNullOrEmpty(rawCv))
+        {
             sb.AppendLine();
-        sb.AppendLine(isEnglish
-            ? "CV raw text (truncated to 6000 chars, may contain PII — do not output):"
-            : "CV-Rohtext (auf 6000 Zeichen gekürzt, kann PII enthalten — nicht ausgeben):");
-        sb.AppendLine(Truncate(rawCv ?? string.Empty, 6000));
+            sb.AppendLine(isEnglish
+                ? "CV raw text (truncated to 6000 chars, may contain PII — do not output):"
+                : "CV-Rohtext (auf 6000 Zeichen gekürzt, kann PII enthalten — nicht ausgeben):");
+            sb.AppendLine(Truncate(rawCv, 6000));
+        }
         sb.AppendLine();
         sb.AppendLine(isEnglish
             ? "Answer with the prose only: no heading, no leading bullet or number."
@@ -147,13 +152,30 @@ public sealed class CvController(
         if (string.IsNullOrWhiteSpace(request.Text))
             return BadRequest(new { error = "CV-Text darf nicht leer sein." });
 
-        await profileService.SetCvText(userId, request.Text);
+        CvUploadResult registered;
+        try
+        {
+            registered = await cvUploadService
+                .RegisterTextAsync(request.Text, userId, HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+
         SetCareerProfileStorageHeaders();
-        return Ok(new { success = true, length = request.Text.Length });
+        return Ok(new
+        {
+            success = true,
+            contentHash = registered.ContentHash,
+            contentLength = registered.ContentLength,
+            extractedText = registered.ExtractedText,
+        });
     }
 
     /// <summary>
-    /// PDF-CV hochladen: Text extrahieren, per KI strukturieren, Rohtext speichern — Vorschau-Daten ohne automatisches Profil-Merge.
+    /// PDF-CV hochladen: Text extrahieren, per KI strukturieren, Hash speichern. Rohtext geht nicht in die Datenbank.
     /// </summary>
     [HttpPost("upload-pdf")]
     [EnableRateLimiting("profile_writes")]
@@ -186,16 +208,22 @@ public sealed class CvController(
                 return BadRequest(new { error = "Konnte keinen Text aus der PDF extrahieren. Ist es ein Bild-PDF?" });
 
             var parsed = await cvParsingService
-                .ParseCvWithAi(rawText, p => llmSingleCompletion.CompleteAsync(p, 2000, HttpContext.RequestAborted))
+                .ParseCvWithAi(
+                    piiScrubber.ScrubBestEffort(rawText),
+                    p => llmSingleCompletion.CompleteAsync(p, 2000, HttpContext.RequestAborted))
                 .ConfigureAwait(false);
 
-            await profileService.SetCvText(userId, rawText).ConfigureAwait(false);
+            var registered = await cvUploadService
+                .RegisterTextAsync(rawText, userId, HttpContext.RequestAborted)
+                .ConfigureAwait(false);
 
             SetCareerProfileStorageHeaders();
             return Ok(new
             {
                 success = true,
-                rawTextLength = rawText.Length,
+                contentHash = registered.ContentHash,
+                contentLength = registered.ContentLength,
+                extractedText = registered.ExtractedText,
                 parsed,
             });
         }
@@ -207,7 +235,7 @@ public sealed class CvController(
     }
 
     /// <summary>
-    /// Erzeugt einen anonymisierten Profil-Fließtext für KI-Kontext (keine Namen/Adressen/Kontaktdaten im Output).
+    /// Optionaler Profil-Fließtext für KI-Kontext. Prompt verlangt, Namen und Kontaktdaten nicht auszugeben.
     /// </summary>
     [HttpPost("anonymous-summary")]
     [EnableRateLimiting("cv_summary")]
@@ -238,8 +266,9 @@ public sealed class CvController(
 
         profile ??= new CareerProfile { UserId = userId };
         NormalizeProfileLists(profile);
+        var cvText = piiScrubber.ScrubBestEffort(request?.CvText ?? "");
 
-        if (!HasEnoughForAnonymousSummary(profile))
+        if (!HasEnoughForAnonymousSummary(profile, cvText))
         {
             return BadRequest(new
             {
@@ -248,7 +277,7 @@ public sealed class CvController(
             });
         }
 
-        var prompt = BuildAnonymousCvSummaryPrompt(profile, isEnglish);
+        var prompt = BuildAnonymousCvSummaryPrompt(profile, isEnglish, cvText);
         try
         {
             var text = await llmSingleCompletion

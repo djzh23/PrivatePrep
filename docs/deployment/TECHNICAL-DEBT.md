@@ -6,7 +6,8 @@ Items noticed during the V1 cut. Do not expand these in the V1 loop.
 - `GET /api/agent/usage` still lives on `AgentController` because there is no `TrackingController`.
 - Groq prompt caching (`cache_control`) is not wired; system prompt is resent every analyze call.
 - `CareerProfile.Story` is JSON-only. There is no dedicated Story endpoint yet; clients send it via the existing profile payload.
-- Full CV text is in `career_profiles.cv_raw_text`; `GetProfile` still omits that column and analyze loads it separately.
+- App code no longer persists CV raw text (hash + length only). Migration `016_cv_store_hash_drop_raw_text.sql` runs on Render boot via PrivatePrepMigrationRunner. Follow with `VACUUM FULL` on `career_profiles` if old TOAST leftovers remain.
+- IndexedDB encryption for the browser CV cache is a later sprint, not V1-blocking.
 
 ## Noticed during the Phase 4 live-deploy check (2026-09-17), not part of this cleanup session
 

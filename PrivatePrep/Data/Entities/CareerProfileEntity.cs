@@ -19,8 +19,12 @@ public sealed class CareerProfileEntity
     [Column("profile_json", TypeName = "jsonb")]
     public string ProfileJson { get; set; } = "{}";
 
-    [Column("cv_raw_text")]
-    public string? CvRawText { get; set; }
+    [Column("cv_content_hash")]
+    [MaxLength(64)]
+    public string? CvContentHash { get; set; }
+
+    [Column("cv_content_length")]
+    public int? CvContentLength { get; set; }
 
     [Column("cache_version")]
     public long CacheVersion { get; set; }

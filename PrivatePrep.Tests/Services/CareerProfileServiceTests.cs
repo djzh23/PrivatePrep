@@ -92,10 +92,9 @@ public class CareerProfileServiceTests
     }
 
     [Fact]
-    public void BuildProfileContext_CvText_LimitedTo500CharsInExcerpt()
+    public void BuildProfileContext_CvSummary_IsIncludedWhenToggleOn()
     {
-        var longCv = new string('X', 1000);
-        var profile = new CareerProfile { CvRawText = longCv };
+        var profile = new CareerProfile { CvSummary = new string('X', 80) };
         var toggles = new ProfileContextToggles
         {
             IncludeBasicProfile = false,
@@ -104,8 +103,24 @@ public class CareerProfileServiceTests
 
         var result = CareerProfileContextBuilder.Build(profile, toggles);
 
-        Assert.True(result.Length < 700, $"Expected bounded context length, got {result.Length}");
-        Assert.Contains("CV (Auszug", result);
+        Assert.Contains("CV (Kurz)", result);
+        Assert.DoesNotContain("CV (Auszug", result);
+    }
+
+    [Fact]
+    public void BuildProfileContext_RawCvText_IsNotIncluded()
+    {
+        var profile = new CareerProfile { CvRawText = new string('X', 1000) };
+        var toggles = new ProfileContextToggles
+        {
+            IncludeBasicProfile = false,
+            IncludeCv = true,
+        };
+
+        var result = CareerProfileContextBuilder.Build(profile, toggles);
+
+        Assert.DoesNotContain("XXXX", result);
+        Assert.DoesNotContain("CV (Auszug", result);
     }
 
     [Fact]

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.FactGate;
+using PrivatePrep.Services.Privacy;
 using PrivatePrep.Services.SkillGap;
 
 namespace PrivatePrep.Tests.Services;
@@ -13,7 +14,7 @@ public class AnalyzeServiceTests
     private readonly Mock<ILlmRouter> _llm = new();
 
     private AnalyzeService CreateSut() =>
-        new(_gap.Object, _gate.Object, _llm.Object, NullLogger<AnalyzeService>.Instance);
+        new(_gap.Object, _gate.Object, _llm.Object, new PiiScrubberService(), NullLogger<AnalyzeService>.Instance);
 
     private static string SampleCv => """
         Kenntnisse
@@ -195,5 +196,27 @@ public class AnalyzeServiceTests
         Assert.Contains("C#", capturedSystem);
         Assert.Contains("Docker", capturedSystem);
         Assert.Contains("Kubernetes", capturedSystem);
+    }
+
+    [Fact]
+    public async Task Analyze_ScrubsEmailBeforeLlm()
+    {
+        string? capturedUser = null;
+        string? classifiedCv = null;
+        SetupHappyCollaborators(ValidJson());
+        _gap.Setup(g => g.Classify(It.IsAny<string>(), It.IsAny<string>()))
+            .Callback<string, string>((cv, _) => classifiedCv = cv)
+            .Returns(OkGap());
+        _llm.Setup(l => l.CompleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Callback<string, string, CancellationToken>((_, user, _) => capturedUser = user)
+            .ReturnsAsync(new LlmResponse(ValidJson(), "llama-3.3-70b-versatile", 1, 1));
+        var sut = CreateSut();
+        var cv = SampleCv + "\nKontakt: ana@example.com";
+
+        await sut.AnalyzeAsync(Request(cv: cv), CancellationToken.None);
+
+        Assert.DoesNotContain("ana@example.com", capturedUser);
+        Assert.DoesNotContain("ana@example.com", classifiedCv);
+        Assert.Contains(PiiScrubberService.EmailPlaceholder, capturedUser);
     }
 }

@@ -43,4 +43,9 @@ public sealed class AnalyzeException(string errorCode, string message) : Invalid
     public string ErrorCode { get; } = errorCode;
 }
 
-public record AnalyzeRequestDto(string JobDescription);
+public sealed class AnalyzeRequestDto
+{
+    public string JobDescription { get; set; } = "";
+    public string CvText { get; set; } = "";
+    public string CvContentHash { get; set; } = "";
+}

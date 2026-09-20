@@ -39,12 +39,18 @@ public sealed class GroqLlmRouter(GroqChatCompletionService groq, ILogger<GroqLl
         if (!result.Success || string.IsNullOrWhiteSpace(result.Content))
         {
             var error = result.Error ?? "Groq request failed.";
-            logger.LogWarning("Groq analyze call failed: {Error}", error);
+            logger.LogWarning("Groq analyze call failed: {StatusHint}", TruncateLog(error, 160));
             if (error.Contains("429", StringComparison.Ordinal))
                 throw new AnalyzeException("llm_unavailable", "The language model is rate-limited. Please retry shortly.");
             throw new AnalyzeException("llm_unavailable", "The language model is temporarily unavailable. Please retry.");
         }
 
         return new LlmResponse(result.Content.Trim(), result.Model, result.InputTokens, result.OutputTokens);
+    }
+
+    private static string TruncateLog(string value, int max)
+    {
+        var t = value.Trim();
+        return t.Length <= max ? t : t[..max];
     }
 }
