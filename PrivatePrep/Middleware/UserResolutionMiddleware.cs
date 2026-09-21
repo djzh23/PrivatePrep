@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using PrivatePrep.Data;
 using PrivatePrep.Data.Entities;
 using PrivatePrep.Services.Auth;
-using PrivatePrep.Services.Tracking;
 
 namespace PrivatePrep.Middleware;
 
@@ -34,70 +33,57 @@ public sealed class UserResolutionMiddleware(RequestDelegate next)
         if (principal is not null)
             context.User = principal;
 
-        if (isAnonymous || string.IsNullOrWhiteSpace(userId))
-        {
-            userCtx.Plan = "anonymous";
-            await next(context);
-            return;
-        }
-
-        // Check memory cache first to avoid DB hit on every request
-        var cacheKey = $"user_resolved:{userId}";
-        if (cache.TryGetValue<ResolvedUser>(cacheKey, out var cached) && cached is not null)
-        {
-            userCtx.Plan = cached.Plan;
-            userCtx.FirstSeenAt = cached.FirstSeenAt;
-            await next(context);
-            return;
-        }
-
-        // Provision user if Postgres is available
-        var db = context.RequestServices.GetService<PrivatePrepDbContext>();
-        if (db is not null)
-        {
-            var appUser = await db.AppUsers.AsNoTracking()
-                .FirstOrDefaultAsync(u => u.ClerkUserId == userId, context.RequestAborted);
-
-            if (appUser is null)
-            {
-                // First-time user: create row
-                var now = DateTime.UtcNow;
-                var newUser = new AppUserEntity
-                {
-                    ClerkUserId = userId,
-                    CreatedAt = now,
-                    UpdatedAt = now,
-                };
-
-                try
-                {
-                    db.AppUsers.Add(newUser);
-                    await db.SaveChangesAsync(context.RequestAborted);
-                    logger.LogInformation("New user provisioned via middleware. UserId {UserId}", userId);
-                }
-                catch (DbUpdateException)
-                {
-                    // Concurrent insert race: row already exists, which is fine
-                    db.Entry(newUser).State = EntityState.Detached;
-                }
-
-                userCtx.FirstSeenAt = now;
-            }
-            else
-            {
-                userCtx.FirstSeenAt = appUser.CreatedAt;
-            }
-        }
-
-        var usageService = context.RequestServices.GetService<UsageService>();
-        userCtx.Plan = usageService is null
-            ? "free"
-            : await usageService.GetPlanAsync(userId);
-
-        cache.Set(cacheKey, new ResolvedUser(userCtx.Plan, userCtx.FirstSeenAt), CacheDuration);
+        if (!isAnonymous && !string.IsNullOrWhiteSpace(userId))
+            await EnsureProvisionedAsync(context, cache, logger, userId);
 
         await next(context);
     }
 
-    private sealed record ResolvedUser(string Plan, DateTime FirstSeenAt);
+    /// <summary>
+    /// Creates the app_users row on a user's first request. Memoized per user so the lookup
+    /// does not hit the database on every request.
+    /// </summary>
+    private static async Task EnsureProvisionedAsync(
+        HttpContext context,
+        IMemoryCache cache,
+        ILogger<UserResolutionMiddleware> logger,
+        string userId)
+    {
+        var cacheKey = $"user_provisioned:{userId}";
+        if (cache.TryGetValue(cacheKey, out _))
+            return;
+
+        var db = context.RequestServices.GetService<PrivatePrepDbContext>();
+        if (db is null)
+            return;
+
+        var exists = await db.AppUsers.AsNoTracking()
+            .AnyAsync(u => u.ClerkUserId == userId, context.RequestAborted);
+
+        if (!exists)
+        {
+            var now = DateTime.UtcNow;
+            var newUser = new AppUserEntity
+            {
+                ClerkUserId = userId,
+                CreatedAt = now,
+                UpdatedAt = now,
+                LastActiveAt = now,
+            };
+
+            try
+            {
+                db.AppUsers.Add(newUser);
+                await db.SaveChangesAsync(context.RequestAborted);
+                logger.LogInformation("New user provisioned via middleware. UserId {UserId}", userId);
+            }
+            catch (DbUpdateException)
+            {
+                // Concurrent insert race: row already exists, which is fine
+                db.Entry(newUser).State = EntityState.Detached;
+            }
+        }
+
+        cache.Set(cacheKey, true, CacheDuration);
+    }
 }
