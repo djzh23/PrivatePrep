@@ -9,7 +9,8 @@ namespace PrivatePrep.Services.Auth;
 
 /// <summary>
 /// Extracts and verifies the Clerk userId from the JWT Bearer token using JWKS.
-/// Falls back to unverified payload parsing when JWKS is unavailable or not configured.
+/// Tokens that cannot be verified (bad signature, expired, JWKS unreachable) are treated as anonymous.
+/// Unverified payload parsing exists only in Development, when no Clerk:Issuer is configured.
 /// </summary>
 public class ClerkAuthService
 {
@@ -17,9 +18,6 @@ public class ClerkAuthService
     private readonly ConfigurationManager<OpenIdConnectConfiguration>? _oidcConfigManager;
     private readonly string? _issuer;
     private readonly bool _jwksEnabled;
-
-    // Cached OIDC config. Fetched once at startup, refreshed automatically by ConfigurationManager.
-    private OpenIdConnectConfiguration? _cachedOidcConfig;
 
     public ClerkAuthService(IConfiguration config, IHostEnvironment env, ILogger<ClerkAuthService> logger)
     {
@@ -67,10 +65,10 @@ public class ClerkAuthService
         if (!_jwksEnabled || _oidcConfigManager is null) return;
         try
         {
-            _cachedOidcConfig = await _oidcConfigManager.GetConfigurationAsync(CancellationToken.None)
+            var oidcConfig = await _oidcConfigManager.GetConfigurationAsync(CancellationToken.None)
                 .ConfigureAwait(false);
             _logger.LogInformation("ClerkAuthService: JWKS keys pre-fetched successfully. Keys={KeyCount}",
-                _cachedOidcConfig.SigningKeys?.Count ?? 0);
+                oidcConfig.SigningKeys?.Count ?? 0);
         }
         catch (Exception ex)
         {
@@ -111,9 +109,9 @@ public class ClerkAuthService
     {
         try
         {
-            var oidcConfig = _cachedOidcConfig
-                ?? await _oidcConfigManager!.GetConfigurationAsync(CancellationToken.None)
-                    .ConfigureAwait(false);
+            // ConfigurationManager caches the config and swaps in fresh keys after RequestRefresh().
+            var oidcConfig = await _oidcConfigManager!.GetConfigurationAsync(CancellationToken.None)
+                .ConfigureAwait(false);
 
             if (oidcConfig.SigningKeys == null || !oidcConfig.SigningKeys.Any())
             {
