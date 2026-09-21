@@ -46,7 +46,7 @@ public sealed class BetaModeMiddleware(
             await context.Response.WriteAsJsonAsync(new
             {
                 error = "beta_access_required",
-                message = "Diese Anwendung ist aktuell nur für eingeladene Beta-Tester verfügbar. Für Zugang: ijd.zouh@yahoo.com",
+                message = "Diese Anwendung ist aktuell nur für eingeladene Beta-Tester verfügbar. Für Zugang: zn.connec.team@gmail.com",
             });
             return;
         }

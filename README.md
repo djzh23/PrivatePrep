@@ -1,7 +1,7 @@
 # PrivatePrep
 
 > Status: geschlossene Beta. Live-URL nicht öffentlich verlinkt. Für Zugang:
-> ijd.zouh@yahoo.com
+> zn.connec.team@gmail.com
 
 Deutsche KI-gestützte Bewerbungsanalyse: Lebenslauf plus Stellenausschreibung
 ergeben einen strukturierten Match-Report mit konkreten Bullet-Point-Vorschlägen.
@@ -49,7 +49,7 @@ nicht im CV oder in der Story stehen.
 ## Live-Zugang
 
 Aktuell nur für eingeladene Beta-Tester über [betweenatna.com](https://betweenatna.com).
-Anfragen für Beta-Zugang: ijd.zouh@yahoo.com
+Anfragen für Beta-Zugang: zn.connec.team@gmail.com
 
 ## Lokale Entwicklung
 
@@ -86,4 +86,4 @@ Santiago Fernández de Valderrama). Details siehe [NOTICE.md](NOTICE.md).
 ## License
 
 Proprietäre Software. Alle Rechte vorbehalten. Kontakt für Beta-Zugang:
-ijd.zouh@yahoo.com.
+zn.connec.team@gmail.com.

@@ -67,7 +67,7 @@ public class BetaModeMiddlewareTests
 
         using var doc = JsonDocument.Parse(result.Body);
         Assert.Equal("beta_access_required", doc.RootElement.GetProperty("error").GetString());
-        Assert.Contains("ijd.zouh@yahoo.com", doc.RootElement.GetProperty("message").GetString());
+        Assert.Contains("zn.connec.team@gmail.com", doc.RootElement.GetProperty("message").GetString());
     }
 
     [Fact]
