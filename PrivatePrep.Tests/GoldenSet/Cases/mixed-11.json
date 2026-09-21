@@ -1,0 +1,20 @@
+{
+  "id": "mixed-11",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Pflegehelfer (m/w/d) Nachtwache - Minijob\nDie Seniorenresidenz Am Park in Kiel sucht zuverlässige Unterstützung für die Nachtstunden von 21 bis 6 Uhr. Wir erwarten eine Ausbildung zum Pflegehelfer oder Altenpflegehelfer sowie Erfahrung in der Nachtbetreuung. Sie sollten körperlich belastbar sein und gut Deutsch sprechen. Vergütung 14 Euro pro Stunde.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Minijob" },
+      { "kind": "schicht", "quote": "Nachtstunden von 21 bis 6 Uhr" },
+      { "kind": "abschluss", "quote": "Ausbildung zum Pflegehelfer oder Altenpflegehelfer" },
+      { "kind": "berufserfahrung", "quote": "Erfahrung in der Nachtbetreuung" },
+      { "kind": "sprache", "quote": "gut Deutsch sprechen" }
+    ],
+    "salaryVerbatim": "14 Euro pro Stunde",
+    "tariff": null,
+    "signals": []
+  }
+}

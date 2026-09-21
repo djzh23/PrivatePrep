@@ -1,0 +1,19 @@
+{
+  "id": "holdout-07",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "ZFA / Zahnmedizinische Fachangestellte (m/w/d) in Teilzeit (20 bis 25 Stunden)\nUnsere Zahnarztpraxis in Hannover sucht Verstärkung am Empfang und am Behandlungsstuhl. Erforderlich: abgeschlossene Ausbildung zur ZFA, Röntgenschein (aktuell), Freundlichkeit im Umgang mit Patienten. Wir arbeiten montags bis donnerstags von 8 bis 17 Uhr. Vergütung nach Absprache, Einstieg mit 2.400 Euro.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Teilzeit (20 bis 25 Stunden)" },
+      { "kind": "abschluss", "quote": "abgeschlossene Ausbildung zur ZFA" },
+      { "kind": "zertifikat", "quote": "Röntgenschein (aktuell)" },
+      { "kind": "arbeitszeit", "quote": "montags bis donnerstags von 8 bis 17 Uhr" }
+    ],
+    "salaryVerbatim": "Einstieg mit 2.400 Euro",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "mixed-10",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Wir suchen für unsere Kfz-Werkstatt einen Kfz-Mechatroniker (m/w/d) mit Schwerpunkt Karosserie in Vollzeit. Voraussetzung ist eine abgeschlossene Berufsausbildung als Karosserie- und Fahrzeugbaumechaniker oder Kfz-Mechatroniker sowie eine mehrjährige Berufserfahrung. Ein gültiger Führerschein der Klasse B ist zwingend erforderlich. Wir bieten einen sicheren Arbeitsplatz mit Weihnachts- und Urlaubsgeld.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "in Vollzeit" },
+      { "kind": "abschluss", "quote": "abgeschlossene Berufsausbildung als Karosserie- und Fahrzeugbaumechaniker oder Kfz-Mechatroniker" },
+      { "kind": "berufserfahrung", "quote": "mehrjährige Berufserfahrung" },
+      { "kind": "fuehrerschein", "quote": "Ein gültiger Führerschein der Klasse B ist zwingend erforderlich" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

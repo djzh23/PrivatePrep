@@ -1,0 +1,18 @@
+{
+  "id": "holdout-03",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Real Estate Agent (m/f/d) - Freelance - Munich\nYou love people and property? We are looking for self-employed agents.\nRequirements: German real estate licence (§ 34c GewO), min. 2 years of sales experience, own car, fluent German, good English.\nCommission only: 3% of the purchase price.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "zertifikat", "quote": "German real estate licence (§ 34c GewO)" },
+      { "kind": "berufserfahrung", "quote": "min. 2 years of sales experience" },
+      { "kind": "sprache", "quote": "fluent German, good English" }
+    ],
+    "salaryVerbatim": "3% of the purchase price",
+    "tariff": null,
+    "signals": []
+  }
+}

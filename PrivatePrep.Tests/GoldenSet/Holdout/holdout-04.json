@@ -1,0 +1,20 @@
+{
+  "id": "holdout-04",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Werkstattleiter Elektrotechnik (m/w/d) - Vollzeit - Bremen\nAls Werkstattleiter führen Sie ein Team von 8 Elektrikern. Wir setzen einen Meisterbrief im Elektrotechniker-Handwerk voraus, dazu Führungserfahrung von mindestens 3 Jahren und einen gültigen Führerschein der Klasse B. Sie sind bereit, gelegentlich am Samstag zu arbeiten.\nUnser Angebot: 4.500 bis 5.200 Euro brutto und 30 Tage Urlaub.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Meisterbrief im Elektrotechniker-Handwerk" },
+      { "kind": "berufserfahrung", "quote": "Führungserfahrung von mindestens 3 Jahren" },
+      { "kind": "fuehrerschein", "quote": "gültigen Führerschein der Klasse B" },
+      { "kind": "schicht", "quote": "gelegentlich am Samstag zu arbeiten" }
+    ],
+    "salaryVerbatim": "4.500 bis 5.200 Euro brutto",
+    "tariff": null,
+    "signals": []
+  }
+}

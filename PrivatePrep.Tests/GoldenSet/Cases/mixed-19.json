@@ -1,0 +1,19 @@
+{
+  "id": "mixed-19",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Support Engineer (m/f/d) - Berlin - full time\nAbout the role: you will help customers of our SaaS product via chat and email.\nRequired:\n1) Fluent German and English, written and spoken\n2) 1-2 years in customer support or a similar role\n3) A university degree is not necessary\n4) Shift work including some weekends\nOffer: EUR 42,000 to 48,000 per year, 28 days off.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "full time" },
+      { "kind": "sprache", "quote": "Fluent German and English, written and spoken" },
+      { "kind": "berufserfahrung", "quote": "1-2 years in customer support or a similar role" },
+      { "kind": "schicht", "quote": "Shift work including some weekends" }
+    ],
+    "salaryVerbatim": "EUR 42,000 to 48,000 per year",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "mixed-04",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Dachdecker / Zimmerer (m/w/d) gesucht!\nWir sind ein kleiner Familienbetrieb mit 10 Mitarbeitern in Erfurt.\nDu solltest haben: Gesellenprüfung als Dachdecker oder Zimmerer, Schwindelfreiheit, Führerschein B (wir zahlen bei Bedarf dazu), körperliche Fitness, Zuverlässigkeit.\nBei uns: 17 bis 20 Euro Stundenlohn, Weihnachtsgeld, Arbeitskleidung.\nMelde dich telefonisch: 0361 555 0100",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Gesellenprüfung als Dachdecker oder Zimmerer" },
+      { "kind": "fuehrerschein", "quote": "Führerschein B" }
+    ],
+    "salaryVerbatim": "17 bis 20 Euro Stundenlohn",
+    "tariff": null,
+    "signals": []
+  }
+}

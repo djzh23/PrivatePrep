@@ -1,0 +1,19 @@
+{
+  "id": "holdout-08",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Berufskraftfahrer (m/w/d) Fernverkehr\nSie fahren 40-Tonner im nationalen Fernverkehr und sind von Montag bis Freitag unterwegs, Wochenenden zu Hause. Wir erwarten den Führerschein Klasse CE, die Fahrerkarte und den Code 95 sowie mindestens 2 Jahre Fahrpraxis. Deutschkenntnisse zur Verständigung reichen aus.\nVerdienst: 2.900 bis 3.300 Euro plus Spesen.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse CE" },
+      { "kind": "zertifikat", "quote": "die Fahrerkarte und den Code 95" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Fahrpraxis" },
+      { "kind": "sprache", "quote": "Deutschkenntnisse zur Verständigung" }
+    ],
+    "salaryVerbatim": "2.900 bis 3.300 Euro plus Spesen",
+    "tariff": null,
+    "signals": []
+  }
+}

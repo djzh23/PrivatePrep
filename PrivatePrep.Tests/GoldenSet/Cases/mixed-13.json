@@ -1,0 +1,20 @@
+{
+  "id": "mixed-13",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Regional Sales Manager, Nordics (m/f/d)\nJoin us in Hamburg and drive growth in Scandinavia. The ideal candidate holds a Bachelor's or Master's degree and has proven experience in industrial sales of at least four years. Fluency in English is a must, Swedish or Danish is a plus. You should be comfortable travelling about 40% of the time and hold a valid driver's licence.\nCompensation: EUR 80,000 fixed plus bonus.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "holds a Bachelor's or Master's degree" },
+      { "kind": "berufserfahrung", "quote": "proven experience in industrial sales of at least four years" },
+      { "kind": "sprache", "quote": "Fluency in English is a must" },
+      { "kind": "einsatzort", "quote": "comfortable travelling about 40% of the time" },
+      { "kind": "fuehrerschein", "quote": "valid driver's licence" }
+    ],
+    "salaryVerbatim": "EUR 80,000 fixed plus bonus",
+    "tariff": null,
+    "signals": []
+  }
+}

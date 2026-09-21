@@ -6,9 +6,18 @@ public static class GoldenSetLoader
 {
     private static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web);
 
-    public static IReadOnlyList<GoldenCase> LoadAll()
+    /// <summary>The cases the rules are developed against.</summary>
+    public static IReadOnlyList<GoldenCase> LoadAll() => Load("Cases");
+
+    /// <summary>
+    /// Postings written after the rules, with different phrasing, to measure how well they generalise.
+    /// Labelled for must-haves and salary only; tariff and signals are not evaluated here.
+    /// </summary>
+    public static IReadOnlyList<GoldenCase> LoadHoldout() => Load("Holdout");
+
+    private static IReadOnlyList<GoldenCase> Load(string folder)
     {
-        var directory = Path.Combine(AppContext.BaseDirectory, "GoldenSet", "Cases");
+        var directory = Path.Combine(AppContext.BaseDirectory, "GoldenSet", folder);
         if (!Directory.Exists(directory))
             throw new DirectoryNotFoundException($"Golden set directory not found: {directory}");
 

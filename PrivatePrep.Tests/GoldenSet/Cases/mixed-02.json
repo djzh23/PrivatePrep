@@ -1,0 +1,19 @@
+{
+  "id": "mixed-02",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Sachbearbeiter Vertragsmanagement (m/w/d)\nStandort: Düsseldorf | Vollzeit | unbefristet\nWas Sie mitbringen\n- Kaufmännische Ausbildung oder Studium der Betriebswirtschaft\n- Mindestens 2 Jahre Erfahrung im Vertragsmanagement\n- Sehr gute Deutschkenntnisse (mindestens C1) und gute Englischkenntnisse\n- Sicherer Umgang mit SAP\nWas wir Ihnen bieten\n- Flexible Arbeitszeiten und Homeoffice\n- 30 Tage Urlaub\nBewerben Sie sich online.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Kaufmännische Ausbildung oder Studium der Betriebswirtschaft" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung im Vertragsmanagement" },
+      { "kind": "sprache", "quote": "Sehr gute Deutschkenntnisse (mindestens C1) und gute Englischkenntnisse" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

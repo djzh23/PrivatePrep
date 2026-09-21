@@ -1,0 +1,20 @@
+{
+  "id": "mixed-20",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Bauleiter Hochbau (m/w/d) - unbefristet in Vollzeit\nIhr Profil\nBauingenieur (FH/TU) oder Bautechniker mit Weiterbildung\nBerufserfahrung im Hochbau, idealerweise 5 Jahre und mehr\nKenntnisse in VOB und Bauvertragsrecht\nFührerschein Klasse B, Reisebereitschaft im Raum Süddeutschland\nIhre Vorteile\nFirmenwagen, 30 Tage Urlaub und Jahresgehalt zwischen 65.000 und 80.000 Euro",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "in Vollzeit" },
+      { "kind": "abschluss", "quote": "Bauingenieur (FH/TU) oder Bautechniker mit Weiterbildung" },
+      { "kind": "berufserfahrung", "quote": "Berufserfahrung im Hochbau" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B" },
+      { "kind": "einsatzort", "quote": "Reisebereitschaft im Raum Süddeutschland" }
+    ],
+    "salaryVerbatim": "zwischen 65.000 und 80.000 Euro",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "mixed-03",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Senior Account Manager (m/f/d) - Munich (hybrid)\nWe are a fast-growing logistics startup. You will manage key accounts and grow revenue.\nWhat you'll need:\n- 5+ years of experience in B2B sales\n- A degree in business or a related field\n- Business-fluent English and German\n- Willingness to travel 2 to 3 days per week\n- Full driving licence\nWhat we offer: EUR 70,000 to 85,000 base plus OTE.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "berufserfahrung", "quote": "5+ years of experience in B2B sales" },
+      { "kind": "abschluss", "quote": "A degree in business or a related field" },
+      { "kind": "sprache", "quote": "Business-fluent English and German" },
+      { "kind": "einsatzort", "quote": "Willingness to travel 2 to 3 days per week" },
+      { "kind": "fuehrerschein", "quote": "Full driving licence" }
+    ],
+    "salaryVerbatim": "EUR 70,000 to 85,000 base plus OTE",
+    "tariff": null,
+    "signals": []
+  }
+}

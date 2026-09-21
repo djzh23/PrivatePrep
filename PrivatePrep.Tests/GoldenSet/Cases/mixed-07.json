@@ -1,0 +1,18 @@
+{
+  "id": "mixed-07",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Fachpfleger Intensivpflege (m/w/d) - Uniklinik - TV-L\nFür unsere Intensivstation suchen wir zum 1. Oktober examinierte Pflegekräfte. Voraussetzung ist die Fachweiterbildung Intensivpflege und Anästhesie oder die Bereitschaft, diese innerhalb von zwei Jahren zu absolvieren (Freistellung und Kostenübernahme durch uns). Sie arbeiten im Drei-Schicht-System inklusive Nachtdiensten. Wir zahlen nach Entgeltgruppe P 9 zuzüglich Zulagen.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "examinierte Pflegekräfte" },
+      { "kind": "abschluss", "quote": "Fachweiterbildung Intensivpflege und Anästhesie oder die Bereitschaft, diese innerhalb von zwei Jahren zu absolvieren" },
+      { "kind": "schicht", "quote": "Drei-Schicht-System inklusive Nachtdiensten" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "mixed-01",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Examinierte Pflegefachkraft (w/m/d) für die ambulante Pflege - 30 bis 39 Stunden\nUnser Pflegedienst in Dresden wächst und braucht Sie! Sie haben eine abgeschlossene Ausbildung zur Pflegefachfrau oder zum Pflegefachmann, sind sicher im Umgang mit der Pflegedokumentation und besitzen den Führerschein Klasse B. Erfahrung in der ambulanten Pflege wäre schön, ist aber keine Bedingung. Wir arbeiten im Früh- und Spätdienst, Wochenendarbeit gehört dazu. Bezahlung nach Haustarif, Einstieg ab 3.300 Euro.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "30 bis 39 Stunden" },
+      { "kind": "abschluss", "quote": "abgeschlossene Ausbildung zur Pflegefachfrau oder zum Pflegefachmann" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B" },
+      { "kind": "schicht", "quote": "Wochenendarbeit gehört dazu" }
+    ],
+    "salaryVerbatim": "ab 3.300 Euro",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "mixed-16",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Praktikum Softwareentwicklung (m/w/d), 6 Monate, Vollzeit\nDu studierst Informatik oder ein verwandtes Fach und hast erste Erfahrung mit Python oder Java. Deine Deutschkenntnisse sind mindestens B1, Englisch sprichst du fließend. Wir wünschen uns, dass du mindestens 3 Tage pro Woche im Büro in München arbeitest. Vergütung: 1.200 Euro pro Monat.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "studierst Informatik oder ein verwandtes Fach" },
+      { "kind": "berufserfahrung", "quote": "erste Erfahrung mit Python oder Java" },
+      { "kind": "sprache", "quote": "Deutschkenntnisse sind mindestens B1, Englisch sprichst du fließend" },
+      { "kind": "einsatzort", "quote": "mindestens 3 Tage pro Woche im Büro in München arbeitest" }
+    ],
+    "salaryVerbatim": "1.200 Euro pro Monat",
+    "tariff": null,
+    "signals": []
+  }
+}

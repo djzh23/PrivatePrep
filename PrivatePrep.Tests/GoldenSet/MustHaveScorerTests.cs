@@ -5,6 +5,29 @@ public class MustHaveScorerTests
     private static ExpectedMustHave Item(string kind, string quote, string status = "met") => new(kind, quote, status);
 
     [Fact]
+    public void Match_NamesTheMissedAndTheExtraItems()
+    {
+        var expected = new[] { Item("abschluss", "Abgeschlossene Ausbildung"), Item("fuehrerschein", "Führerschein Klasse B") };
+        var actual = new[] { Item("abschluss", "Abgeschlossene Ausbildung"), Item("zertifikat", "Gewerbeschein") };
+
+        var match = MustHaveScorer.Match(expected, actual);
+
+        Assert.Equal(["Führerschein Klasse B"], match.Missed.Select(m => m.Quote));
+        Assert.Equal(["Gewerbeschein"], match.Extra.Select(m => m.Quote));
+    }
+
+    [Fact]
+    public void Match_ReportsAnExpectedItemThatLostItsPartnerToAnEarlierOne()
+    {
+        var expected = new[] { Item("sprache", "Deutsch C1"), Item("sprache", "Deutsch C1 oder besser") };
+        var actual = new[] { Item("sprache", "Deutsch C1 oder besser") };
+
+        var match = MustHaveScorer.Match(expected, actual);
+
+        Assert.Single(match.Missed);
+    }
+
+    [Fact]
     public void IdenticalLists_ScoreFullAccuracyWithoutFalsePositives()
     {
         var expected = new[] { Item("abschluss", "Abgeschlossene Ausbildung"), Item("fuehrerschein", "Führerschein Klasse B") };

@@ -1,0 +1,19 @@
+{
+  "id": "mixed-17",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Physiotherapeut (m/w/d) für unsere Praxis in Köln, 30 Wochenstunden\nAls staatlich anerkannter Physiotherapeut bringen Sie idealerweise Zusatzqualifikationen in Manueller Therapie mit. Zwingend benötigen wir Ihre Berufsurkunde und einen Nachweis über die Kassenzulassung. Samstagsdienste im Wechsel sind Teil der Arbeit. Wir zahlen 3.400 bis 3.800 Euro brutto.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "30 Wochenstunden" },
+      { "kind": "abschluss", "quote": "staatlich anerkannter Physiotherapeut" },
+      { "kind": "zertifikat", "quote": "Ihre Berufsurkunde und einen Nachweis über die Kassenzulassung" },
+      { "kind": "schicht", "quote": "Samstagsdienste im Wechsel" }
+    ],
+    "salaryVerbatim": "3.400 bis 3.800 Euro brutto",
+    "tariff": null,
+    "signals": []
+  }
+}

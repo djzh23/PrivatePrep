@@ -1,0 +1,20 @@
+{
+  "id": "mixed-18",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Filialleiter/in Bäckerei (m/w/d) - Vollzeit - 5-Tage-Woche\nStart ab sofort in Rostock. Was Sie mitbringen: Eine abgeschlossene Ausbildung im Bäckerei- oder Verkaufsbereich, Führungserfahrung von mindestens 2 Jahren, Früh- und Wochenendbereitschaft (Arbeitsbeginn 4 Uhr), Hygienebelehrung nach IfSG.\nWir bieten 2.800 Euro Grundgehalt und Prämien.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "abgeschlossene Ausbildung im Bäckerei- oder Verkaufsbereich" },
+      { "kind": "berufserfahrung", "quote": "Führungserfahrung von mindestens 2 Jahren" },
+      { "kind": "schicht", "quote": "Früh- und Wochenendbereitschaft (Arbeitsbeginn 4 Uhr)" },
+      { "kind": "zertifikat", "quote": "Hygienebelehrung nach IfSG" }
+    ],
+    "salaryVerbatim": "2.800 Euro Grundgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

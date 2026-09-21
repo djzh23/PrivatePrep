@@ -1,0 +1,19 @@
+{
+  "id": "mixed-15",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Kita-Leitung (m/w/d) - 39 Stunden - unbefristet\nDer Verein Kinderland e. V. sucht zum nächstmöglichen Zeitpunkt eine engagierte Leitung für die Kita Regenbogen (65 Kinder). Voraussetzungen sind ein Abschluss als staatlich anerkannter Erzieher oder ein Studium der Sozialen Arbeit, mindestens drei Jahre Berufserfahrung in einer Kindertageseinrichtung sowie Leitungserfahrung. Ein aktuelles erweitertes Führungszeugnis und der Masernimpfnachweis sind vorzulegen. Wir zahlen nach TVöD SuE, Entgeltgruppe S 16.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "39 Stunden" },
+      { "kind": "abschluss", "quote": "Abschluss als staatlich anerkannter Erzieher oder ein Studium der Sozialen Arbeit" },
+      { "kind": "berufserfahrung", "quote": "mindestens drei Jahre Berufserfahrung in einer Kindertageseinrichtung sowie Leitungserfahrung" },
+      { "kind": "zertifikat", "quote": "Ein aktuelles erweitertes Führungszeugnis und der Masernimpfnachweis sind vorzulegen" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

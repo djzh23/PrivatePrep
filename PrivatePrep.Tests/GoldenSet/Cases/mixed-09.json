@@ -1,0 +1,19 @@
+{
+  "id": "mixed-09",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Administrative Assistant (m/f/d) - part-time (20 hours per week)\nOur international law firm in Frankfurt is looking for a reliable assistant.\nQualifications: Completed commercial training or equivalent experience, at least 1 year of administrative work, excellent command of English (C1 or above) and good German, proficiency in Microsoft Office.\nWe offer EUR 1,900 gross per month.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "part-time (20 hours per week)" },
+      { "kind": "abschluss", "quote": "Completed commercial training or equivalent experience" },
+      { "kind": "berufserfahrung", "quote": "at least 1 year of administrative work" },
+      { "kind": "sprache", "quote": "excellent command of English (C1 or above) and good German" }
+    ],
+    "salaryVerbatim": "EUR 1,900 gross per month",
+    "tariff": null,
+    "signals": []
+  }
+}

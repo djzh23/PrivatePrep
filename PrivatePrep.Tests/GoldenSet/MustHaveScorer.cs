@@ -11,32 +11,53 @@ public sealed record MustHaveScore(int Expected, int Found, int Correct, int Fal
     public double Recall => Expected == 0 ? 1.0 : (double)Found / Expected;
 }
 
+/// <summary>The outcome of pairing expected and actual requirements one to one.</summary>
+public sealed record MustHaveMatch(
+    int Found,
+    int Correct,
+    IReadOnlyList<ExpectedMustHave> Missed,
+    IReadOnlyList<ExpectedMustHave> Extra);
+
 /// <summary>Compares the requirements an extractor found with the golden expectations.</summary>
 public static partial class MustHaveScorer
 {
     public static MustHaveScore Score(IReadOnlyList<ExpectedMustHave> expected, IReadOnlyList<ExpectedMustHave> actual)
     {
+        var match = Match(expected, actual);
+        return new MustHaveScore(expected.Count, match.Found, match.Correct, match.Extra.Count);
+    }
+
+    /// <summary>Pairs each expected item with at most one actual item of the same kind and overlapping quote.</summary>
+    public static MustHaveMatch Match(IReadOnlyList<ExpectedMustHave> expected, IReadOnlyList<ExpectedMustHave> actual)
+    {
         var used = new bool[actual.Count];
         var found = 0;
         var correct = 0;
+        var missed = new List<ExpectedMustHave>();
 
         foreach (var wanted in expected)
         {
             var wantedQuote = Normalize(wanted.Quote);
+            var matched = false;
             for (var i = 0; i < actual.Count; i++)
             {
                 if (used[i] || actual[i].Kind != wanted.Kind || !Overlaps(wantedQuote, Normalize(actual[i].Quote)))
                     continue;
 
                 used[i] = true;
+                matched = true;
                 found++;
                 if (wanted.Status is null || actual[i].Status == wanted.Status)
                     correct++;
                 break;
             }
+
+            if (!matched)
+                missed.Add(wanted);
         }
 
-        return new MustHaveScore(expected.Count, found, correct, used.Count(u => !u));
+        var extra = actual.Where((_, i) => !used[i]).ToList();
+        return new MustHaveMatch(found, correct, missed, extra);
     }
 
     public static MustHaveScore Aggregate(IEnumerable<MustHaveScore> scores) =>

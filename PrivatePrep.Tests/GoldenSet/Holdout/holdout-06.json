@@ -1,0 +1,18 @@
+{
+  "id": "holdout-06",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Junior Data Analyst (m/f/d) | Frankfurt | 40 hours\nJoin our analytics team. Must have: a Bachelor's degree in statistics, mathematics or a similar field; solid knowledge of SQL and Python; business fluent English. Nice to have: experience with Power BI. We offer a salary of EUR 52,000 per year and a hybrid work model.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "40 hours" },
+      { "kind": "abschluss", "quote": "a Bachelor's degree in statistics, mathematics or a similar field" },
+      { "kind": "sprache", "quote": "business fluent English" }
+    ],
+    "salaryVerbatim": "EUR 52,000 per year",
+    "tariff": null,
+    "signals": []
+  }
+}

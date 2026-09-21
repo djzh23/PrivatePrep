@@ -1,0 +1,21 @@
+{
+  "id": "holdout-10",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Systemadministrator (m/w/d) Linux - Vollzeit - Stuttgart - Homeoffice teilweise möglich\nAbgeschlossene Ausbildung als Fachinformatiker Systemintegration oder Studium der Informatik\nMindestens 4 Jahre Erfahrung in der Administration von Linux-Servern\nRHCE-Zertifizierung\nBereitschaftsdienst im Wechsel (eine Woche pro Monat)\nVerhandlungssicheres Deutsch und Englisch\nWir bieten 68.000 bis 76.000 Euro pro Jahr",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung als Fachinformatiker Systemintegration oder Studium der Informatik" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 4 Jahre Erfahrung in der Administration von Linux-Servern" },
+      { "kind": "zertifikat", "quote": "RHCE-Zertifizierung" },
+      { "kind": "schicht", "quote": "Bereitschaftsdienst im Wechsel (eine Woche pro Monat)" },
+      { "kind": "sprache", "quote": "Verhandlungssicheres Deutsch und Englisch" }
+    ],
+    "salaryVerbatim": "68.000 bis 76.000 Euro pro Jahr",
+    "tariff": null,
+    "signals": []
+  }
+}

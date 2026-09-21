@@ -1,0 +1,20 @@
+{
+  "id": "mixed-14",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Malermeister oder Vorarbeiter (m/w/d), Vollzeit, Raum Leipzig\nWir erwarten:\nMeisterbrief oder mehrjährige Erfahrung als Vorarbeiter\nFührerschein Klasse B (Klasse BE von Vorteil)\nBereitschaft zur Montage auf Baustellen im Umkreis von 80 km\nWir bieten: übertarifliche Bezahlung, Firmenwagen.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Meisterbrief oder mehrjährige Erfahrung als Vorarbeiter" },
+      { "kind": "berufserfahrung", "quote": "mehrjährige Erfahrung als Vorarbeiter" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B" },
+      { "kind": "einsatzort", "quote": "Bereitschaft zur Montage auf Baustellen im Umkreis von 80 km" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

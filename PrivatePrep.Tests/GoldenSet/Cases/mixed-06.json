@@ -1,0 +1,19 @@
+{
+  "id": "mixed-06",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "DevOps Engineer (m/w/d), Vollzeit, remote innerhalb Deutschlands\nMust-haves: mindestens drei Jahre Erfahrung mit Kubernetes und Terraform; sehr gute Linux-Kenntnisse; Deutsch und Englisch fließend.\nNice-to-haves: AWS-Zertifizierung, Erfahrung mit Go.\nWir bieten 75.000 bis 90.000 Euro, 32 Tage Urlaub und ein Weiterbildungsbudget von 2.000 Euro.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "einsatzort", "quote": "remote innerhalb Deutschlands" },
+      { "kind": "berufserfahrung", "quote": "mindestens drei Jahre Erfahrung mit Kubernetes und Terraform" },
+      { "kind": "sprache", "quote": "Deutsch und Englisch fließend" }
+    ],
+    "salaryVerbatim": "75.000 bis 90.000 Euro",
+    "tariff": null,
+    "signals": []
+  }
+}

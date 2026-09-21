@@ -1,0 +1,19 @@
+{
+  "id": "mixed-08",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Verkaufsberater Küchenstudio (m/w/d) in Teilzeit oder Vollzeit\nIhre Aufgaben: Beratung, Planung und Verkauf von Küchen.\nIhr Profil:\n• Abgeschlossene Ausbildung im Einzelhandel oder Tischler-/Schreinerhandwerk\n• Erste Verkaufserfahrung, Quereinsteiger willkommen\n• Sicherer Umgang mit CAD-Planungssoftware oder Bereitschaft zur Einarbeitung\n• Arbeiten an Samstagen im Wechsel\nWir bieten ein Fixgehalt von 2.900 Euro plus Umsatzbeteiligung.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Teilzeit oder Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung im Einzelhandel oder Tischler-/Schreinerhandwerk" },
+      { "kind": "berufserfahrung", "quote": "Erste Verkaufserfahrung" },
+      { "kind": "schicht", "quote": "Arbeiten an Samstagen im Wechsel" }
+    ],
+    "salaryVerbatim": "Fixgehalt von 2.900 Euro",
+    "tariff": null,
+    "signals": []
+  }
+}

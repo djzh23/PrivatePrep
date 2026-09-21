@@ -1,0 +1,19 @@
+{
+  "id": "mixed-05",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Lehrkraft für Deutsch als Fremdsprache (m/w/d), Teilzeit, 20 Unterrichtsstunden pro Woche\nUnsere Sprachschule in Stuttgart unterrichtet Integrationskurse.\nSie benötigen: eine BAMF-Zulassung als Lehrkraft für Integrationskurse, ein abgeschlossenes Hochschulstudium (DaF/DaZ oder vergleichbar) und Unterrichtserfahrung mit Erwachsenen von mindestens einem Jahr.\nVergütung: 32 Euro pro Unterrichtsstunde als Honorarkraft.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Teilzeit, 20 Unterrichtsstunden pro Woche" },
+      { "kind": "zertifikat", "quote": "BAMF-Zulassung als Lehrkraft für Integrationskurse" },
+      { "kind": "abschluss", "quote": "abgeschlossenes Hochschulstudium (DaF/DaZ oder vergleichbar)" },
+      { "kind": "berufserfahrung", "quote": "Unterrichtserfahrung mit Erwachsenen von mindestens einem Jahr" }
+    ],
+    "salaryVerbatim": "32 Euro pro Unterrichtsstunde",
+    "tariff": null,
+    "signals": []
+  }
+}

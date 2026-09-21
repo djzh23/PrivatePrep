@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <None Include="GoldenSet\Cases\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="GoldenSet\Holdout\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

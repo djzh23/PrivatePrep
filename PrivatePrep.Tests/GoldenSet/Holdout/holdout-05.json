@@ -1,0 +1,18 @@
+{
+  "id": "holdout-05",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Schulsozialarbeiterin / Schulsozialarbeiter (m/w/d), 75 % Stelle, befristet bis 31.07.\nAn unserer Gesamtschule in Bochum begleiten Sie Schülerinnen und Schüler in schwierigen Lebenslagen. Erforderlich ist ein Bachelor- oder Diplomabschluss in Sozialer Arbeit (Staatliche Anerkennung). Wünschenswert sind Erfahrungen in der Jugendhilfe. Ein erweitertes Führungszeugnis ist vor Arbeitsbeginn vorzulegen. Vergütung nach TV-L S 11b.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "75 % Stelle" },
+      { "kind": "abschluss", "quote": "Bachelor- oder Diplomabschluss in Sozialer Arbeit (Staatliche Anerkennung)" },
+      { "kind": "zertifikat", "quote": "Ein erweitertes Führungszeugnis ist vor Arbeitsbeginn vorzulegen" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

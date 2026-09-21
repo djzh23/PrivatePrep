@@ -1,0 +1,18 @@
+{
+  "id": "holdout-02",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Buchhalter (m/w/d) für unser Familienunternehmen in Ulm, Teilzeit oder Vollzeit möglich\nSie kennen sich mit der Finanzbuchhaltung aus? Dann bringen Sie am besten Folgendes mit: Ausbildung zum Steuerfachangestellten oder Bilanzbuchhalter-Zertifikat (IHK), mindestens 3 Jahre Praxis in der Debitoren- und Kreditorenbuchhaltung, sichere DATEV-Kenntnisse. Nice to have: Englisch. Gehalt nach Vereinbarung.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Teilzeit oder Vollzeit" },
+      { "kind": "abschluss", "quote": "Ausbildung zum Steuerfachangestellten oder Bilanzbuchhalter-Zertifikat (IHK)" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Praxis in der Debitoren- und Kreditorenbuchhaltung" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

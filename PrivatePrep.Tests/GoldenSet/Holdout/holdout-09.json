@@ -1,0 +1,16 @@
+{
+  "id": "holdout-09",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Ausbildung zur/zum Verwaltungsfachangestellten (m/w/d) - Start 1. September\nDie Kreisverwaltung Nordheide bietet Ausbildungsplätze an. Sie haben die Fachoberschulreife oder einen höheren Schulabschluss, gute Noten in Deutsch und Mathematik und Spaß am Umgang mit Menschen. Bewerbungen bitte online. Ausbildungsvergütung nach TVAöD: 1.200 Euro im ersten Ausbildungsjahr.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Fachoberschulreife oder einen höheren Schulabschluss" }
+    ],
+    "salaryVerbatim": "1.200 Euro im ersten Ausbildungsjahr",
+    "tariff": null,
+    "signals": []
+  }
+}

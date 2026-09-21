@@ -1,0 +1,19 @@
+{
+  "id": "mixed-12",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Für unser Büro in Freiburg suchen wir eine Empfangs- und Verwaltungskraft (m/w/d) in Teilzeit (25 Stunden). Sie sind freundlich, organisiert und haben eine kaufmännische Ausbildung abgeschlossen. Erfahrung im Umgang mit Kunden und sichere Englischkenntnisse setzen wir voraus. Kenntnisse in DATEV sind ein Plus. Wir bieten Gleitzeit und 30 Urlaubstage.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Teilzeit (25 Stunden)" },
+      { "kind": "abschluss", "quote": "eine kaufmännische Ausbildung abgeschlossen" },
+      { "kind": "berufserfahrung", "quote": "Erfahrung im Umgang mit Kunden" },
+      { "kind": "sprache", "quote": "sichere Englischkenntnisse" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

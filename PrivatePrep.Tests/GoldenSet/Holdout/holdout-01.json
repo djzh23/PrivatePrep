@@ -1,0 +1,20 @@
+{
+  "id": "holdout-01",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Notfallsanitäter (m/w/d) - Rettungswache Lübeck - 48 Stunden Wochenarbeitszeit im Schichtsystem\nWir stellen zum 1. Januar Notfallsanitäter ein. Ihr Profil: erfolgreich abgeschlossene Ausbildung zum Notfallsanitäter, gültige Fahrerlaubnis Klasse C1 (Rettungswagen), Bereitschaft zu 12-Stunden-Schichten inklusive Wochenenden und Feiertagen sowie Deutschkenntnisse auf Muttersprachniveau. Bezahlung nach TVöD, Entgeltgruppe 9a.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "48 Stunden Wochenarbeitszeit" },
+      { "kind": "abschluss", "quote": "erfolgreich abgeschlossene Ausbildung zum Notfallsanitäter" },
+      { "kind": "fuehrerschein", "quote": "gültige Fahrerlaubnis Klasse C1 (Rettungswagen)" },
+      { "kind": "schicht", "quote": "Bereitschaft zu 12-Stunden-Schichten inklusive Wochenenden und Feiertagen" },
+      { "kind": "sprache", "quote": "Deutschkenntnisse auf Muttersprachniveau" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}
