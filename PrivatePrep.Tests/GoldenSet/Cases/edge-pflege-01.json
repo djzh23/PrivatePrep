@@ -1,0 +1,17 @@
+{
+  "id": "edge-pflege-01",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "PFLEGEFACHKRAFT (M/W/D) FÜR DEN NACHTDIENST\nWer wir sind: Das Seniorenzentrum Sonnenhof in Hannover mit 84 Pflegeplätzen.\nDas bringen Sie mit:\n• Examen als Altenpfleger/in oder Pflegefachfrau/-mann\n• Erfahrung in der Nachtwache ist wünschenswert\n• Belastbarkeit und Teamgeist\n• Bereitschaft zu Nachtdiensten im Wechsel (22 bis 6 Uhr)\nDas bieten wir: Vergütung nach AVR Caritas, ca. 3.400 bis 3.900 Euro brutto, Nachtzuschläge, 31 Urlaubstage und ein Jobrad.\nBewerbung per E-Mail an personal@sonnenhof.example",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Examen als Altenpfleger/in oder Pflegefachfrau/-mann" },
+      { "kind": "schicht", "quote": "Bereitschaft zu Nachtdiensten im Wechsel (22 bis 6 Uhr)" }
+    ],
+    "salaryVerbatim": "ca. 3.400 bis 3.900 Euro brutto",
+    "tariff": null,
+    "signals": []
+  }
+}

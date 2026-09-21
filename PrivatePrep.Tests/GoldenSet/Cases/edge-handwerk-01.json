@@ -1,0 +1,18 @@
+{
+  "id": "edge-handwerk-01",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Kfz-Mechatroniker für Nutzfahrzeuge (m/w/d)\nUnsere Werkstatt für Lkw und Anhänger in Kassel sucht Verstärkung im Zwei-Schicht-System.\nAnforderungen:\n- Gesellenbrief als Kfz-Mechatroniker, Schwerpunkt Nutzfahrzeugtechnik\n- Führerschein Klasse C/CE zwingend erforderlich\n- Arbeit im 2-Schicht-System (Früh- und Spätschicht im Wechsel)\n- Erfahrung mit Diagnosegeräten wünschenswert\nWir bieten 21,50 Euro pro Stunde, Schichtzulagen und Werkskleidung.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Gesellenbrief als Kfz-Mechatroniker, Schwerpunkt Nutzfahrzeugtechnik" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse C/CE zwingend erforderlich" },
+      { "kind": "schicht", "quote": "Arbeit im 2-Schicht-System (Früh- und Spätschicht im Wechsel)" }
+    ],
+    "salaryVerbatim": "21,50 Euro pro Stunde",
+    "tariff": null,
+    "signals": []
+  }
+}

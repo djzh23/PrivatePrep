@@ -1,0 +1,17 @@
+{
+  "id": "edge-verwaltung-01",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Die Stadt Beispielheim sucht für das Bürgeramt zum nächstmöglichen Zeitpunkt eine Sachbearbeitung im Meldewesen (m/w/d), zunächst befristet für zwei Jahre, in Teilzeit mit 20 Stunden pro Woche. Sie bearbeiten Anmeldungen, stellen Ausweisdokumente aus und beraten Bürgerinnen und Bürger am Schalter. Wir setzen den erfolgreich abgeschlossenen Verwaltungslehrgang I oder eine gleichwertige Ausbildung voraus und erwarten Freude am Kontakt mit Menschen. Kenntnisse im Melderecht und Erfahrungen mit Fachverfahren sind von Vorteil. Die Stelle ist in der Entgeltgruppe 6 TVöD bewertet. Auskünfte erteilt Frau Roth.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "erfolgreich abgeschlossenen Verwaltungslehrgang I oder eine gleichwertige Ausbildung" },
+      { "kind": "arbeitszeit", "quote": "Teilzeit mit 20 Stunden pro Woche" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TVöD", "group": "6" },
+    "signals": []
+  }
+}

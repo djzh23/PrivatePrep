@@ -1,0 +1,18 @@
+{
+  "id": "edge-bildung-02",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Wissenschaftliche Mitarbeiterin / Wissenschaftlicher Mitarbeiter (m/w/d), 65 Prozent, befristet auf 3 Jahre\nAm Institut für Sozialwissenschaften der Universität Beispielstadt ist zum 1. April eine Stelle zu besetzen (Entgeltgruppe 13 TV-L).\nAufgaben: Mitarbeit im Forschungsprojekt, Lehre im Umfang von 4 Semesterwochenstunden, Möglichkeit zur eigenen Qualifizierung (Promotion).\nVoraussetzungen: ein mit überdurchschnittlichem Erfolg abgeschlossenes Masterstudium in Soziologie oder einem verwandten Fach; sehr gute Deutsch- und Englischkenntnisse; Erfahrung in der Lehre ist erwünscht.\nSchwerbehinderte Bewerberinnen und Bewerber werden bei gleicher Eignung bevorzugt. Kontakt: Prof. Dr. Lang.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "65 Prozent, befristet auf 3 Jahre" },
+      { "kind": "abschluss", "quote": "mit überdurchschnittlichem Erfolg abgeschlossenes Masterstudium in Soziologie oder einem verwandten Fach" },
+      { "kind": "sprache", "quote": "sehr gute Deutsch- und Englischkenntnisse" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TV-L", "group": "13" },
+    "signals": []
+  }
+}

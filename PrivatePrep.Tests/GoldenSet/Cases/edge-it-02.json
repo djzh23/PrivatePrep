@@ -1,0 +1,19 @@
+{
+  "id": "edge-it-02",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Werkstudent IT-Support (m/w/d), maximal 20 Stunden pro Woche\nUnterstützen Sie unser IT-Team bei der Einrichtung von Arbeitsplätzen und beim Ticketsystem.\nVoraussetzungen: Sie sind als Student an einer Hochschule immatrikuliert, verfügen über Deutschkenntnisse auf Niveau C1 und bringen erste Erfahrung mit Windows und Microsoft 365 mit. Vorkenntnisse in Linux sind nicht nötig.\nWir zahlen 16 Euro pro Stunde. Bewerbungen an it-jobs@beispiel.example.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "maximal 20 Stunden pro Woche" },
+      { "kind": "abschluss", "quote": "Sie sind als Student an einer Hochschule immatrikuliert" },
+      { "kind": "sprache", "quote": "Deutschkenntnisse auf Niveau C1" },
+      { "kind": "berufserfahrung", "quote": "erste Erfahrung mit Windows und Microsoft 365" }
+    ],
+    "salaryVerbatim": "16 Euro pro Stunde",
+    "tariff": null,
+    "signals": []
+  }
+}

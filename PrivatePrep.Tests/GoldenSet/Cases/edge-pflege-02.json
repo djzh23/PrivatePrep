@@ -1,0 +1,17 @@
+{
+  "id": "edge-pflege-02",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Betreuungskraft (m/w/d) im Minijob, 12 Stunden pro Woche\nFür unsere Wohngemeinschaft für Menschen mit Demenz in Bremen suchen wir Unterstützung bei der Alltagsbegleitung.\nSie begleiten die Bewohnerinnen und Bewohner beim Spazierengehen, Vorlesen und Spielen. Pflegerische Tätigkeiten gehören nicht zu Ihren Aufgaben.\nWas wir erwarten: Qualifizierung nach § 43b SGB XI oder die Bereitschaft, diese bei uns zu absolvieren. Ein Führerschein ist nicht erforderlich. Quereinsteiger sind herzlich willkommen.\nWir zahlen 13,50 Euro pro Stunde. Ansprechpartnerin ist Frau Yilmaz.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "zertifikat", "quote": "Qualifizierung nach § 43b SGB XI oder die Bereitschaft, diese bei uns zu absolvieren" },
+      { "kind": "arbeitszeit", "quote": "Minijob, 12 Stunden pro Woche" }
+    ],
+    "salaryVerbatim": "13,50 Euro pro Stunde",
+    "tariff": null,
+    "signals": []
+  }
+}

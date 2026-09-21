@@ -8,7 +8,7 @@ public sealed record GoldenCase(
     string Language,
     bool IsJobPosting,
     string JobDescription,
-    string CvText,
+    string? CvText,
     GoldenExpectations Expected);
 
 public sealed record GoldenExpectations(
@@ -17,8 +17,11 @@ public sealed record GoldenExpectations(
     ExpectedTariff? Tariff,
     IReadOnlyList<string> Signals);
 
-/// <summary>A hard requirement of the posting, the exact posting text it comes from, and how the CV fares.</summary>
-public sealed record ExpectedMustHave(string Kind, string Quote, string Status);
+/// <summary>
+/// A hard requirement of the posting and the exact posting text it comes from. <paramref name="Status"/> says
+/// how the CV fares and is only set for cases that carry a CV; CV-free edge cases check extraction alone.
+/// </summary>
+public sealed record ExpectedMustHave(string Kind, string Quote, string? Status = null);
 
 public sealed record ExpectedTariff(string Agreement, string? Group);
 

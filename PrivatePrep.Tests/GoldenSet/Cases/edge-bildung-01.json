@@ -1,0 +1,18 @@
+{
+  "id": "edge-bildung-01",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Erzieherin / Erzieher (m/w/d) für unsere Kita Sonnenschein\nDie Stadt Wiesental sucht zum 1. September Fachkräfte für die Betreuung von Kindern im Alter von 1 bis 6 Jahren. Der Stellenumfang beträgt 30 Stunden pro Woche.\nSie verfügen über die staatliche Anerkennung als Erzieher/in oder eine als gleichwertig anerkannte Qualifikation. Ein Nachweis über den Masernschutz ist vor Beginn der Tätigkeit vorzulegen. Zusatzqualifikationen in der Sprachförderung sind gern gesehen.\nDie Eingruppierung erfolgt in die Entgeltgruppe S 8a TVöD SuE. Fragen beantwortet die Kita-Leitung, Frau Dietrich.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "30 Stunden pro Woche" },
+      { "kind": "abschluss", "quote": "staatliche Anerkennung als Erzieher/in oder eine als gleichwertig anerkannte Qualifikation" },
+      { "kind": "zertifikat", "quote": "Nachweis über den Masernschutz" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TVöD", "group": "S 8a" },
+    "signals": []
+  }
+}

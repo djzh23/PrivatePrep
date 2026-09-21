@@ -6,6 +6,9 @@ public sealed record MustHaveScore(int Expected, int Found, int Correct, int Fal
 {
     /// <summary>Share of expected requirements that were found AND assessed correctly (AC-1: at least 0.95).</summary>
     public double Accuracy => Expected == 0 ? 1.0 : (double)Correct / Expected;
+
+    /// <summary>Share of expected requirements that were found at all, whatever their status. Isolates extraction from the CV comparison.</summary>
+    public double Recall => Expected == 0 ? 1.0 : (double)Found / Expected;
 }
 
 /// <summary>Compares the requirements an extractor found with the golden expectations.</summary>
@@ -27,7 +30,7 @@ public static partial class MustHaveScorer
 
                 used[i] = true;
                 found++;
-                if (actual[i].Status == wanted.Status)
+                if (wanted.Status is null || actual[i].Status == wanted.Status)
                     correct++;
                 break;
             }

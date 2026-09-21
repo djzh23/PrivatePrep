@@ -1,0 +1,18 @@
+{
+  "id": "edge-vertrieb-01",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Trainee Vertrieb (m/w/d) - Berufseinsteiger willkommen\nWir sind ein mittelständischer Hersteller von Verpackungsmaschinen und bilden im Rahmen eines 12-monatigen Traineeprogramms künftige Vertriebsprofis aus.\nSie bringen mit:\n- ein abgeschlossenes Studium der Betriebswirtschaft oder ein vergleichbarer Abschluss\n- gute Englischkenntnisse in Wort und Schrift\n- Reisebereitschaft (ca. 20 Prozent)\n- ein Führerschein der Klasse B ist von Vorteil\nBerufserfahrung ist nicht erforderlich.\nWir bieten 3.000 Euro brutto monatlich im ersten Jahr. Ihre Ansprechpartnerin: Frau Hoffmann, Personalabteilung.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "abgeschlossenes Studium der Betriebswirtschaft oder ein vergleichbarer Abschluss" },
+      { "kind": "sprache", "quote": "gute Englischkenntnisse in Wort und Schrift" },
+      { "kind": "einsatzort", "quote": "Reisebereitschaft (ca. 20 Prozent)" }
+    ],
+    "salaryVerbatim": "3.000 Euro brutto monatlich",
+    "tariff": null,
+    "signals": []
+  }
+}

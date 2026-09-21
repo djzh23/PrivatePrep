@@ -1,0 +1,19 @@
+{
+  "id": "edge-vertrieb-02",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Inside Sales Representative (m/f/d) - Part-time 30 hours\nJoin our small team in Vienna and help us reach new customers by phone and email.\nWhat you bring:\n* Completed commercial apprenticeship or a comparable qualification\n* Fluent German (native level) and good English\n* Experience with a CRM system is preferred\n* Availability Monday to Thursday from 9 am to 3 pm\nWhat we offer: EUR 2,400 gross per month for 30 hours, plus bonus. Questions? Contact Lukas Berger.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Part-time 30 hours" },
+      { "kind": "abschluss", "quote": "Completed commercial apprenticeship or a comparable qualification" },
+      { "kind": "sprache", "quote": "Fluent German (native level) and good English" },
+      { "kind": "arbeitszeit", "quote": "Availability Monday to Thursday from 9 am to 3 pm" }
+    ],
+    "salaryVerbatim": "EUR 2,400 gross per month for 30 hours",
+    "tariff": null,
+    "signals": []
+  }
+}

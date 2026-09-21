@@ -1,0 +1,16 @@
+{
+  "id": "edge-handwerk-02",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Ausbildung zum Maler und Lackierer (m/w/d) ab 1. August\nDu suchst einen Beruf mit Zukunft? Wir bilden in unserem Malerbetrieb in Rostock aus.\nDas solltest du mitbringen: Hauptschulabschluss oder Mittlere Reife, handwerkliches Geschick, Freude an der Arbeit auf Baustellen. Ein Führerschein ist nicht notwendig.\nDeine Vergütung: Ausbildungsvergütung von 900 Euro im ersten Lehrjahr.\nMelde dich einfach bei Herrn Sommer.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Hauptschulabschluss oder Mittlere Reife" }
+    ],
+    "salaryVerbatim": "900 Euro im ersten Lehrjahr",
+    "tariff": null,
+    "signals": []
+  }
+}

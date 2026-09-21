@@ -3,22 +3,42 @@ using PrivatePrep.Services.Agent;
 namespace PrivatePrep.Tests.GoldenSet;
 
 /// <summary>
-/// Guards the golden set itself: a set that is too small, skewed or sloppy would make the
-/// 95 % must-have gate (AC-1) meaningless.
+/// Guards the golden set itself: a set that is too small, too clean or sloppily labelled would make
+/// the 95 % must-have gate (AC-1) meaningless. Modelled on career-ops' evals/golden: one JSON file
+/// per case, synthetic, edge cases preferred. Only the CV-relative cases carry a CV and statuses.
 /// </summary>
 public class GoldenSetIntegrityTests
 {
     private static readonly IReadOnlyList<GoldenCase> Cases = GoldenSetLoader.LoadAll();
 
+    private static readonly string[] NiceToHaveMarkers =
+    [
+        "wünschenswert", "von Vorteil", "idealerweise", "ein Plus", "is a plus", "nice to have",
+        "gern gesehen", "preferred", "erwünscht", "optional",
+        "nicht erforderlich", "nicht notwendig", "nicht nötig", "is not required",
+    ];
+
     private static IEnumerable<GoldenCase> Postings => Cases.Where(c => c.IsJobPosting);
 
+    private static bool HasCv(GoldenCase c) => !string.IsNullOrWhiteSpace(c.CvText);
+
     [Fact]
-    public void EveryFieldHasAtLeastTwoJobPostings()
+    public void EveryFieldHasAtLeastFourJobPostings()
     {
         foreach (var field in GoldenVocabulary.Fields)
         {
             var count = Postings.Count(c => c.Field == field);
-            Assert.True(count >= 2, $"Field '{field}' has {count} postings, need at least 2.");
+            Assert.True(count >= 4, $"Field '{field}' has {count} postings, need at least 4.");
+        }
+    }
+
+    [Fact]
+    public void EveryFieldHasJdOnlyEdgeCases()
+    {
+        foreach (var field in GoldenVocabulary.Fields)
+        {
+            var count = Postings.Count(c => c.Field == field && !HasCv(c));
+            Assert.True(count >= 2, $"Field '{field}' has {count} CV-free edge cases, need at least 2.");
         }
     }
 
@@ -41,7 +61,8 @@ public class GoldenSetIntegrityTests
             foreach (var m in c.Expected.MustHaves)
             {
                 Assert.Contains(m.Kind, GoldenVocabulary.Kinds);
-                Assert.Contains(m.Status, GoldenVocabulary.Statuses);
+                if (m.Status is not null)
+                    Assert.Contains(m.Status, GoldenVocabulary.Statuses);
             }
 
             foreach (var s in c.Expected.Signals)
@@ -49,6 +70,21 @@ public class GoldenSetIntegrityTests
 
             if (c.Expected.Tariff is { } tariff)
                 Assert.Contains(tariff.Agreement, GoldenVocabulary.Agreements);
+        }
+    }
+
+    [Fact]
+    public void StatusesAreSetExactlyWhenACvIsPresent()
+    {
+        foreach (var c in Postings)
+        {
+            foreach (var m in c.Expected.MustHaves)
+            {
+                if (HasCv(c))
+                    Assert.True(m.Status is not null, $"[{c.Id}] CV present but status missing for \"{m.Quote}\".");
+                else
+                    Assert.True(m.Status is null, $"[{c.Id}] no CV but status set for \"{m.Quote}\".");
+            }
         }
     }
 
@@ -65,6 +101,20 @@ public class GoldenSetIntegrityTests
     }
 
     [Fact]
+    public void NiceToHaveAndNegatedPhrasesAreNeverExpectedAsMustHaves()
+    {
+        foreach (var c in Postings)
+        {
+            foreach (var m in c.Expected.MustHaves)
+            {
+                var marker = NiceToHaveMarkers.FirstOrDefault(
+                    x => m.Quote.Contains(x, StringComparison.OrdinalIgnoreCase));
+                Assert.True(marker is null, $"[{c.Id}] \"{m.Quote}\" is optional or negated ('{marker}'), not a must-have.");
+            }
+        }
+    }
+
+    [Fact]
     public void ExpectedSalaryAppearsVerbatimInThePosting()
     {
         foreach (var c in Postings.Where(c => c.Expected.SalaryVerbatim is not null))
@@ -74,15 +124,12 @@ public class GoldenSetIntegrityTests
     }
 
     [Fact]
-    public void PostingsMeetTheMinimumLengthAndHaveACv()
+    public void PostingsMeetTheMinimumLength()
     {
         foreach (var c in Postings)
-        {
             Assert.True(
                 c.JobDescription.Length >= AnalyzeService.MinimumJobDescriptionLength,
                 $"[{c.Id}] posting shorter than the analysis minimum.");
-            Assert.False(string.IsNullOrWhiteSpace(c.CvText), $"[{c.Id}] CV text is empty.");
-        }
     }
 
     [Fact]
@@ -103,8 +150,8 @@ public class GoldenSetIntegrityTests
     [Fact]
     public void BothLanguagesAreRepresentedInPostings()
     {
-        Assert.True(Postings.Count(c => c.Language == "en") >= 2, "Need at least two English postings.");
-        Assert.True(Postings.Count(c => c.Language == "de") >= 8, "Need at least eight German postings.");
+        Assert.True(Postings.Count(c => c.Language == "en") >= 3, "Need at least three English postings.");
+        Assert.True(Postings.Count(c => c.Language == "de") >= 10, "Need at least ten German postings.");
     }
 
     [Fact]
@@ -113,7 +160,9 @@ public class GoldenSetIntegrityTests
         var mustHaves = Postings.SelectMany(c => c.Expected.MustHaves).ToList();
 
         Assert.Equal(GoldenVocabulary.Kinds.Order(), mustHaves.Select(m => m.Kind).Distinct().Order());
-        Assert.Equal(GoldenVocabulary.Statuses.Order(), mustHaves.Select(m => m.Status).Distinct().Order());
+        Assert.Equal(
+            GoldenVocabulary.Statuses.Order(),
+            mustHaves.Where(m => m.Status is not null).Select(m => m.Status!).Distinct().Order());
         Assert.Equal(GoldenVocabulary.Signals.Order(), Postings.SelectMany(c => c.Expected.Signals).Distinct().Order());
         Assert.Equal(
             GoldenVocabulary.Agreements.Order(),

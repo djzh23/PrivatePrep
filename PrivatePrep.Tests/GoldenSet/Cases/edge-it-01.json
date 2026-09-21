@@ -1,0 +1,18 @@
+{
+  "id": "edge-it-01",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Frontend Developer React (m/w/d) | Remote-first\nWir sind ein Berliner Scale-up im Bereich HR-Tech und bauen unser Produktteam aus.\nYour profile:\n- Mindestens 2 Jahre Erfahrung mit React und TypeScript\n- Fließend Englisch, gutes Deutsch\n- Vue.js is a plus\n- Präsenz im Berliner Büro nur 1x pro Quartal\nWhat we offer: 60.000 bis 70.000 Euro Jahresgehalt, 30 Urlaubstage, Remote-Budget. Sprich mit Nina aus dem Recruiting.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung mit React und TypeScript" },
+      { "kind": "sprache", "quote": "Fließend Englisch, gutes Deutsch" },
+      { "kind": "einsatzort", "quote": "Präsenz im Berliner Büro nur 1x pro Quartal" }
+    ],
+    "salaryVerbatim": "60.000 bis 70.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}
