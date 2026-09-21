@@ -1,6 +1,6 @@
 # Spec 001: Analyse v2 (Bericht)
 
-**Status:** Approved (2026-09-21)
+**Status:** In Review (2026-09-21, zurückgesetzt: AC-1-Ansatz für Muss-Kriterien offen, siehe Open Questions)
 **Date:** 2026-09-21
 
 > Entstanden in acht Fragerunden. Alle Antworten des Entwicklers sind eingearbeitet. Abschnitte mit **(Entwurf)** sind Vorschläge von Claude auf Basis dieser Antworten und im Review zu korrigieren.
@@ -183,4 +183,6 @@ Weitere Felder: `schemaVersion: 2`, `tier`, `truncated` (Anzeige gekürzt), erka
 
 ## Open Questions
 
-Keine. Entwurfsdetails (Berichtsfelder, Ereignisnamen, Fehlercodes, Längenbudgets) sind oben als **(Entwurf)** gekennzeichnet und werden im Review korrigiert.
+- **Erkennung der Muss-Kriterien (AC-1):** Der Spec nimmt an, dass regelbasierte Erkennung 95 % erreicht. Gemessen auf Anzeigen, die nach den Regeln geschrieben wurden (Schritt 3): **50 %, 64 %, 68 %** in drei Blind-Runden (76 % nach einer letzten Regeländerung, nicht mehr rein blind), auf den abgestimmten Fällen jeweils 95 % bis 100 %. Die Lücke bleibt bei neuen Formulierungen. Entscheidung offen: **(A)** KI schlägt Muss-Kriterien mit wörtlichem Zitat vor, Code prüft Zitat, Art und Status (die Regeln dienen als Gegenprobe), **(B)** Regeln weiter ausbauen, **(C)** Ziel für regelbasierte Erkennung senken und KI-Ergänzung nur in Premium.
+
+Entwurfsdetails (Berichtsfelder, Ereignisnamen, Fehlercodes, Längenbudgets) sind oben als **(Entwurf)** gekennzeichnet und werden im Review korrigiert.
