@@ -178,6 +178,7 @@ Weitere Felder: `schemaVersion: 2`, `tier`, `truncated` (Anzeige gekürzt), erka
 | Form von `retryToken` | signierter, kurzlebiger Token ohne Serverzustand | wenn mehrere Serverinstanzen laufen |
 | Sperre für parallele Anfragen | Speicher pro Nutzer in einer Instanz | wenn mehrere Serverinstanzen laufen |
 | Floskel-Test | nicht in dieser Version, Textbeleg (AC-3) wirkt indirekt | wenn das Golden Set Floskeln zeigt |
+| Anzeige in einer anderen Sprache als Deutsch oder Englisch (Vorprüfung meldet `Unknown`) | ablehnen mit klarer Meldung, zählt nicht (vorgeschlagen, mit "ja weiter machen" angenommen) | wenn Nutzer solche Anzeigen häufig einfügen |
 | Golden-Set-Läufe für KI-Teile | wie career-ops: **Replay** (aufgezeichnete Modellausgaben, offline, deterministisch, in der Test-Suite) und **Live** (echtes Modell, nur auf Abruf). Erwartungen aus Referenzlabels, später ersetzbar durch handgeprüfte | ab Schritt 9 (Prompts) |
 | Fremde Stellenanzeigen aus dem Netz | nicht im Repository (Urheberrecht der Arbeitgeber ungeklärt). Nur als Stilvorlage für eigene Formulierungen | wenn ein Datensatz mit klarer Lizenz gefunden wird |
 
