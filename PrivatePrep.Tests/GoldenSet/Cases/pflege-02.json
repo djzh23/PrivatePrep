@@ -1,0 +1,20 @@
+{
+  "id": "pflege-02",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Pflegehilfskraft (m/w/d) für den ambulanten Pflegedienst, Teilzeit 30 Stunden\nWir sind ein familiengeführter Pflegedienst in Leipzig und suchen Verstärkung für unser Team. Bei uns ist jeder Teil der Familie, wir sind eine Familie und halten zusammen.\nIhre Aufgaben: Grundpflege, Hilfe bei der Körperpflege, Mobilisation, Fahrten zu den Patienten.\nVoraussetzungen: Führerschein Klasse B und eigenes Fahrzeug, Pflegehilfskraft-Qualifikation oder Bereitschaft zur Qualifizierung, Flexibilität bei Einsatzzeiten (früh, spät, Wochenende), hohe Belastbarkeit und Einsatzbereitschaft.\nWir bieten ein leistungsgerechtes Gehalt und ein tolles Betriebsklima.",
+  "cvText": "Pflegehelfer mit Basiskurs 2021, drei Jahre in einem Seniorenheim, Führerschein Klasse B, kein eigenes Fahrzeug. Grundpflege und Mobilisation. Verfügbar für Früh-, Spät- und Wochenenddienste, 25 Stunden pro Woche.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B und eigenes Fahrzeug", "status": "notMet" },
+      { "kind": "abschluss", "quote": "Pflegehilfskraft-Qualifikation oder Bereitschaft zur Qualifizierung", "status": "met" },
+      { "kind": "schicht", "quote": "Flexibilität bei Einsatzzeiten (früh, spät, Wochenende)", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Teilzeit 30 Stunden", "status": "unclear" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": ["warning_language", "missing_information"]
+  }
+}

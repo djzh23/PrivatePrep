@@ -1,0 +1,20 @@
+{
+  "id": "bildung-01",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Lehrkraft (m/w/d) an einer Grundschule, Vollzeit, unbefristet, Land Niedersachsen\nDie Grundschule am Wiesengrund sucht zum Halbjahr eine Lehrkraft für die Klassen 1 bis 4.\nAufgaben: Unterricht in Deutsch, Mathematik und Sachunterricht, Klassenleitung, Elternarbeit, Mitarbeit an der Schulentwicklung.\nVoraussetzungen: Erstes und Zweites Staatsexamen für das Lehramt an Grundschulen, erweitertes Führungszeugnis, Deutsch auf Muttersprachniveau oder C2.\nVergütung nach Entgeltgruppe E 11 TV-L. Ansprechpartnerin ist die Schulleiterin Frau Petersen.",
+  "cvText": "Lehramt Grundschule, Erstes Staatsexamen 2020, Referendariat bis 2022 mit bestandenem Zweiten Staatsexamen. Zwei Jahre Klassenlehrerin in Klasse 3 und 4. Deutsch Muttersprache. Ein Führungszeugnis kann bei Bedarf vorgelegt werden.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Erstes und Zweites Staatsexamen für das Lehramt an Grundschulen", "status": "met" },
+      { "kind": "zertifikat", "quote": "erweitertes Führungszeugnis", "status": "unclear" },
+      { "kind": "sprache", "quote": "Deutsch auf Muttersprachniveau oder C2", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TV-L", "group": "E 11" },
+    "signals": []
+  }
+}

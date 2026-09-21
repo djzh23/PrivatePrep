@@ -1,0 +1,21 @@
+{
+  "id": "pflege-01",
+  "field": "pflege",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Gesundheits- und Krankenpfleger (m/w/d) für unsere Kardiologie in Vollzeit\nDas Klinikum am Stadtpark sucht zum nächstmöglichen Zeitpunkt Verstärkung für die Station Kardiologie.\nIhre Aufgaben: Behandlungspflege, Pflegedokumentation, Begleitung der Visite, Anleitung von Auszubildenden.\nIhr Profil: Abgeschlossene Ausbildung zur Pflegefachkraft oder Gesundheits- und Krankenpflegerin, mindestens 2 Jahre Berufserfahrung im Stationsdienst, Bereitschaft zum Schichtdienst inklusive Wochenenden, gute Deutschkenntnisse (mindestens Niveau B2).\nWir bieten: Vergütung nach TVöD-P (Entgeltgruppe P 8), 30 Urlaubstage, betriebliche Altersvorsorge und Fortbildungen.\nBewerbungen richten Sie bitte an die Pflegedirektion, Ansprechpartnerin ist Frau Weber.",
+  "cvText": "Gesundheits- und Krankenpflegerin, Examen 2019. 2019 bis 2024 Stationsdienst Innere Medizin im Klinikum Nord, Schichtdienst inklusive Wochenenden. Behandlungspflege, Pflegedokumentation, Anleitung von Auszubildenden. Deutsch Muttersprache.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Pflegefachkraft oder Gesundheits- und Krankenpflegerin", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Berufserfahrung im Stationsdienst", "status": "met" },
+      { "kind": "schicht", "quote": "Bereitschaft zum Schichtdienst inklusive Wochenenden", "status": "met" },
+      { "kind": "sprache", "quote": "gute Deutschkenntnisse (mindestens Niveau B2)", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "in Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TVöD", "group": "P 8" },
+    "signals": []
+  }
+}

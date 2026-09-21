@@ -1,0 +1,20 @@
+{
+  "id": "handwerk-01",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Elektroniker für Energie- und Gebäudetechnik (m/w/d), Vollzeit, Raum Stuttgart\nFür unsere Baustellen in der Region suchen wir Verstärkung im Bereich Elektroinstallation.\nAufgaben: Installation von Schaltanlagen, Verkabelung, Prüfung nach DGUV V3, Inbetriebnahme, Wartung.\nAnforderungen: Abgeschlossene Ausbildung als Elektroniker für Energie- und Gebäudetechnik, Führerschein Klasse B, Bereitschaft zu Montageeinsätzen im Umkreis von 100 km. Fachkunde nach DGUV Vorschrift 3 ist von Vorteil, ein Meisterbrief ist ein Plus.\nWir bieten ab 22 Euro pro Stunde je nach Erfahrung, ein Firmenfahrzeug und 30 Tage Urlaub. Ansprechpartner ist Herr Öztürk.",
+  "cvText": "Elektroniker für Energie- und Gebäudetechnik, Gesellenbrief 2018. Sechs Jahre Elektroinstallation im Gewerbebau, Montageeinsätze bundesweit möglich. Führerschein Klasse B und BE. Prüfungen nach DGUV V3.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung als Elektroniker für Energie- und Gebäudetechnik", "status": "met" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B", "status": "met" },
+      { "kind": "einsatzort", "quote": "Bereitschaft zu Montageeinsätzen im Umkreis von 100 km", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "ab 22 Euro pro Stunde",
+    "tariff": null,
+    "signals": []
+  }
+}

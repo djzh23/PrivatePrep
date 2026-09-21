@@ -1,0 +1,21 @@
+{
+  "id": "vertrieb-02",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "en",
+  "isJobPosting": true,
+  "jobDescription": "Account Executive B2B Software (m/f/d), Berlin, full-time\nWe are a growing software company and are looking for an Account Executive to win new mid-market customers in the DACH region.\nResponsibilities: managing the full sales cycle, running product demos, forecasting and pipeline reporting.\nRequirements: Bachelor's degree or equivalent experience, at least 3 years of B2B sales experience, fluent German and English (C1), willingness to travel up to 30 percent, valid driver's license.\nWe offer EUR 55,000 to 65,000 base salary plus commission, 30 days of vacation and a learning budget. Contact: Anna Reuter, Head of Sales.",
+  "cvText": "B2B Sales Manager with five years in SaaS sales, mid-market, DACH region. BSc Business Administration. German native speaker, English C1. Driver's license category B. Based in Berlin.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Bachelor's degree or equivalent experience", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "at least 3 years of B2B sales experience", "status": "met" },
+      { "kind": "sprache", "quote": "fluent German and English (C1)", "status": "met" },
+      { "kind": "fuehrerschein", "quote": "valid driver's license", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "full-time", "status": "unclear" }
+    ],
+    "salaryVerbatim": "EUR 55,000 to 65,000 base salary plus commission",
+    "tariff": null,
+    "signals": []
+  }
+}

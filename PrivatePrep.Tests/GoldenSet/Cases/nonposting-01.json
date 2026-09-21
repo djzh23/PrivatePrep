@@ -1,0 +1,15 @@
+{
+  "id": "nonposting-01",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": false,
+  "jobDescription": "Zutaten für vier Personen: 500 Gramm Spaghetti, 400 Gramm Tomaten aus der Dose, zwei Knoblauchzehen, eine Zwiebel, Olivenöl, Salz, Pfeffer und frisches Basilikum. Zubereitung: Zwiebel und Knoblauch fein hacken und im Olivenöl glasig dünsten. Tomaten dazugeben und zwanzig Minuten köcheln lassen. Die Nudeln in Salzwasser bissfest kochen und mit der Sauce vermengen.",
+  "cvText": "Verwaltungsfachangestellte, fünf Jahre Sachbearbeitung in einer Kreisverwaltung.",
+  "expected": {
+    "mustHaves": [],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

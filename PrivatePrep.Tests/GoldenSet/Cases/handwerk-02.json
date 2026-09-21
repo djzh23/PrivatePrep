@@ -1,0 +1,21 @@
+{
+  "id": "handwerk-02",
+  "field": "handwerk",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Anlagenmechaniker SHK (m/w/d) mit Meisterbrief, Vollzeit, Dortmund\nUnser Meisterbetrieb für Sanitär, Heizung und Klima sucht eine Fachkraft mit Verantwortung für Kundendienst und Neuinstallation.\nAufgaben: Installation von Wärmepumpen und Heizungsanlagen, Störungsdienst, Kundenberatung, Einsatzplanung des Monteurteams.\nAnforderungen: Meisterbrief im Installateur- und Heizungsbauerhandwerk erforderlich, mindestens 4 Jahre Berufserfahrung, Führerschein Klasse B, Bereitschaft zum Bereitschaftsdienst an Wochenenden. Ein Zertifikat für Kälte-Klima-Arbeiten ist wünschenswert.\nBei Interesse melden Sie sich bei Herrn Kaya.",
+  "cvText": "Anlagenmechaniker SHK, Gesellenbrief 2016, Meisterschule läuft, Prüfung 2027. Acht Jahre Wärmepumpen und Heizungsbau, Führerschein Klasse B, Bereitschaftsdienst bisher im Wechsel mit den Kollegen.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Meisterbrief im Installateur- und Heizungsbauerhandwerk erforderlich", "status": "notMet" },
+      { "kind": "berufserfahrung", "quote": "mindestens 4 Jahre Berufserfahrung", "status": "met" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B", "status": "met" },
+      { "kind": "schicht", "quote": "Bereitschaft zum Bereitschaftsdienst an Wochenenden", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": ["missing_information"]
+  }
+}

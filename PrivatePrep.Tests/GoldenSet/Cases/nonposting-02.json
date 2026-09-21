@@ -1,0 +1,15 @@
+{
+  "id": "nonposting-02",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": false,
+  "jobDescription": "Hallo zusammen, ich wollte kurz fragen, ob wir uns morgen um zehn Uhr im Büro treffen können, um die Präsentation für die Kunden durchzugehen. Ich habe die Folien gestern Abend noch einmal überarbeitet und schicke sie gleich per Mail. Falls jemand einen anderen Termin vorschlagen möchte, meldet euch bitte bis heute Mittag. Danke und bis später!",
+  "cvText": "Softwareentwicklerin mit drei Jahren Erfahrung in C# und TypeScript.",
+  "expected": {
+    "mustHaves": [],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": []
+  }
+}

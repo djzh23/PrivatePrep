@@ -1,0 +1,20 @@
+{
+  "id": "verwaltung-02",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Office Manager (m/w/d) für Berufseinsteiger, Vollzeit, Hamburg\nWir suchen zum 1. März eine Office Managerin oder einen Office Manager für unser wachsendes Steuerberatungsbüro.\nIhre Aufgaben: Terminkoordination, Empfang, Korrespondenz, Reiseorganisation, Bestellwesen.\nIhr Profil: Ideal für Berufseinsteiger, Sie bringen mindestens 5 Jahre Berufserfahrung im Office Management mit. Abgeschlossene kaufmännische Ausbildung, sehr gute MS-Office-Kenntnisse, Deutsch auf Muttersprachniveau.\nWir bieten 2.800 bis 3.000 Euro brutto monatlich und 28 Tage Urlaub. Ansprechpartnerin ist Frau Lindner.",
+  "cvText": "Kauffrau für Büromanagement, Abschluss 2022. Anderthalb Jahre Teamassistenz in einer Anwaltskanzlei. MS Office sehr gut, Deutsch Muttersprache, Englisch B2.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene kaufmännische Ausbildung", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 5 Jahre Berufserfahrung im Office Management", "status": "notMet" },
+      { "kind": "sprache", "quote": "Deutsch auf Muttersprachniveau", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "2.800 bis 3.000 Euro brutto monatlich",
+    "tariff": null,
+    "signals": ["contradictory_requirements"]
+  }
+}

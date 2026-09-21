@@ -1,0 +1,21 @@
+{
+  "id": "it-01",
+  "field": "it",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Softwareentwickler .NET (m/w/d), Vollzeit, hybrid, Frankfurt\nFür unser Produktteam im Bereich Zahlungsverkehr suchen wir Verstärkung.\nAufgaben: Entwicklung von Web-APIs mit C# und ASP.NET Core, Anbindung von PostgreSQL, Code Reviews, Weiterentwicklung der CI/CD-Pipeline.\nAnforderungen: Abgeschlossenes Studium der Informatik oder eine vergleichbare Qualifikation, mindestens 3 Jahre Erfahrung mit C# und .NET, gute Englischkenntnisse (B2), zwei Tage pro Woche Präsenz im Büro. Erfahrung mit Kubernetes ist ein Plus.\nWir bieten 65.000 bis 75.000 Euro Jahresgehalt, 30 Tage Urlaub und ein Weiterbildungsbudget. Ansprechpartnerin ist Frau Neumann.",
+  "cvText": "Softwareentwickler mit B.Sc. Wirtschaftsinformatik. Zweieinhalb Jahre C# und ASP.NET Core, PostgreSQL, GitHub Actions. Englisch B2. Wohnort Frankfurt am Main.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Informatik oder eine vergleichbare Qualifikation", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung mit C# und .NET", "status": "notMet" },
+      { "kind": "sprache", "quote": "gute Englischkenntnisse (B2)", "status": "met" },
+      { "kind": "einsatzort", "quote": "zwei Tage pro Woche Präsenz im Büro", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "65.000 bis 75.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

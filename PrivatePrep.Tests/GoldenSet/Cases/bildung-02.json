@@ -1,0 +1,21 @@
+{
+  "id": "bildung-02",
+  "field": "bildung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Dozentin / Dozent (m/w/d) für Erwachsenenbildung auf Honorarbasis\nUnser Bildungsträger in Köln sucht Dozenten für Kurse im Bereich Bürokommunikation und Bewerbungstraining.\nSie arbeiten als Honorarkraft ausschließlich für uns, nach festen Einsatzplänen und mit vorgegebenen Arbeitszeiten von Montag bis Freitag, 8 bis 16 Uhr.\nAnforderungen: Abgeschlossenes Hochschulstudium, mindestens 2 Jahre Berufserfahrung in der Erwachsenenbildung, AEVO-Schein oder die Bereitschaft, ihn zu erwerben, Deutsch auf Niveau C1.\nDas Honorar beträgt 35 Euro pro Unterrichtseinheit. Kontakt: Herr Schmitz, Bereichsleitung.",
+  "cvText": "Diplom-Pädagogin, vier Jahre Trainerin in der Erwachsenenbildung mit Bewerbungstraining und EDV-Kursen. AEVO-Prüfung 2021. Deutsch Muttersprache, Englisch C1. Verfügbar Montag bis Freitag jeweils vormittags.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Hochschulstudium", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Berufserfahrung in der Erwachsenenbildung", "status": "met" },
+      { "kind": "zertifikat", "quote": "AEVO-Schein oder die Bereitschaft, ihn zu erwerben", "status": "met" },
+      { "kind": "sprache", "quote": "Deutsch auf Niveau C1", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Montag bis Freitag, 8 bis 16 Uhr", "status": "notMet" }
+    ],
+    "salaryVerbatim": "35 Euro pro Unterrichtseinheit",
+    "tariff": null,
+    "signals": ["pseudo_freelance_or_commission_only"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "verwaltung-01",
+  "field": "verwaltung",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Sachbearbeiterin / Sachbearbeiter Personalverwaltung (m/w/d), Vollzeit oder Teilzeit\nDie Landesverwaltung Musterstadt besetzt zum 1. Januar eine Stelle in der Personalabteilung.\nAufgaben: Bearbeitung von Einstellungen und Vertragsänderungen, Führung der Personalakten, Auskunft zu Arbeitsrecht und Tarifrecht, Zusammenarbeit mit dem Personalrat.\nAnforderungen: Abgeschlossene Ausbildung zur Verwaltungsfachangestellten oder ein vergleichbarer Abschluss, mindestens 3 Jahre Erfahrung in der Personalsachbearbeitung, sichere Kenntnisse im TV-L, verhandlungssicheres Englisch.\nVergütung nach Entgeltgruppe 9a TV-L, die Stelle ist unbefristet. Ansprechpartner ist Herr Baumann.",
+  "cvText": "Verwaltungsfachangestellte, Abschluss 2015. Von 2015 bis 2022 Sachbearbeitung Personal in einer Kreisverwaltung, Anwendung des TVöD. Englisch Grundkenntnisse B1. Gewünscht ist eine Teilzeitstelle mit 30 Stunden.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Verwaltungsfachangestellten oder ein vergleichbarer Abschluss", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung in der Personalsachbearbeitung", "status": "met" },
+      { "kind": "sprache", "quote": "verhandlungssicheres Englisch", "status": "notMet" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit oder Teilzeit", "status": "met" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TV-L", "group": "9a" },
+    "signals": []
+  }
+}

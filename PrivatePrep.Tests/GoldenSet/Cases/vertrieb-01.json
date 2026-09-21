@@ -1,0 +1,20 @@
+{
+  "id": "vertrieb-01",
+  "field": "vertrieb",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Vertriebsmitarbeiter im Außendienst (m/w/d), selbstständig auf Provisionsbasis\nWerden Sie Ihr eigener Chef! Wir vertreiben Energiespar-Systeme an Privathaushalte in ganz Deutschland.\nSie arbeiten selbstständig und benötigen einen Gewerbeschein. Die Vergütung erfolgt auf reiner Provisionsbasis, ein Fixum gibt es nicht.\nAnforderungen: Führerschein Klasse B, mindestens 1 Jahr Vertriebserfahrung im Direktvertrieb, kommunikationsstark und hoch motiviert, Bereitschaft zu Terminen am Abend und am Wochenende.\nWir bieten unbegrenzte Verdienstmöglichkeiten und ein dynamisches Team.",
+  "cvText": "Vertriebsmitarbeiter im Innendienst Telekommunikation, vier Jahre Erfahrung. Führerschein Klasse B. Abends flexibel, am Wochenende nach Absprache. Bisher kein Direktvertrieb.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 1 Jahr Vertriebserfahrung im Direktvertrieb", "status": "notMet" },
+      { "kind": "schicht", "quote": "Bereitschaft zu Terminen am Abend und am Wochenende", "status": "unclear" },
+      { "kind": "zertifikat", "quote": "benötigen einen Gewerbeschein", "status": "notMet" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": null,
+    "signals": ["pseudo_freelance_or_commission_only", "missing_information"]
+  }
+}
