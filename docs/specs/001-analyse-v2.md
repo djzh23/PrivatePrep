@@ -129,7 +129,7 @@ Weitere Felder: `schemaVersion: 2`, `tier`, `truncated` (Anzeige gekürzt), erka
 ## Acceptance Criteria
 
 **Qualität und Korrektheit**
-- **AC-1** Given ein Golden Set mit mindestens zwei Fällen je Berufsfeld (sechs Felder, echte anonymisierte und synthetische), when die Analyse läuft, then werden Muss-Kriterien in mindestens **95 %** der Fälle richtig erkannt.
+- **AC-1** Given ein Golden Set mit mindestens vier Anzeigen je Berufsfeld (sechs Felder), when die Analyse läuft, then werden Muss-Kriterien in mindestens **95 %** der Fälle richtig erkannt. Das Golden Set ist **synthetisch nach dem Vorbild von career-ops (`evals/golden`)**: eine JSON-Datei pro Fall, Grenzfälle bevorzugt (Stichpunkte, Fließtext, Großbuchstaben, "wünschenswert" gegen "erforderlich", Verneinungen). Der Lebenslauf gehört nur zu den Fällen, die den Abgleich prüfen. Echte anonymisierte Fälle sind optional. Änderung vom 2026-09-21 auf Wunsch des Entwicklers (vorher: "echte anonymisierte und synthetische").
 - **AC-2** Given das Golden Set, when der Bericht erzeugt wird, then enthält er **null erfundene Zahlen, Skills oder Abschlüsse**. Ein Verstoß lässt den Test fehlschlagen.
 - **AC-3** Given eine Aussage im Klartext-Abschnitt, when sie ausgegeben wird, then enthält sie ein **Zitat aus der Anzeige**. Aussagen ohne Beleg werden verworfen.
 - **AC-4** Given ein erzeugter Text, when er geprüft wird, then enthält er **kein "du" und kein "Sie"** als Anrede.
@@ -178,6 +178,8 @@ Weitere Felder: `schemaVersion: 2`, `tier`, `truncated` (Anzeige gekürzt), erka
 | Form von `retryToken` | signierter, kurzlebiger Token ohne Serverzustand | wenn mehrere Serverinstanzen laufen |
 | Sperre für parallele Anfragen | Speicher pro Nutzer in einer Instanz | wenn mehrere Serverinstanzen laufen |
 | Floskel-Test | nicht in dieser Version, Textbeleg (AC-3) wirkt indirekt | wenn das Golden Set Floskeln zeigt |
+| Golden-Set-Läufe für KI-Teile | wie career-ops: **Replay** (aufgezeichnete Modellausgaben, offline, deterministisch, in der Test-Suite) und **Live** (echtes Modell, nur auf Abruf). Erwartungen aus Referenzlabels, später ersetzbar durch handgeprüfte | ab Schritt 9 (Prompts) |
+| Fremde Stellenanzeigen aus dem Netz | nicht im Repository (Urheberrecht der Arbeitgeber ungeklärt). Nur als Stilvorlage für eigene Formulierungen | wenn ein Datensatz mit klarer Lizenz gefunden wird |
 
 ## Open Questions
 
