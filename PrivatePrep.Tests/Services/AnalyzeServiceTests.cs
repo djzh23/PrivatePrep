@@ -83,6 +83,34 @@ public class AnalyzeServiceTests
     }
 
     [Fact]
+    public async Task Analyze_ShortJd_UsesTheWordUsersKnowInTheMessage()
+    {
+        var sut = CreateSut();
+
+        var ex = await Assert.ThrowsAsync<AnalyzeException>(() =>
+            sut.AnalyzeAsync(Request(jd: "zu kurz"), CancellationToken.None));
+
+        Assert.Equal("Die Stellenanzeige ist zu kurz.", ex.Message);
+    }
+
+    [Fact]
+    public async Task Analyze_ModelWritesJd_ReportSaysStellenanzeigeInstead()
+    {
+        var json = ValidJson()
+            .Replace("\"role_summary\": \"Junior .NET Backend, Remote\"", "\"role_summary\": \"Junior .NET Backend, laut JD Remote\"")
+            .Replace("\"warnings\": []", "\"warnings\": [\"Kein Mentoring in JD erwähnt\", \"Zwei JDs widersprechen sich\"]");
+        SetupHappyCollaborators(json);
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.Equal("Junior .NET Backend, laut Stellenanzeige Remote", report.RoleSummary);
+        Assert.Contains("Kein Mentoring in Stellenanzeige erwähnt", report.Warnings);
+        Assert.Contains("Zwei Stellenanzeigen widersprechen sich", report.Warnings);
+        Assert.Equal("Stellenanzeige betont Backend-APIs ohne neue Fakten.", Assert.Single(report.Bullets).Reasoning);
+    }
+
+    [Fact]
     public async Task Analyze_EmptyCv_Throws()
     {
         var sut = CreateSut();

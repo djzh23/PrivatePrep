@@ -53,7 +53,7 @@ public sealed class AgentController(
 
         var jd = request?.JobDescription?.Trim() ?? "";
         if (jd.Length < AnalyzeService.MinimumJobDescriptionLength)
-            return BadRequest(new { error = "jd_too_short", message = "JD zu kurz" });
+            return BadRequest(new { error = "jd_too_short", message = "Die Stellenanzeige ist zu kurz." });
         if (jd.Length > MaxJobDescriptionChars)
             return BadRequest(new { error = "jd_too_long", message = $"Stellenanzeige zu lang (max. {MaxJobDescriptionChars} Zeichen)." });
 

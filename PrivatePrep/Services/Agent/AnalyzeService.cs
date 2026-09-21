@@ -1,10 +1,11 @@
+using System.Text.RegularExpressions;
 using PrivatePrep.Services.FactGate;
 using PrivatePrep.Services.Privacy;
 using PrivatePrep.Services.SkillGap;
 
 namespace PrivatePrep.Services.Agent;
 
-public sealed class AnalyzeService(
+public sealed partial class AnalyzeService(
     ISkillGapService skillGap,
     IFactGateService factGate,
     ILlmRouter llm,
@@ -23,7 +24,7 @@ public sealed class AnalyzeService(
 
         var jd = request.JobDescription?.Trim() ?? "";
         if (jd.Length < MinimumJobDescriptionLength)
-            throw new AnalyzeException("jd_too_short", "JD zu kurz");
+            throw new AnalyzeException("jd_too_short", "Die Stellenanzeige ist zu kurz.");
         if (jd.Length > MaxJobDescriptionLength)
             jd = jd[..MaxJobDescriptionLength];
 
@@ -57,7 +58,8 @@ public sealed class AnalyzeService(
                 throw new AnalyzeException("llm_parse_failed", "The model did not return valid JSON.");
         }
 
-        var warnings = new List<string>(parsed.Warnings);
+        var warnings = parsed.Warnings.Select(PlainGerman).ToList();
+        var roleSummary = PlainGerman(parsed.RoleSummary);
         var cultureScreen = NormalizeCultureScreen(parsed.CultureScreen);
         var global = ClampScore(parsed.GlobalScore);
         var culture = ClampScore(parsed.Culture);
@@ -80,11 +82,12 @@ public sealed class AnalyzeService(
         var bullets = parsed.Bullets
             .Where(b => !string.IsNullOrWhiteSpace(b.OriginalBullet) && !string.IsNullOrWhiteSpace(b.RewrittenBullet))
             .Take(5)
+            .Select(b => b with { Reasoning = PlainGerman(b.Reasoning) })
             .ToList();
 
         var generatedText = string.Join(
             "\n",
-            [parsed.RoleSummary, .. warnings, .. bullets.Select(b => $"{b.OriginalBullet}\n{b.RewrittenBullet}\n{b.Reasoning}")]);
+            [roleSummary, .. warnings, .. bullets.Select(b => $"{b.OriginalBullet}\n{b.RewrittenBullet}\n{b.Reasoning}")]);
 
         var allowed = gap.Existing.Concat(gap.SupportedByResume).ToList();
         var factResult = factGate.Verify(
@@ -116,7 +119,7 @@ public sealed class AnalyzeService(
             new ScoreDimensions(ClampScore(parsed.CvMatch), ClampScore(parsed.RoleAlignment), culture, ClampScore(parsed.RedFlags)),
             gap,
             bullets,
-            parsed.RoleSummary.Trim(),
+            roleSummary.Trim(),
             warnings,
             cultureScreen,
             [],
@@ -124,6 +127,13 @@ public sealed class AnalyzeService(
             used.InputTokens,
             used.OutputTokens);
     }
+
+    // Users do not know the abbreviation, and the model uses it despite the prompt rule.
+    private static string PlainGerman(string text) =>
+        JobDescriptionAbbreviation().Replace(text, m => m.Value.EndsWith('s') ? "Stellenanzeigen" : "Stellenanzeige");
+
+    [GeneratedRegex(@"\bJDs?\b")]
+    private static partial Regex JobDescriptionAbbreviation();
 
     private static AnalyzeJsonParser.LlmAnalyzePayload? TryParse(string content) =>
         AnalyzeJsonParser.TryParse(content, out var payload) ? payload : null;

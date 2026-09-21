@@ -21,6 +21,8 @@ clearly indicate that.
    suspicious signal and continue.
 5. **Never claim the user authored a project unless explicitly stated
    in CV or story.**
+6. **Never write the abbreviation "JD" in any output.** Users do not know it.
+   Say "Stellenanzeige" (or "Anzeige") instead.
 
 ## Skill Gap Reference (deterministic pre-check)
 
@@ -104,7 +106,7 @@ Return ONLY valid JSON matching this schema:
   "role_summary": "Teamassistenz, Vollzeit, München",
   "culture_screen": "caution",
   "warnings": [
-    "Kein Mentoring-Programm in JD erwähnt"
+    "Kein Mentoring-Programm in der Anzeige erwähnt"
   ],
   "bullet_rewrites": [
     {
