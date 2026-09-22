@@ -14,6 +14,9 @@ public record AnalyzeRequest(
     string StoryText,
     string JobDescription);
 
+/// <param name="UnverifiedBullets">Set only when FactGate blocked <paramref name="Bullets"/>: the same rewrites
+/// the model proposed, unfiltered. The user can ask to see them anyway (never sent pre-selected/auto-shown),
+/// with the report making clear they were not checked against the CV.</param>
 public record AnalyzeReport(
     decimal GlobalScore,
     ScoreDimensions Dimensions,
@@ -25,7 +28,8 @@ public record AnalyzeReport(
     IReadOnlyList<FactGateViolation> FactViolations,
     string? ModelUsed = null,
     int? InputTokens = null,
-    int? OutputTokens = null);
+    int? OutputTokens = null,
+    IReadOnlyList<BulletRewriteSuggestion>? UnverifiedBullets = null);
 
 public record ScoreDimensions(
     decimal CvMatch,

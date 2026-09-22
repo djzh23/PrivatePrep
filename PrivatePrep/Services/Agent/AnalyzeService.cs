@@ -111,7 +111,8 @@ public sealed partial class AnalyzeService(
                 factResult.Violations,
                 used.ModelUsed,
                 used.InputTokens,
-                used.OutputTokens);
+                used.OutputTokens,
+                UnverifiedBullets: bullets);
         }
 
         return new AnalyzeReport(

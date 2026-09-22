@@ -203,6 +203,21 @@ public class AnalyzeServiceTests
         Assert.Equal("", report.RoleSummary);
         Assert.NotEmpty(report.FactViolations);
         Assert.Contains(report.Warnings, w => w.Contains("FactGate", StringComparison.OrdinalIgnoreCase));
+
+        // The blocked rewrite is not lost: it travels separately so the user can ask to see it anyway.
+        var unverified = Assert.Single(report.UnverifiedBullets ?? []);
+        Assert.Equal("Betrieb von Kubernetes-Clustern in Produktion.", unverified.RewrittenBullet);
+    }
+
+    [Fact]
+    public async Task Analyze_ValidJson_HasNoUnverifiedBulletsOnTheHappyPath()
+    {
+        SetupHappyCollaborators(ValidJson());
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.True(report.UnverifiedBullets is null or []);
     }
 
     [Fact]
