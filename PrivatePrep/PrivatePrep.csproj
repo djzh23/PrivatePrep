@@ -26,6 +26,16 @@
 		<EmbeddedResource Include="Services\Requirements\Prompts\must-haves-system-prompt.md">
 			<LogicalName>PrivatePrep.Services.Requirements.Prompts.must-haves-system-prompt.md</LogicalName>
 		</EmbeddedResource>
+		<Content Remove="Services\Tariffs\Data\tvoed-vka.json" />
+		<Content Remove="Services\Tariffs\Data\tv-l.json" />
+		<EmbeddedResource Include="Services\Tariffs\Data\tvoed-vka.json">
+			<LogicalName>PrivatePrep.Services.Tariffs.Data.tvoed-vka.json</LogicalName>
+			<WithCulture>false</WithCulture>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Services\Tariffs\Data\tv-l.json">
+			<LogicalName>PrivatePrep.Services.Tariffs.Data.tv-l.json</LogicalName>
+			<WithCulture>false</WithCulture>
+		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
