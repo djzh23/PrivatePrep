@@ -1,6 +1,6 @@
 # Spec 001: Analyse v2 (Bericht)
 
-**Status:** In Review (2026-09-21, zurückgesetzt: AC-1-Ansatz für Muss-Kriterien offen, siehe Open Questions)
+**Status:** Approved (2026-09-22, AC-1-Ansatz entschieden: A)
 **Date:** 2026-09-21
 
 > Entstanden in acht Fragerunden. Alle Antworten des Entwicklers sind eingearbeitet. Abschnitte mit **(Entwurf)** sind Vorschläge von Claude auf Basis dieser Antworten und im Review zu korrigieren.
@@ -62,7 +62,7 @@ Grundsatz: **Nichts wird gespeichert.** Der Bericht lebt nur im Browser. Der Ser
 |---|---|---|---|---|
 | 1 | Kernaussage | Score, Band-Label, bis zu 3 wichtigste Erkenntnisse mit Zitat, nächster Schritt | ja | ja |
 | 2 | Rollenprofil | Berufsfeld, Seniorität, Arbeitszeit, Ort/Remote, Team | ja | ja |
-| 3 | Muss-Kriterien | regelbasiert: Abschluss, Erfahrung, Führerschein, Schicht, Sprache, Zertifikat, je mit Zitat und Status (erfüllt, nicht erfüllt, unklar) | ja | ja |
+| 3 | Muss-Kriterien | KI schlägt vor (Abschluss, Erfahrung, Führerschein, Schicht, Sprache, Zertifikat) mit wörtlichem Zitat und Status (erfüllt, nicht erfüllt, unklar); Code verifiziert, dass das Zitat im Anzeigentext steht und verwirft den Vorschlag sonst; `RequirementsExtractor` (Schritt 3a) läuft als Gegenprobe/Fallback, nicht mehr als alleinige Quelle | ja | ja |
 | 4 | Skill-Abgleich | vorhanden, durch Lebenslauf gestützt, Lücke (bestehender `SkillGapService`) | ja | ja |
 | 5 | Klartext zur Anzeige | Aussage, Zitat, Erklärung | 3 stärkste | alle |
 | 6 | Seriosität der Anzeige | Signale (1)–(4), KI-Anweisungen, Status je Signal | nein | ja |
@@ -184,6 +184,8 @@ Weitere Felder: `schemaVersion: 2`, `tier`, `truncated` (Anzeige gekürzt), erka
 
 ## Open Questions
 
-- **Erkennung der Muss-Kriterien (AC-1):** Der Spec nimmt an, dass regelbasierte Erkennung 95 % erreicht. Gemessen auf Anzeigen, die nach den Regeln geschrieben wurden (Schritt 3): **50 %, 64 %, 68 %** in drei Blind-Runden (76 % nach einer letzten Regeländerung, nicht mehr rein blind), auf den abgestimmten Fällen jeweils 95 % bis 100 %. Die Lücke bleibt bei neuen Formulierungen. Entscheidung offen: **(A)** KI schlägt Muss-Kriterien mit wörtlichem Zitat vor, Code prüft Zitat, Art und Status (die Regeln dienen als Gegenprobe), **(B)** Regeln weiter ausbauen, **(C)** Ziel für regelbasierte Erkennung senken und KI-Ergänzung nur in Premium.
+Keine offenen Fragen mehr.
+
+**Entscheidung AC-1 (2026-09-22):** Option **A** — KI schlägt jedes Muss-Kriterium mit wörtlichem Zitat vor (Art und Status inklusive), Code verifiziert das Zitat gegen den Anzeigentext und verwirft nicht belegte Vorschläge. Grund: regelbasierte Erkennung (Schritt 3a) erreichte auf blinden Anzeigen nur 50 → 64 → 68 % Recall (76 % nach letzter Regeländerung, nicht mehr blind) gegenüber 95 % auf den abgestimmten Fällen — die Lücke bei neuen Formulierungen lässt sich mit Regeln allein nicht zuverlässig schließen. `RequirementsExtractor` bleibt als Gegenprobe/Fallback erhalten (z. B. wenn der KI-Aufruf fehlschlägt), ist aber nicht mehr der alleinige Erkennungsweg.
 
 Entwurfsdetails (Berichtsfelder, Ereignisnamen, Fehlercodes, Längenbudgets) sind oben als **(Entwurf)** gekennzeichnet und werden im Review korrigiert.
