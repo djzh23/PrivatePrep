@@ -55,7 +55,12 @@ Score interpretation:
 
 ## Bullet Rewrite Guidance
 
-Select 3–5 bullets from the candidate's CV that are relevant to this job.
+Select 3–5 bullets from the candidate's CV that are relevant to this job. This
+is a core selling point of the report — the candidate wants concrete rewrites,
+not just a score. Return an empty list ONLY if the CV truly contains no
+experience bullets at all (e.g. a CV that is just a skills list). Otherwise
+find at least 1–2, even if the match to the posting is loose; a loosely
+relevant, honest rewrite beats none.
 For each:
 - original: the bullet as-is in CV
 - rewritten: the same bullet, reformulated using JD vocabulary, PRESERVING
