@@ -164,6 +164,13 @@ public sealed class CvController(
             return BadRequest(new { error = ex.Message });
         }
 
+        // Pasted text gets the same structured extraction as a PDF upload (skills, experience,
+        // education, languages) instead of only registering the hash. ParseCvWithAi never throws —
+        // on any LLM failure it returns an empty ParsedCvData, so this never blocks registration.
+        var parsed = await cvParsingService
+            .ParseCvWithAi(piiScrubber.ScrubBestEffort(request.Text), p => llmSingleCompletion.CompleteAsync(p, 2000, HttpContext.RequestAborted))
+            .ConfigureAwait(false);
+
         SetCareerProfileStorageHeaders();
         return Ok(new
         {
@@ -171,6 +178,7 @@ public sealed class CvController(
             contentHash = registered.ContentHash,
             contentLength = registered.ContentLength,
             extractedText = registered.ExtractedText,
+            parsed,
         });
     }
 

@@ -125,8 +125,6 @@ public sealed class ProfileController(
 
         if (profile.TargetJobs.Count > 3)
             return BadRequest(new { error = "Maximal 3 Wunschstellen erlaubt." });
-        if (profile.Skills.Count > 30)
-            return BadRequest(new { error = "Maximal 30 Skills erlaubt." });
 
         try
         {

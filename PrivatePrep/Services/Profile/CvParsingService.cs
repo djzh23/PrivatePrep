@@ -56,7 +56,9 @@ public class CvParsingService
             }
 
             Wenn ein Feld nicht im CV vorkommt, lasse es leer oder als leeres Array.
-            Extrahiere maximal 15 Skills, 5 Erfahrungen, 3 Ausbildungen, 5 Sprachen.
+            Skills: erfasse ALLE tatsächlich im Lebenslauf genannten Skills, ohne Obergrenze — auch
+            Werkzeuge, Methoden, Zertifikate und Soft Skills, wenn sie explizit stehen. Erfinde keine.
+            Erfahrung, Ausbildung und Sprachen: alle vorhandenen Einträge, jeweils bis zu 10.
 
             LEBENSLAUF:
             """ + cvText;
