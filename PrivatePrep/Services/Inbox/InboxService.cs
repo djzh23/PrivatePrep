@@ -108,12 +108,17 @@ public sealed class InboxService(PrivatePrepDbContext db) : IInboxService
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(userId);
 
-        var deleted = await db.InboxJobs
+        var entity = await db.InboxJobs
             .Where(x => x.Id == id && x.UserId == userId)
-            .ExecuteDeleteAsync(ct)
+            .FirstOrDefaultAsync(ct)
             .ConfigureAwait(false);
 
-        return deleted > 0;
+        if (entity is null)
+            return false;
+
+        db.InboxJobs.Remove(entity);
+        await db.SaveChangesAsync(ct).ConfigureAwait(false);
+        return true;
     }
 
     public Task<int> CountActiveForUserAsync(string userId, CancellationToken ct)
