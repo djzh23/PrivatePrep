@@ -8,7 +8,8 @@ namespace PrivatePrep.Controllers;
 /// <summary>
 /// Inbox of job postings collected by the browser extension ("job vacuum") or entered manually.
 /// The extension only collects; the user reviews here and the app analyzes when they choose to.
-/// CORS for the extension origin is added in Phase D ([EnableCors("ExtensionPolicy")]).
+/// Reachable from the extension's chrome-extension:// origin via the shared "PrivatePrepWeb"
+/// CORS policy (Program.cs), which every controller already uses via RequireCors.
 /// </summary>
 [ApiController]
 [Route("api/inbox")]

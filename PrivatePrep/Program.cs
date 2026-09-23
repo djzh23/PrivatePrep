@@ -101,6 +101,14 @@ var allowedOrigins = localOrigins
     .Distinct(StringComparer.OrdinalIgnoreCase)
     .ToArray();
 
+// Chrome extension origins (chrome-extension://<extension-id>) for the Inbox API used by the
+// browser extension. The extension id is unknown until Chrome Web Store publish, so every
+// chrome-extension:// origin is accepted for now. TODO: once the published extension id is
+// known, replace the StartsWith check with an exact match so only our own extension can call the API.
+bool IsAllowedOrigin(string origin) =>
+    allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase)
+    || origin.StartsWith("chrome-extension://", StringComparison.Ordinal);
+
 builder.Services.AddControllers();
 builder.Services.Configure<DatabaseFeatureOptions>(builder.Configuration.GetSection(DatabaseFeatureOptions.SectionName));
 builder.Services.AddSingleton<Microsoft.Extensions.Options.IValidateOptions<DatabaseFeatureOptions>, DatabaseFeatureOptionsValidator>();
@@ -182,7 +190,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PrivatePrepWeb", policy =>
     {
-        policy.WithOrigins(allowedOrigins)
+        policy.SetIsOriginAllowed(IsAllowedOrigin)
             .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .AllowAnyHeader()
             .WithExposedHeaders(
@@ -259,7 +267,7 @@ app.Use(async (context, next) =>
         if (!context.Response.HasStarted)
         {
             var origin = context.Request.Headers.Origin.FirstOrDefault();
-            if (!string.IsNullOrEmpty(origin) && allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(origin) && IsAllowedOrigin(origin))
             {
                 context.Response.Headers["Access-Control-Allow-Origin"] = origin;
                 context.Response.Headers["Vary"] = "Origin";
