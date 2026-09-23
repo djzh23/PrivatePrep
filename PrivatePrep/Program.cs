@@ -10,6 +10,7 @@ using PrivatePrep.Services.Applications;
 using PrivatePrep.Services.Auth;
 using PrivatePrep.Services.FactGate;
 using PrivatePrep.Services.Groq;
+using PrivatePrep.Services.Inbox;
 using PrivatePrep.Services.Infrastructure;
 using PrivatePrep.Services.Payments;
 using PrivatePrep.Services.Privacy;
@@ -129,6 +130,7 @@ if (registerPostgres)
     builder.Services.AddScoped<ICareerProfileReader>(sp => sp.GetRequiredService<CareerProfileService>());
     builder.Services.AddScoped<ICvUploadService, CvUploadService>();
     builder.Services.AddScoped<StripeService>();
+    builder.Services.AddScoped<IInboxService, InboxService>();
 }
 
 var databaseFeaturesPreview = builder.Configuration.GetSection(DatabaseFeatureOptions.SectionName)
