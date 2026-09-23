@@ -23,6 +23,8 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
 
     public DbSet<UserPlanEntity> UserPlans => Set<UserPlanEntity>();
 
+    public DbSet<InboxJobEntity> InboxJobs => Set<InboxJobEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AppUserEntity>(e =>
@@ -81,6 +83,17 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
         {
             e.ToTable("user_plan");
             e.HasKey(x => x.ClerkUserId);
+        });
+
+        modelBuilder.Entity<InboxJobEntity>(e =>
+        {
+            e.ToTable("inbox_jobs");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.SourceKind).HasConversion<int>();
+            e.Property(x => x.Status).HasConversion<int>();
+            e.HasIndex(x => new { x.UserId, x.SourceUrl }).IsUnique();
+            e.HasIndex(x => new { x.UserId, x.Status });
+            e.HasIndex(x => new { x.UserId, x.ExtractedAt }).IsDescending(false, true);
         });
 
     }

@@ -15,6 +15,7 @@ Run SQL files **in order** (`001` → `008`) in the Supabase SQL Editor (or your
 | `009_cv_pdf_exports.sql` | `cv_pdf_exports` (PDF download tracking + quota) |
 | `010_cv_pdf_exports_target_fields.sql` | Adds `target_company` / `target_role` to `cv_pdf_exports` |
 | `011_cv_resume_categories.sql` | `cv_user_categories` + `cv_resume_category_assignments` (server-side master CV categories, replaces localStorage) |
+| `017_inbox_jobs.sql` | `inbox_jobs` (browser-extension "job vacuum" inbox) + FK to `app_users` |
 
 ## Backfill chat notes from Redis (manual)
 
