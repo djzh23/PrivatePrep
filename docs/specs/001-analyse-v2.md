@@ -54,7 +54,9 @@ Nicht als Hauptnutzen gewählt, aber im Umfang: Score mit Empfehlung, Bullets, P
 
 ## Domain Model
 
-Grundsatz: **Nichts wird gespeichert.** Der Bericht lebt nur im Browser. Der Server hält weder CV noch Bericht. Ausnahme bleibt die bestehende CV-Kennung (Hash) und Zähler.
+Grundsatz (Stand 2026-09-21): **Nichts wird gespeichert.** Der Bericht lebt nur im Browser. Der Server hält weder CV noch Bericht. Ausnahme bleibt die bestehende CV-Kennung (Hash) und Zähler.
+
+**Nachtrag (2026-09-24, Prompt B Session 1):** Dieser Grundsatz wurde bewusst aufgehoben. Reports werden ab jetzt serverseitig persistiert (Tabelle `analysis_reports`, siehe `PrivatePrep/Data/Entities/AnalysisReportEntity.cs` und Migration `Migrations/018_analysis_reports.sql`), pro Nutzer (`UserId` Pflicht) und optional mit einem `InboxJob` verknüpft. Gespeichert werden das vollständige Report-JSON, CV- und JD-Text-Hash (SHA-256, kein Klartext), Zeichen-Längen und das verwendete LLM-Modell. Nutzer können einzelne Reports jederzeit löschen (Right to be Forgotten, `DELETE /api/reports/{id}`). Der CV-Rohtext selbst wird weiterhin nicht gespeichert, nur sein Hash. Grund für die Änderung: die Inbox (Paket 1–3B) braucht einen Report, der überlebt, wenn der Nutzer zwischen Inbox und Analyse-Seite wechselt, statt bei jedem Seitenwechsel zu verschwinden.
 
 **Bericht v2 (Entwurf).** Jeder Abschnitt hat `id`, `status` (`ok`, `not_evaluated`, `locked`), Längenbudget:
 
@@ -118,7 +120,7 @@ Weitere Felder: `schemaVersion: 2`, `tier`, `truncated` (Anzeige gekürzt), erka
 - **Volumen:** unter 100 Analysen pro Tag in den ersten drei Monaten. Kostenloses Groq-Kontingent reicht voraussichtlich.
 - **Latenz:** erste Inhalte **unter 2 Sekunden**, vollständiger Bericht **unter 30 Sekunden** (entspricht dem bestehenden Timeout).
 - **Modellwechsel:** **Anbieter und Modell per Konfiguration** über eine gemeinsame Schnittstelle (viele Anbieter sprechen das OpenAI-Format). Kein Code-Umbau im Analysepfad. Ein Adapter pro neuem Anbieter mit eigenem Format.
-- **Datenschutz:** CV und Bericht werden nicht gespeichert und nicht protokolliert. Nur Hash und Zähler.
+- **Datenschutz:** CV-Rohtext wird nicht gespeichert, nur sein Hash und der Zähler. **Geändert 2026-09-24 (Prompt B Session 1):** Der Bericht selbst wird seitdem serverseitig persistiert (siehe Nachtrag im Domain-Model-Abschnitt), pro Nutzer und einzeln löschbar.
 
 ## Integrations
 
