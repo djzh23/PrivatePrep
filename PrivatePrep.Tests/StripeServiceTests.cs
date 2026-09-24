@@ -10,6 +10,7 @@ using PrivatePrep.Data;
 using PrivatePrep.Models;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Profile;
+using PrivatePrep.Services.Reports;
 using PrivatePrep.Services.Tracking;
 using PrivatePrep.Services.Payments;
 using Stripe;
@@ -203,12 +204,14 @@ public class StripeServiceTests
         userContextMock.Setup(u => u.IsAnonymous).Returns(false);
 
         var tokenTrackingMock = new Mock<TokenTrackingService>();
+        var reportMock = new Mock<IAnalysisReportService>();
         var controller = new AgentController(
             analyzeMock.Object,
             profileMock.Object,
             usage,
             userContextMock.Object,
             tokenTrackingMock.Object,
+            reportMock.Object,
             agentLoggerMock.Object)
         {
             ControllerContext = new ControllerContext

@@ -6,6 +6,7 @@ using PrivatePrep.Controllers;
 using PrivatePrep.Models;
 using PrivatePrep.Services.Auth;
 using PrivatePrep.Services.Inbox;
+using PrivatePrep.Services.Reports;
 
 namespace PrivatePrep.Tests;
 
@@ -16,12 +17,13 @@ namespace PrivatePrep.Tests;
 public class InboxControllerTests
 {
     private readonly Mock<IInboxService> _inboxMock = new();
+    private readonly Mock<IAnalysisReportService> _reportMock = new();
     private readonly Mock<IAppUserContext> _userContextMock = new();
     private readonly Mock<ILogger<InboxController>> _loggerMock = new();
 
     private InboxController CreateController()
     {
-        var controller = new InboxController(_inboxMock.Object, _userContextMock.Object, _loggerMock.Object);
+        var controller = new InboxController(_inboxMock.Object, _reportMock.Object, _userContextMock.Object, _loggerMock.Object);
         controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
         return controller;
     }
@@ -263,6 +265,64 @@ public class InboxControllerTests
         _inboxMock.Setup(s => s.DeleteAsync("user_abc", id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
         var result = await CreateController().Delete(id, CancellationToken.None);
+
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    // ---- GET /api/inbox/{id}/report ---------------------------------------------------------
+
+    private static AnalysisReport SampleReport(Guid jobId) => new(
+        Guid.NewGuid(),
+        "user_abc",
+        jobId,
+        "{}",
+        new string('a', 64),
+        new string('b', 64),
+        100,
+        200,
+        "groq-model",
+        3.8m,
+        DateTime.UtcNow,
+        DateTime.UtcNow);
+
+    [Fact]
+    public async Task GetReport_JobHasReport_Returns200()
+    {
+        SignedInAs("user_abc");
+        var job = SampleJob();
+        _inboxMock.Setup(s => s.GetByIdForUserAsync("user_abc", job.Id, It.IsAny<CancellationToken>())).ReturnsAsync(job);
+        var report = SampleReport(job.Id);
+        _reportMock.Setup(s => s.GetByInboxJobIdForUserAsync("user_abc", job.Id, It.IsAny<CancellationToken>())).ReturnsAsync(report);
+
+        var result = await CreateController().GetReport(job.Id, CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        var body = Assert.IsType<AnalysisReportResponse>(ok.Value);
+        Assert.Equal(report.Id, body.Id);
+    }
+
+    [Fact]
+    public async Task GetReport_JobNotFound_Returns404WithInboxJobErrorCode()
+    {
+        SignedInAs("user_abc");
+        var id = Guid.NewGuid();
+        _inboxMock.Setup(s => s.GetByIdForUserAsync("user_abc", id, It.IsAny<CancellationToken>())).ReturnsAsync((InboxJob?)null);
+
+        var result = await CreateController().GetReport(id, CancellationToken.None);
+
+        Assert.IsType<NotFoundObjectResult>(result);
+        _reportMock.Verify(s => s.GetByInboxJobIdForUserAsync(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetReport_JobHasNoReportYet_Returns404()
+    {
+        SignedInAs("user_abc");
+        var job = SampleJob();
+        _inboxMock.Setup(s => s.GetByIdForUserAsync("user_abc", job.Id, It.IsAny<CancellationToken>())).ReturnsAsync(job);
+        _reportMock.Setup(s => s.GetByInboxJobIdForUserAsync("user_abc", job.Id, It.IsAny<CancellationToken>())).ReturnsAsync((AnalysisReport?)null);
+
+        var result = await CreateController().GetReport(job.Id, CancellationToken.None);
 
         Assert.IsType<NotFoundObjectResult>(result);
     }
