@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PrivatePrep.Models;
 using PrivatePrep.Services.Auth;
 using PrivatePrep.Services.Inbox;
+using PrivatePrep.Services.Reports;
 
 namespace PrivatePrep.Controllers;
 
@@ -15,6 +16,7 @@ namespace PrivatePrep.Controllers;
 [Route("api/inbox")]
 public sealed class InboxController(
     IInboxService inboxService,
+    IAnalysisReportService reportService,
     IAppUserContext userContext,
     ILogger<InboxController> logger) : ControllerBase
 {
@@ -147,6 +149,24 @@ public sealed class InboxController(
         return NoContent();
     }
 
+    [HttpGet("{id:guid}/report")]
+    public async Task<IActionResult> GetReport(Guid id, CancellationToken ct)
+    {
+        var userId = userContext.UserId;
+        if (userContext.IsAnonymous || string.IsNullOrEmpty(userId))
+            return Unauthorized(new { error = "auth_required", message = "Bitte anmelden." });
+
+        var job = await inboxService.GetByIdForUserAsync(userId, id, ct).ConfigureAwait(false);
+        if (job is null)
+            return NotFound(new { error = "inbox_job_not_found", message = "Eintrag wurde nicht gefunden." });
+
+        var report = await reportService.GetByInboxJobIdForUserAsync(userId, id, ct).ConfigureAwait(false);
+        if (report is null)
+            return NotFound(new { error = "report_not_found", message = "Dieser Job wurde noch nicht analysiert." });
+
+        return Ok(ToReportResponse(report));
+    }
+
     private static object? ValidateCreate(CreateInboxJobRequest? request)
     {
         if (request is null)
@@ -192,6 +212,19 @@ public sealed class InboxController(
         job.ExtractedAt,
         job.AnalyzedAt,
         job.AnalysisReportId);
+
+    private static AnalysisReportResponse ToReportResponse(Models.AnalysisReport report) => new(
+        report.Id,
+        report.InboxJobId,
+        report.ReportJson,
+        report.CvHash,
+        report.JdHash,
+        report.CvLength,
+        report.JdLength,
+        report.LlmModel,
+        report.MatchScore,
+        report.CreatedAt,
+        report.UpdatedAt);
 
     private static InboxJobListItemResponse ToListItemResponse(Models.InboxJob job) => new(
         job.Id,
