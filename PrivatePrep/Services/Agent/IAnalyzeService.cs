@@ -52,4 +52,7 @@ public sealed class AnalyzeRequestDto
     public string JobDescription { get; set; } = "";
     public string CvText { get; set; } = "";
     public string CvContentHash { get; set; } = "";
+
+    /// <summary>Set when this analysis was triggered from an inbox job; links the persisted report to it.</summary>
+    public Guid? InboxJobId { get; set; }
 }

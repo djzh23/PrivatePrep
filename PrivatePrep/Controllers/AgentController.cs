@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using PrivatePrep.Models;
 using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.Auth;
 using PrivatePrep.Services.Profile;
+using PrivatePrep.Services.Reports;
 using PrivatePrep.Services.Tracking;
 
 namespace PrivatePrep.Controllers;
@@ -15,6 +17,7 @@ public sealed class AgentController(
     UsageService usageService,
     IAppUserContext userContext,
     TokenTrackingService tokenTrackingService,
+    IAnalysisReportService reportService,
     ILogger<AgentController> logger) : ControllerBase
 {
     public const int MaxJobDescriptionChars = AnalyzeService.MaxJobDescriptionLength;
@@ -132,7 +135,25 @@ public sealed class AgentController(
                 .ConfigureAwait(false);
 
             await FireTokenTrackingAsync(userId, report).ConfigureAwait(false);
-            return Ok(report);
+
+            var saved = await reportService.UpsertAsync(
+                userId,
+                request?.InboxJobId,
+                SerializeReport(report),
+                TextHasher.ComputeHash(cvText),
+                TextHasher.ComputeHash(jd),
+                cvText.Length,
+                jd.Length,
+                report.ModelUsed ?? "unknown",
+                report.GlobalScore,
+                HttpContext.RequestAborted).ConfigureAwait(false);
+
+            return Ok(new AnalyzeResponse(report, saved.Id));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            logger.LogWarning(ex, "Analyze: inbox job not found for report link. UserId {UserId}", userId);
+            return NotFound(new { error = "inbox_job_not_found", message = "Die verknüpfte Stelle wurde nicht gefunden." });
         }
         catch (AnalyzeException ex)
         {
@@ -220,6 +241,19 @@ public sealed class AgentController(
 
         return null;
     }
+
+    private static readonly System.Text.Json.JsonSerializerOptions ReportJsonOptions = new()
+    {
+        PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+    };
+
+    /// <summary>
+    /// Serializes exactly as the API itself would (camelCase, matching AddControllers()'s default
+    /// System.Text.Json settings — this repo does not customize them), so a stored report's
+    /// ReportJson is byte-for-byte what the client already received.
+    /// </summary>
+    private static string SerializeReport(AnalyzeReport report) =>
+        System.Text.Json.JsonSerializer.Serialize(report, ReportJsonOptions);
 
     private async Task FireTokenTrackingAsync(string userId, AnalyzeReport report)
     {
