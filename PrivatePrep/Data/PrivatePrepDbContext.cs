@@ -25,6 +25,8 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
 
     public DbSet<InboxJobEntity> InboxJobs => Set<InboxJobEntity>();
 
+    public DbSet<AnalysisReportEntity> AnalysisReports => Set<AnalysisReportEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AppUserEntity>(e =>
@@ -94,6 +96,19 @@ public sealed class PrivatePrepDbContext(DbContextOptions<PrivatePrepDbContext> 
             e.HasIndex(x => new { x.UserId, x.SourceUrl }).IsUnique();
             e.HasIndex(x => new { x.UserId, x.Status });
             e.HasIndex(x => new { x.UserId, x.ExtractedAt }).IsDescending(false, true);
+        });
+
+        modelBuilder.Entity<AnalysisReportEntity>(e =>
+        {
+            e.ToTable("analysis_reports");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.MatchScore).HasPrecision(3, 1);
+            e.HasIndex(x => new { x.UserId, x.InboxJobId }).IsUnique();
+            e.HasIndex(x => new { x.UserId, x.CreatedAt }).IsDescending(false, true);
+            e.HasOne(x => x.InboxJob)
+                .WithMany()
+                .HasForeignKey(x => x.InboxJobId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
     }
