@@ -1,0 +1,21 @@
+{
+  "id": "design-02",
+  "field": "design",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "UI-Designerin (m/w/d), Vollzeit, München\nDas Produktteam sucht Verstärkung für Figma und Prototyping.\nAufgaben: UI-Design, Wireframes und Abstimmung mit der Entwicklung.\nAnforderungen: Abgeschlossenes Studium der Kommunikationsdesign, mindestens 2 Jahre Erfahrung mit Figma, Englisch B2, Präsenz im Münchner Büro an drei Tagen.\nWir bieten 58.000 Euro Jahresgehalt. Ansprechpartner ist Herr Krämer.",
+  "cvText": "B.A. Kommunikationsdesign. Drei Jahre Figma und Prototyping, bisher nur remote. Englisch C1.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Kommunikationsdesign", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung mit Figma", "status": "met" },
+      { "kind": "sprache", "quote": "Englisch B2", "status": "met" },
+      { "kind": "einsatzort", "quote": "Präsenz im Münchner Büro an drei Tagen", "status": "notMet" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "58.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

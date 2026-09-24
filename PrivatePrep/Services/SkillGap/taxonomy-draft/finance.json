@@ -1,0 +1,36 @@
+{
+  "field": "finance",
+  "label": "Finanzen / Buchhaltung",
+  "job_titles": [
+    { "name": "Steuerfachwirt", "aliases": ["steuerfachwirtin"] },
+    { "name": "Bilanzbuchhalter", "aliases": ["bilanzbuchhalterin", "bilanzbuchhalter ihk"] }
+  ],
+  "skills": [
+    { "name": "Buchhaltung", "aliases": ["finanzbuchhaltung", "fibu"] },
+    { "name": "Debitorenbuchhaltung", "aliases": ["debitoren", "debi"] },
+    { "name": "Kreditorenbuchhaltung", "aliases": ["kreditoren", "kredi"] },
+    { "name": "Lohnbuchhaltung", "aliases": ["entgeltabrechnung", "gehaltsabrechnung", "lohnabrechnung"] },
+    { "name": "Jahresabschluss", "aliases": ["abschlussarbeiten"] },
+    { "name": "Kostenrechnung", "aliases": ["betriebsabrechnung", "kore"] },
+    { "name": "Mahnwesen", "aliases": ["mahnung", "forderungsmanagement"] },
+    { "name": "DATEV", "aliases": ["datev unternehmen online", "datev rewe", "duo"] },
+    { "name": "Lexware", "aliases": [] },
+    { "name": "SAP FI", "aliases": ["sap fi/co", "sap fico"] },
+    { "name": "SAP CO", "aliases": ["controlling sap"] },
+    { "name": "Umsatzsteuer", "aliases": ["ust", "mwst", "mehrwertsteuer", "umsatzsteuervoranmeldung"] },
+    { "name": "Einnahmen-Überschuss-Rechnung", "aliases": ["einnahmen-ueberschuss-rechnung", "eur", "einnahmenueberschussrechnung"] },
+    { "name": "Bilanzierung", "aliases": ["bilanz"] },
+    { "name": "IFRS", "aliases": [] },
+    { "name": "Sachkontenplan", "aliases": ["skr", "skr03", "skr04"] },
+    { "name": "Anlagenbuchhaltung", "aliases": ["anlagevermögen", "anlagevermoegen", "anbu"] },
+    { "name": "Zahlungsverkehr", "aliases": ["sepa", "überweisungen", "ueberweisungen"] },
+    { "name": "Kontenabstimmung", "aliases": ["kontoabstimmung", "saldenabstimmung"] },
+    { "name": "Offene-Posten-Buchhaltung", "aliases": ["op-buchhaltung", "offene posten", "opv"] },
+    { "name": "Steuererklärung", "aliases": ["steuererklaerung", "einkommensteuer"] },
+    { "name": "Controlling", "aliases": ["berichtswesen"] },
+    { "name": "Budgetplanung", "aliases": ["budget", "wirtschaftsplanung"] },
+    { "name": "DATEV Lohn", "aliases": ["lodas", "lodas classic"] },
+    { "name": "Elster", "aliases": [] },
+    { "name": "GoBD", "aliases": [] }
+  ]
+}

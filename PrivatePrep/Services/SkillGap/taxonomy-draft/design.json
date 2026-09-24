@@ -1,0 +1,32 @@
+{
+  "field": "design",
+  "label": "Design / Kreativ",
+  "job_titles": [
+    { "name": "Grafikdesigner", "aliases": ["grafikdesignerin", "mediengestalter"] }
+  ],
+  "skills": [
+    { "name": "Adobe Photoshop", "aliases": ["photoshop"] },
+    { "name": "Adobe Illustrator", "aliases": ["illustrator"] },
+    { "name": "Adobe InDesign", "aliases": ["indesign"] },
+    { "name": "Adobe XD", "aliases": [] },
+    { "name": "Figma", "aliases": [] },
+    { "name": "Sketch", "aliases": [] },
+    { "name": "After Effects", "aliases": ["adobe after effects"] },
+    { "name": "Premiere Pro", "aliases": ["adobe premiere"] },
+    { "name": "Cinema 4D", "aliases": ["c4d"] },
+    { "name": "Blender", "aliases": [] },
+    { "name": "Canva", "aliases": [] },
+    { "name": "UI-Design", "aliases": ["user interface", "interface design"] },
+    { "name": "UX-Design", "aliases": ["user experience"] },
+    { "name": "UX-Research", "aliases": ["nutzerforschung", "user research"] },
+    { "name": "Prototyping", "aliases": ["klickdummy", "wireframe"] },
+    { "name": "Design System", "aliases": ["component library"] },
+    { "name": "Corporate Design", "aliases": ["erscheinungsbild"] },
+    { "name": "Typografie", "aliases": ["typographie"] },
+    { "name": "Printlayout", "aliases": ["satzspiegel"] },
+    { "name": "Bildbearbeitung", "aliases": ["retusche"] },
+    { "name": "Packaging", "aliases": ["verpackungsdesign"] },
+    { "name": "Motion Design", "aliases": ["motion graphics"] },
+    { "name": "Barrierefreiheit", "aliases": ["bitv", "wcag"] }
+  ]
+}

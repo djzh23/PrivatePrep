@@ -1,0 +1,19 @@
+{
+  "id": "edge-design-02",
+  "field": "design",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Packaging-Designer (m/w/d), Vollzeit\nDer Markenhersteller sucht Verstärkung für das Verpackungsdesign.\nIhr Profil: Abgeschlossene Ausbildung zur Mediengestalterin, mindestens 3 Jahre Erfahrung im Packaging, Nachweis der Farbverbindlichkeitsschulung.\nWir bieten 48.000 Euro Jahresgehalt. Kontakt: Frau Beck.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Mediengestalterin" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung im Packaging" },
+      { "kind": "zertifikat", "quote": "Nachweis der Farbverbindlichkeitsschulung" }
+    ],
+    "salaryVerbatim": "48.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

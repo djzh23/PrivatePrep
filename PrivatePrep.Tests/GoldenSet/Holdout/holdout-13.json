@@ -1,0 +1,19 @@
+{
+  "id": "holdout-13",
+  "field": "marketing",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Performance-Marketing-Manager (m/w/d), Vollzeit, Hamburg\nSie bringen ein abgeschlossenes Studium mit, mindestens 2 Jahre Erfahrung mit Meta Ads und gutes Englisch. Bewerbung an das Marketing-Team.\nGehalt: 52.000 Euro.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "abgeschlossenes Studium" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung mit Meta Ads" },
+      { "kind": "sprache", "quote": "gutes Englisch" }
+    ],
+    "salaryVerbatim": "52.000 Euro",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "field": "other",
+  "label": "Sonstiges",
+  "job_titles": [
+    { "name": "Servicekraft", "aliases": [] }
+  ],
+  "skills": [
+    { "name": "Projektmanagement", "aliases": ["projektleitung", "projektsteuerung"] },
+    { "name": "PRINCE2", "aliases": ["prince 2"] },
+    { "name": "Kundenkontakt", "aliases": ["kundenumgang"] },
+    { "name": "Führerschein Klasse B", "aliases": ["führerschein klasse b", "fuehrerschein klasse b", "führerschein b", "fuehrerschein b", "pkw-führerschein", "pkw-fuehrerschein"] },
+    { "name": "Erste Hilfe", "aliases": ["ersthelfer"] },
+    { "name": "Lagerlogistik", "aliases": ["kommissionierung", "wareneingang"] },
+    { "name": "Reinigung", "aliases": ["gebäudereinigung", "gebaeudereinigung"] },
+    { "name": "Catering", "aliases": [] },
+    { "name": "Objektschutz", "aliases": ["wachdienst"] }
+  ]
+}

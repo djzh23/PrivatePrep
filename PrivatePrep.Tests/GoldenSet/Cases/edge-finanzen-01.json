@@ -1,0 +1,18 @@
+{
+  "id": "edge-finanzen-01",
+  "field": "finanzen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Kreditorenbuchhalter (m/w/d)\nUnsere Einkaufsabteilung in Bremen sucht Verstärkung für die Kreditorenbuchhaltung.\nAnforderungen:\n- Abgeschlossene kaufmännische Ausbildung\n- Mindestens 2 Jahre Erfahrung in der Kreditorenbuchhaltung\n- Gute Deutschkenntnisse\nWir bieten 38.000 Euro Jahresgehalt und 28 Urlaubstage.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene kaufmännische Ausbildung" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung in der Kreditorenbuchhaltung" },
+      { "kind": "sprache", "quote": "Gute Deutschkenntnisse" }
+    ],
+    "salaryVerbatim": "38.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

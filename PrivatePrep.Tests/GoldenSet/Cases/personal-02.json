@@ -1,0 +1,20 @@
+{
+  "id": "personal-02",
+  "field": "personal",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Personalsachbearbeiter (m/w/d), Vollzeit, Hannover\nDie Kreisverwaltung sucht Verstärkung für die Personalabteilung.\nAufgaben: Zeugniserstellung, Führung der Personalakten und Abstimmung mit dem Personalrat.\nAnforderungen: Abgeschlossene Ausbildung zur Verwaltungsfachangestellten, mindestens 3 Jahre Erfahrung in der Personalsachbearbeitung, AEVO-Schein.\nVergütung nach Entgeltgruppe 9a TV-L. Ansprechpartner ist Herr Bode.",
+  "cvText": "Verwaltungsfachangestellte, Abschluss 2016. Fünf Jahre Personalsachbearbeitung in einer Stadtverwaltung, Zeugnisse und Personalakten. Kein AEVO-Schein.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Verwaltungsfachangestellten", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung in der Personalsachbearbeitung", "status": "met" },
+      { "kind": "zertifikat", "quote": "AEVO-Schein", "status": "notMet" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TV-L", "group": "9a" },
+    "signals": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "field": "legal",
+  "label": "Recht / Jura",
+  "job_titles": [
+    { "name": "Rechtsanwalt", "aliases": ["rechtsanwältin", "rechtsanwaeltin"] },
+    { "name": "Notar", "aliases": ["notarin"] },
+    { "name": "Fachanwalt", "aliases": ["fachanwältin", "fachanwaeltin"] }
+  ],
+  "skills": [
+    { "name": "Aktenvortrag", "aliases": [] },
+    { "name": "Schriftsatz", "aliases": ["schriftsätze", "schriftsaetze", "klageerwiderung"] },
+    { "name": "Vertragsgestaltung", "aliases": ["vertragswesen", "vertragsprüfung", "vertragspruefung"] },
+    { "name": "Due Diligence", "aliases": [] },
+    { "name": "Gesellschaftsrecht", "aliases": ["gmbh-recht", "aktienrecht"] },
+    { "name": "Arbeitsrecht", "aliases": [] },
+    { "name": "Mietrecht", "aliases": [] },
+    { "name": "Familienrecht", "aliases": [] },
+    { "name": "Strafrecht", "aliases": [] },
+    { "name": "Verwaltungsrecht", "aliases": ["öffentliches recht", "oeffentliches recht"] },
+    { "name": "Vergaberecht", "aliases": ["vgv"] },
+    { "name": "Datenschutzrecht", "aliases": ["bdsg"] },
+    { "name": "Urheberrecht", "aliases": ["lizenzrecht"] },
+    { "name": "Insolvenzrecht", "aliases": [] },
+    { "name": "Zwangsvollstreckung", "aliases": ["vollstreckung"] },
+    { "name": "Mandantenkorrespondenz", "aliases": ["mandatsbetreuung"] },
+    { "name": "Fristenkontrolle", "aliases": ["fristenbuch", "wiedervorlage"] },
+    { "name": "RA-Micro", "aliases": ["ra micro"] },
+    { "name": "DATEV Anwalt", "aliases": ["datev advodat"] },
+    { "name": "juris", "aliases": [] },
+    { "name": "Beck-Online", "aliases": ["beck online"] },
+    { "name": "Legal Tech", "aliases": [] },
+    { "name": "Notariat", "aliases": ["beurkundung"] },
+    { "name": "Compliance", "aliases": [] },
+    { "name": "Legal English", "aliases": ["vertragsenglisch"] }
+  ]
+}

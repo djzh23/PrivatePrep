@@ -71,10 +71,32 @@ public sealed class SkillTaxonomyCatalog
 
     private static SkillTaxonomyCatalog LoadEmbeddedCore()
     {
-        var de = ReadEmbedded("skill-taxonomy.de.json");
-        var en = ReadEmbedded("skill-taxonomy.en.json");
-        return Merge(Parse(de), Parse(en));
+        var fieldSkills = LoadFieldFiles();
+        var en = Parse(ReadEmbedded("skill-taxonomy.en.json"));
+        return Merge(fieldSkills, en);
     }
+
+    private static List<SkillTaxonomyEntry> LoadFieldFiles()
+    {
+        var assembly = typeof(SkillTaxonomyCatalog).Assembly;
+        var resources = assembly.GetManifestResourceNames()
+            .Where(IsFieldTaxonomyResource)
+            .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+        if (resources.Length == 0)
+            throw new InvalidOperationException("No field skill-taxonomy JSON files were embedded.");
+
+        var result = new List<SkillTaxonomyEntry>();
+        foreach (var resource in resources)
+            result.AddRange(Parse(ReadResource(resource)));
+
+        return result;
+    }
+
+    private static bool IsFieldTaxonomyResource(string resourceName) =>
+        resourceName.Contains("taxonomy-draft", StringComparison.OrdinalIgnoreCase)
+        && resourceName.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
 
     private static SkillTaxonomyCatalog Merge(IReadOnlyList<SkillTaxonomyEntry> left, IReadOnlyList<SkillTaxonomyEntry> right)
     {
@@ -142,8 +164,14 @@ public sealed class SkillTaxonomyCatalog
             .FirstOrDefault(n => n.EndsWith(fileName, StringComparison.OrdinalIgnoreCase))
             ?? throw new InvalidOperationException($"Embedded skill taxonomy '{fileName}' was not found.");
 
+        return ReadResource(resource);
+    }
+
+    private static string ReadResource(string resource)
+    {
+        var assembly = typeof(SkillTaxonomyCatalog).Assembly;
         using var stream = assembly.GetManifestResourceStream(resource)
-            ?? throw new InvalidOperationException($"Embedded skill taxonomy '{fileName}' could not be opened.");
+            ?? throw new InvalidOperationException($"Embedded skill taxonomy '{resource}' could not be opened.");
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     }

@@ -1,0 +1,19 @@
+{
+  "id": "holdout-15",
+  "field": "design",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "UX-Designer (m/w/d) Produkt - Vollzeit - Berlin\nAbgeschlossenes Studium des Kommunikationsdesign\nMindestens 2 Jahre Erfahrung in der Nutzerforschung\nDeutsch und Englisch verhandlungssicher\nWir bieten 60.000 Euro pro Jahr",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium des Kommunikationsdesign" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung in der Nutzerforschung" },
+      { "kind": "sprache", "quote": "Deutsch und Englisch verhandlungssicher" }
+    ],
+    "salaryVerbatim": "60.000 Euro pro Jahr",
+    "tariff": null,
+    "signals": []
+  }
+}

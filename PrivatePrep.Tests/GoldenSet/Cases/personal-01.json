@@ -1,0 +1,20 @@
+{
+  "id": "personal-01",
+  "field": "personal",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Recruiter (m/w/d), Vollzeit, Berlin\nUnsere Personalabteilung sucht Verstärkung für das Recruiting.\nAufgaben: Stellenausschreibungen, Vorstellungsgespräche und Onboarding neuer Kolleginnen und Kollegen.\nAnforderungen: Abgeschlossenes Studium der Betriebswirtschaft oder Psychologie, mindestens 2 Jahre Erfahrung im Recruiting, verhandlungssicheres Englisch.\nWir bieten 52.000 Euro Jahresgehalt. Ansprechpartnerin ist Frau Hartwig.",
+  "cvText": "B.A. Psychologie. Drei Jahre Recruiting in einem Mittelstand, Personio und Vorstellungsgespräche. Englisch C1.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Betriebswirtschaft oder Psychologie", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung im Recruiting", "status": "met" },
+      { "kind": "sprache", "quote": "verhandlungssicheres Englisch", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "52.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

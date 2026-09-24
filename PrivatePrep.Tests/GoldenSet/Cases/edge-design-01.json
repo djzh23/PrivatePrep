@@ -1,0 +1,18 @@
+{
+  "id": "edge-design-01",
+  "field": "design",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Motion Designer (m/w/d)\nUnsere Kreativabteilung in Köln sucht Verstärkung für Motion Design.\nAnforderungen:\n- Abgeschlossenes Studium der Mediengestaltung\n- Mindestens 2 Jahre Erfahrung mit After Effects\n- Fließend Deutsch\nWir bieten 46.000 Euro Jahresgehalt und 28 Urlaubstage.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Mediengestaltung" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung mit After Effects" },
+      { "kind": "sprache", "quote": "Fließend Deutsch" }
+    ],
+    "salaryVerbatim": "46.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

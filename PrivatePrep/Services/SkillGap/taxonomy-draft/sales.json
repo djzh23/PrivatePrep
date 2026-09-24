@@ -1,0 +1,40 @@
+{
+  "field": "sales",
+  "label": "Vertrieb / Verkauf",
+  "job_titles": [
+    { "name": "Außendienst", "aliases": ["aussendienst", "field sales"] },
+    { "name": "Innendienst", "aliases": ["inside sales", "vertriebsinnendienst"] }
+  ],
+  "skills": [
+    { "name": "Kundenberatung", "aliases": ["kundenbetreuung", "fachberatung"] },
+    { "name": "Neukundenakquise", "aliases": ["kundenakquise", "akquise"] },
+    { "name": "Kaltakquise", "aliases": ["cold calling", "kaltakquise am telefon", "outbound akquise"] },
+    { "name": "Bestandskundenbetreuung", "aliases": ["account management", "kundenbindung"] },
+    { "name": "Key-Account-Management", "aliases": ["key account", "key account management", "kam"] },
+    { "name": "Angebotserstellung", "aliases": ["angebotsmanagement"] },
+    { "name": "Preisverhandlung", "aliases": ["konditionenverhandlung"] },
+    { "name": "Abschlussstärke", "aliases": ["abschlussstaerke", "verkaufsabschluss"] },
+    { "name": "Reklamationsbearbeitung", "aliases": ["beschwerdemanagement", "reklamation"] },
+    { "name": "Leadgenerierung", "aliases": ["lead management"] },
+    { "name": "CRM", "aliases": ["kundenverwaltung"] },
+    { "name": "Salesforce", "aliases": [] },
+    { "name": "HubSpot", "aliases": [] },
+    { "name": "SAP SD", "aliases": [] },
+    { "name": "Warenwirtschaft", "aliases": ["wawi"] },
+    { "name": "Kassenführung", "aliases": ["kassenfuehrung", "kassensystem", "pos"] },
+    { "name": "Visual Merchandising", "aliases": ["warenpräsentation", "warenpraesentation"] },
+    { "name": "Telefonverkauf", "aliases": ["telesales"] },
+    { "name": "Direktvertrieb", "aliases": ["tür-zu-tür", "tuer-zu-tuer", "haustürgeschäft", "haustuergeschaeft"] },
+    { "name": "Zielvereinbarung", "aliases": ["vertriebsziele", "quota"] },
+    { "name": "Pipeline-Management", "aliases": ["sales pipeline", "sales funnel", "pipeline"] },
+    { "name": "Messevertrieb", "aliases": ["vertrieb auf fachmessen"] },
+    { "name": "After-Sales", "aliases": ["kundenservice nach kauf"] },
+    { "name": "Cross-Selling", "aliases": ["kreuzverkauf", "zusatzverkauf"] },
+    { "name": "Upselling", "aliases": ["up-selling", "upgrade-verkauf"] },
+    { "name": "Solution Selling", "aliases": ["lösungsverkauf", "loesungsverkauf", "beratender vertrieb"] },
+    { "name": "SPIN Selling", "aliases": ["spin"] },
+    { "name": "Challenger Sale", "aliases": ["challenger selling"] },
+    { "name": "KPI-Reporting", "aliases": ["kpi", "vertriebskennzahlen"] },
+    { "name": "Umsatzverantwortung", "aliases": ["umsatzverantwortung", "revenue responsibility"] }
+  ]
+}

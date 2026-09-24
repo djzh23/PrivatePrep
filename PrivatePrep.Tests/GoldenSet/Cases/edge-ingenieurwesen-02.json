@@ -1,0 +1,18 @@
+{
+  "id": "edge-ingenieurwesen-02",
+  "field": "ingenieurwesen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Bauingenieur Tragwerksplanung (m/w/d), Vollzeit\nDas Ingenieurbüro Stein sucht Verstärkung für die Statik.\nVoraussetzungen: Abgeschlossenes Studium des Bauingenieurwesens, Nachweis der Listeneintragung als Tragwerksplaner.\nWir bieten 55.000 Euro Jahresgehalt. Melden Sie sich bei Herrn Stein.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium des Bauingenieurwesens" },
+      { "kind": "zertifikat", "quote": "Nachweis der Listeneintragung als Tragwerksplaner" }
+    ],
+    "salaryVerbatim": "55.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

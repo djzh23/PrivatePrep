@@ -1,0 +1,18 @@
+{
+  "id": "edge-recht-02",
+  "field": "recht",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Notarfachwirt (m/w/d), Vollzeit\nDas Notariat sucht Verstärkung für Beurkundungen.\nVoraussetzungen: Abgeschlossene Weiterbildung zum Notarfachwirt, Nachweis der notariellen Fachkunde.\nWir bieten 50.000 Euro Jahresgehalt. Melden Sie sich bei Herrn Stein.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene Weiterbildung zum Notarfachwirt" },
+      { "kind": "zertifikat", "quote": "Nachweis der notariellen Fachkunde" }
+    ],
+    "salaryVerbatim": "50.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

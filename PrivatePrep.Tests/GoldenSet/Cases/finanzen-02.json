@@ -1,0 +1,20 @@
+{
+  "id": "finanzen-02",
+  "field": "finanzen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Bilanzbuchhalter (m/w/d), Vollzeit, Düsseldorf\nUnsere Industrieholding sucht Verstärkung für den Konzernabschluss.\nAufgaben: Jahresabschluss, Anlagenbuchhaltung und Abstimmung der Sachkonten nach SKR04.\nAnforderungen: Abgeschlossene Weiterbildung zur Bilanzbuchhalterin IHK, mindestens 5 Jahre Erfahrung in der Bilanzierung, Bereitschaft zu Dienstreisen im Umkreis von 80 km.\nWir bieten 62.000 Euro Jahresgehalt. Ansprechpartner ist Herr Vogt.",
+  "cvText": "Buchhalter, sechs Jahre Jahresabschluss nach HGB, Anlagenbuchhaltung, SKR04. Wohnort Düsseldorf. Bisher keine Dienstreisen.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Weiterbildung zur Bilanzbuchhalterin IHK", "status": "notMet" },
+      { "kind": "berufserfahrung", "quote": "mindestens 5 Jahre Erfahrung in der Bilanzierung", "status": "met" },
+      { "kind": "einsatzort", "quote": "Bereitschaft zu Dienstreisen im Umkreis von 80 km", "status": "notMet" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "62.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

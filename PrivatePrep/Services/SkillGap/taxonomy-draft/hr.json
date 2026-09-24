@@ -1,0 +1,34 @@
+{
+  "field": "hr",
+  "label": "Personal / HR",
+  "job_titles": [
+    { "name": "Personalsachbearbeiter", "aliases": ["personalsachbearbeiterin"] },
+    { "name": "Recruiter", "aliases": ["recruiterin"] }
+  ],
+  "skills": [
+    { "name": "Recruiting", "aliases": ["personalgewinnung", "rekrutierung"] },
+    { "name": "Employer Branding", "aliases": ["arbeitgebermarke"] },
+    { "name": "Personalentwicklung", "aliases": ["weiterbildungsplanung"] },
+    { "name": "Betriebsverfassungsrecht", "aliases": ["betrvg"] },
+    { "name": "Tarifrecht", "aliases": ["tvöd", "tvoed", "tv-l", "tarifvertrag"] },
+    { "name": "Onboarding", "aliases": ["einarbeitung"] },
+    { "name": "Offboarding", "aliases": ["austritt"] },
+    { "name": "Zeugniserstellung", "aliases": ["arbeitszeugnis"] },
+    { "name": "Stellenausschreibung", "aliases": ["stellenanzeige verfassen"] },
+    { "name": "Vorstellungsgespräch", "aliases": ["vorstellungsgespraech", "interviewführung", "interviewfuehrung", "bewerbungsgespräch", "bewerbungsgespraech"] },
+    { "name": "Assessment Center", "aliases": [] },
+    { "name": "Personaleinsatzplanung", "aliases": ["schichtplanung personal"] },
+    { "name": "Personio", "aliases": [] },
+    { "name": "SAP HCM", "aliases": ["sap hr"] },
+    { "name": "SAP SuccessFactors", "aliases": ["successfactors"] },
+    { "name": "Bewerbermanagement", "aliases": ["ats", "bewerbertool"] },
+    { "name": "Betriebliches Gesundheitsmanagement", "aliases": ["bgm"] },
+    { "name": "BEM", "aliases": ["betriebliches eingliederungsmanagement"] },
+    { "name": "Schwerbehindertenvertretung", "aliases": ["sbv"] },
+    { "name": "Ausbildungsbetreuung", "aliases": ["ausbildungskoordination"] },
+    { "name": "Mitarbeitergespräch", "aliases": ["mitarbeitergespraech", "jahresgespräch", "jahresgespraech", "zielvereinbarung"] },
+    { "name": "Konfliktmoderation", "aliases": [] },
+    { "name": "Mediation", "aliases": [] },
+    { "name": "DSGVO Personalakten", "aliases": ["personalakte"] }
+  ]
+}

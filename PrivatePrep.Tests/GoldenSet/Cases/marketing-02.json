@@ -1,0 +1,20 @@
+{
+  "id": "marketing-02",
+  "field": "marketing",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Content-Managerin (m/w/d), Teilzeit 30 Stunden, Leipzig\nDer Verlag sucht Verstärkung für die Redaktion.\nAufgaben: Content-Erstellung, Redaktionsplan und Abstimmung mit der Grafik.\nAnforderungen: Abgeschlossene Ausbildung zur Mediengestalterin Digital und Print, mindestens 1 Jahr Erfahrung in der Content-Erstellung, Deutsch auf Muttersprachniveau.\nWir bieten 32.000 Euro Jahresgehalt. Ansprechpartner ist Herr Pauli.",
+  "cvText": "Mediengestalterin Digital und Print, Gesellenprüfung 2022. Acht Monate Content-Erstellung. Deutsch Muttersprache.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Mediengestalterin Digital und Print", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 1 Jahr Erfahrung in der Content-Erstellung", "status": "notMet" },
+      { "kind": "sprache", "quote": "Deutsch auf Muttersprachniveau", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Teilzeit 30 Stunden", "status": "unclear" }
+    ],
+    "salaryVerbatim": "32.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

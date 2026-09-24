@@ -1,0 +1,20 @@
+{
+  "id": "ingenieurwesen-01",
+  "field": "ingenieurwesen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Konstrukteur Maschinenbau (m/w/d), Vollzeit, Wolfsburg\nUnser Zulieferer sucht Verstärkung für die Baugruppenkonstruktion.\nAufgaben: Konstruktion in SolidWorks, Stücklistenerstellung und Freigabe von Fertigungszeichnungen.\nAnforderungen: Abgeschlossenes Studium des Maschinenbaus, mindestens 3 Jahre Erfahrung in der Konstruktion, Deutsch auf Niveau C1.\nWir bieten 58.000 bis 64.000 Euro Jahresgehalt. Ansprechpartnerin ist Frau Berg.",
+  "cvText": "B.Eng. Maschinenbau. Vier Jahre Baugruppenkonstruktion in SolidWorks, Stücklisten und Fertigungszeichnungen. Deutsch Muttersprache.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium des Maschinenbaus", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung in der Konstruktion", "status": "met" },
+      { "kind": "sprache", "quote": "Deutsch auf Niveau C1", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "58.000 bis 64.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

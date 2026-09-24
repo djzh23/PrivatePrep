@@ -1,0 +1,19 @@
+{
+  "id": "edge-marketing-02",
+  "field": "marketing",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "SEA-Manager (m/w/d), Vollzeit\nDie Shop-Marke sucht Verstärkung für Google Ads.\nIhr Profil: Abgeschlossene kaufmännische Ausbildung, mindestens 3 Jahre Erfahrung mit Google Ads, Englisch B2.\nWir bieten 50.000 Euro Jahresgehalt. Kontakt: Frau Beck.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene kaufmännische Ausbildung" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung mit Google Ads" },
+      { "kind": "sprache", "quote": "Englisch B2" }
+    ],
+    "salaryVerbatim": "50.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

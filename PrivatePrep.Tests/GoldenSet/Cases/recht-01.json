@@ -1,0 +1,20 @@
+{
+  "id": "recht-01",
+  "field": "recht",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Rechtsanwaltsfachangestellte (m/w/d), Vollzeit, Frankfurt\nDie Kanzlei sucht Verstärkung für das Sekretariat.\nAufgaben: Fristenkontrolle, Mandantenkorrespondenz und Ablage in RA-Micro.\nAnforderungen: Abgeschlossene Ausbildung zur Rechtsanwaltsfachangestellten, mindestens 2 Jahre Erfahrung in einer Kanzlei, Deutsch auf Muttersprachniveau.\nWir bieten 36.000 Euro Jahresgehalt. Ansprechpartnerin ist Frau Engel.",
+  "cvText": "Rechtsanwaltsfachangestellte, Abschluss 2020. Drei Jahre Fristenkontrolle und Mandantenkorrespondenz, RA-Micro. Deutsch Muttersprache.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Rechtsanwaltsfachangestellten", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung in einer Kanzlei", "status": "met" },
+      { "kind": "sprache", "quote": "Deutsch auf Muttersprachniveau", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "36.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "recht-02",
+  "field": "recht",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Syndikusrechtsanwalt (m/w/d), Vollzeit, Stuttgart\nDie Rechtsabteilung sucht Verstärkung für Vertragsgestaltung und Compliance.\nAufgaben: Vertragsprüfung, Gesellschaftsrecht und Abstimmung mit der Geschäftsleitung.\nAnforderungen: Abgeschlossenes Studium der Rechtswissenschaft mit Zweitem Staatsexamen, mindestens 3 Jahre Erfahrung im Gesellschaftsrecht, Legal English auf Niveau C1.\nWir bieten 78.000 Euro Jahresgehalt. Ansprechpartner ist Herr Braun.",
+  "cvText": "Erstes Staatsexamen 2022, Referendariat läuft noch. Vier Jahre wissenschaftliche Mitarbeit im Gesellschaftsrecht. Legal English C1.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Rechtswissenschaft mit Zweitem Staatsexamen", "status": "notMet" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung im Gesellschaftsrecht", "status": "met" },
+      { "kind": "sprache", "quote": "Legal English auf Niveau C1", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "78.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

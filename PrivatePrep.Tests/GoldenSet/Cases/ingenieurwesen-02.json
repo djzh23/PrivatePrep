@@ -1,0 +1,21 @@
+{
+  "id": "ingenieurwesen-02",
+  "field": "ingenieurwesen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Projektingenieur Elektrotechnik (m/w/d), Vollzeit, Mannheim\nFür die Elektrokonstruktion suchen wir Verstärkung.\nAufgaben: Schaltplanerstellung in EPLAN und Abstimmung mit der Fertigung.\nAnforderungen: Abgeschlossenes Studium der Elektrotechnik, mindestens 2 Jahre Erfahrung, Führerschein Klasse B, Reisebereitschaft.\nWir bieten 60.000 Euro Jahresgehalt. Ansprechpartner ist Herr Dietz.",
+  "cvText": "Diplom-Ingenieur Elektrotechnik. Drei Jahre Elektrokonstruktion mit EPLAN. Kein Führerschein. Bisher nur Arbeit am Standort.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Elektrotechnik", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung", "status": "met" },
+      { "kind": "fuehrerschein", "quote": "Führerschein Klasse B", "status": "notMet" },
+      { "kind": "einsatzort", "quote": "Reisebereitschaft", "status": "notMet" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "60.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

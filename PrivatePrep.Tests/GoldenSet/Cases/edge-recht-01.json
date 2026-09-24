@@ -1,0 +1,18 @@
+{
+  "id": "edge-recht-01",
+  "field": "recht",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Jurist Arbeitsrecht (m/w/d)\nUnsere Kanzlei in Köln sucht Verstärkung für das Arbeitsrecht.\nAnforderungen:\n- Abgeschlossenes Studium der Rechtswissenschaft\n- Mindestens 2 Jahre Erfahrung im Arbeitsrecht\n- Fließend Deutsch\nWir bieten 64.000 Euro Jahresgehalt und 30 Urlaubstage.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Rechtswissenschaft" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung im Arbeitsrecht" },
+      { "kind": "sprache", "quote": "Fließend Deutsch" }
+    ],
+    "salaryVerbatim": "64.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

@@ -194,6 +194,64 @@ public class SkillGapServiceTests
     }
 
     [Fact]
+    public void Classify_FinanceAliases_MapToCanonicalSkills()
+    {
+        var cv = """
+            Kenntnisse
+            FiBu, Debi, MwSt
+
+            Berufserfahrung
+            Buchhaltung in einer Steuerkanzlei.
+            """;
+        var jd = PadJob("""
+            Voraussetzungen
+            Finanzbuchhaltung, Debitorenbuchhaltung und Umsatzsteuer sind erforderlich.
+            """);
+
+        var report = _sut.Classify(cv, jd);
+
+        Assert.Equal(SkillGapReasonCodes.Ok, report.ReasonCode);
+        Assert.Contains("Buchhaltung", report.Existing);
+        Assert.Contains("Debitorenbuchhaltung", report.Existing);
+        Assert.Contains("Umsatzsteuer", report.Existing);
+    }
+
+    [Fact]
+    public void Classify_WigWelding_IsOwnSkillNotGenericWelding()
+    {
+        var cv = """
+            Kenntnisse
+            WIG-Schweißen
+
+            Berufserfahrung
+            Metallbau.
+            """;
+        var jd = PadJob("""
+            Anforderungen
+            WIG-Schweißer für Edelstahlbehälter, Erfahrung mit WIG ist Pflicht.
+            """);
+
+        var report = _sut.Classify(cv, jd);
+
+        Assert.Equal(SkillGapReasonCodes.Ok, report.ReasonCode);
+        Assert.Contains("WIG-Schweißen", report.Existing);
+        Assert.DoesNotContain("MAG-Schweißen", report.ExtractedJdSkills);
+    }
+
+    [Fact]
+    public void Classify_GenericPruefung_DoesNotExtractQualitaetspruefung()
+    {
+        var jd = PadJob("""
+            Voraussetzungen
+            Abiturprüfung und Blutprüfung sind in dieser Anzeige nur als Textköder genannt.
+            """);
+
+        var report = _sut.Classify("Kenntnisse\nQualitätsprüfung", jd);
+
+        Assert.DoesNotContain("Qualitätsprüfung", report.ExtractedJdSkills);
+    }
+
+    [Fact]
     public void Classify_Matching_IsCaseInsensitive()
     {
         var cv = """

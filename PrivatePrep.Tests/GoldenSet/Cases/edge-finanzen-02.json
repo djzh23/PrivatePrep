@@ -1,0 +1,18 @@
+{
+  "id": "edge-finanzen-02",
+  "field": "finanzen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Sachbearbeiter Finanzwesen (m/w/d), Vollzeit\nDie Stadt Musterhafen besetzt eine Stelle in der Kämmerei.\nIhr Profil: Abgeschlossene Ausbildung zur Verwaltungsfachangestellten, mindestens 2 Jahre Erfahrung in der kommunalen Buchhaltung.\nDie Eingruppierung erfolgt in die Entgeltgruppe 8 TVöD. Fragen beantwortet Frau Lange.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Verwaltungsfachangestellten" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung in der kommunalen Buchhaltung" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TVöD", "group": "8" },
+    "signals": []
+  }
+}

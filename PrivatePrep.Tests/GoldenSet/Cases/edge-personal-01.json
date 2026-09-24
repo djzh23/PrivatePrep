@@ -1,0 +1,18 @@
+{
+  "id": "edge-personal-01",
+  "field": "personal",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Personalentwickler (m/w/d)\nUnser Unternehmen in Essen sucht Verstärkung für die Personalentwicklung.\nAnforderungen:\n- Abgeschlossenes Hochschulstudium\n- Mindestens 3 Jahre Erfahrung in der Personalentwicklung\n- Gute Deutschkenntnisse\nWir bieten 56.000 Euro Jahresgehalt und 30 Urlaubstage.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Hochschulstudium" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 3 Jahre Erfahrung in der Personalentwicklung" },
+      { "kind": "sprache", "quote": "Gute Deutschkenntnisse" }
+    ],
+    "salaryVerbatim": "56.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

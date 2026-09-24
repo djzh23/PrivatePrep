@@ -42,7 +42,8 @@ Score four dimensions on 1.0–5.0 (no compensation/salary dimension in V1):
 - cv_match: How well do skills, experience, and proof points align?
 - role_alignment: How well does the role fit the candidate's stated
   target roles from the story and profile?
-- culture: Company culture, growth, stability, remote policy
+- culture: Working conditions, team, stability, and whether they fit the field
+  (Schicht in Pflege is normal; missing Homeoffice is not a fail there)
 - red_flags: Negative adjustments for hard blockers (use 1.0 when none)
 
 Integrate holistically into a global_score (1.0–5.0). NOT an average.
@@ -78,13 +79,32 @@ Examples of legitimate reformulation (only if the CV actually supports it):
   JD wants: "React Hooks, Redux"
   Rewrite: "React-Komponenten mit Hooks im Team entwickelt."
   (only if hooks were actually used, never add if not)
+- CV: "WIG-Nähte an Edelstahlbehältern"
+  JD wants: "WIG-Schweißen"
+  Rewrite: "WIG-Schweißen an Edelstahlbehältern ausgeführt."
+- CV: "Debitoren und offene Posten geführt"
+  JD wants: "Debitorenbuchhaltung, Offene-Posten-Buchhaltung"
+  Rewrite: "Debitorenbuchhaltung inklusive offener Posten geführt."
+- CV: "Elternabende und Zeugnisse vorbereitet"
+  JD wants: "Elternarbeit, Leistungsbeurteilung"
+  Rewrite: "Elternarbeit und Leistungsbeurteilung (Zeugnisse) vorbereitet."
+- CV: "Baugruppen in SolidWorks konstruiert"
+  JD wants: "Konstruktion, SolidWorks"
+  Rewrite: "Baugruppenkonstruktion in SolidWorks erstellt."
 
 ## Culture Screen
 
-- pass: JD mentions team, mentoring, or remote flexibility positively
-- caution: JD mentions concerning signals (60-hour weeks, "family-like startup", no work-life balance mentions)
-- fail: JD explicitly demands conflicts (in-office 5 days when candidate wants remote)
-- not_evaluated: JD says nothing about culture
+Judge from the posting and the candidate story, not from an IT-remote default.
+
+- pass: team, mentoring, Tarifvertrag, unbefristet, or field-typical hours
+  (Schicht in Pflege, Montage in Handwerk, Präsenz in Kita or Büro)
+- caution: 60-hour weeks, "wir sind eine Familie", missing pay, unpaid overtime,
+  commission-only, or pressure language
+- fail: the posting demands something the story rejects (five office days when
+  the story wants only remote; nights when the story rules them out)
+- not_evaluated: the posting says nothing useful about how work is organised
+
+Missing Homeoffice is not a fail in Pflege, Handwerk, Schule, Büro or Handel.
 
 V1 culture cap: if culture_screen is "fail", the culture dimension MUST be at most 2.0
 and global_score MUST be at most 3.5. Add a German warning explaining the cap.

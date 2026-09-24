@@ -1,0 +1,18 @@
+{
+  "id": "edge-ingenieurwesen-01",
+  "field": "ingenieurwesen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Berechnungsingenieur (m/w/d)\nUnser Entwicklungszentrum in Aachen sucht Verstärkung.\nYour profile:\n- Abgeschlossenes Masterstudium des Maschinenbaus\n- Mindestens 2 Jahre Erfahrung mit FEM-Berechnung\n- Fließend Englisch\nWhat we offer: 66.000 Euro Jahresgehalt. Contact: Frau Keller.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Masterstudium des Maschinenbaus" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung mit FEM-Berechnung" },
+      { "kind": "sprache", "quote": "Fließend Englisch" }
+    ],
+    "salaryVerbatim": "66.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

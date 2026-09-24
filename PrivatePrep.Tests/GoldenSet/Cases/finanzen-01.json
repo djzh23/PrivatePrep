@@ -1,0 +1,20 @@
+{
+  "id": "finanzen-01",
+  "field": "finanzen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Buchhalter (m/w/d), Vollzeit, Hamburg\nDie Steuerkanzlei Nordblick sucht Verstärkung für die Finanzbuchhaltung.\nAufgaben: Debitorenbuchhaltung, Kreditorenbuchhaltung, Umsatzsteuervoranmeldung und Kontenabstimmung.\nAnforderungen: Abgeschlossene Ausbildung zur Steuerfachangestellten, mindestens 3 Jahre Erfahrung in der Finanzbuchhaltung, Deutsch auf Muttersprachniveau.\nWir bieten 42.000 bis 48.000 Euro Jahresgehalt und 30 Tage Urlaub. Ansprechpartnerin ist Frau Krüger.",
+  "cvText": "Steuerfachangestellte, Abschluss 2018. Fünf Jahre FiBu und Debitoren in einer Kanzlei, DATEV Unternehmen online, Umsatzsteuervoranmeldung. Deutsch Muttersprache.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Steuerfachangestellten", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung in der Finanzbuchhaltung", "status": "met" },
+      { "kind": "sprache", "quote": "Deutsch auf Muttersprachniveau", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "42.000 bis 48.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

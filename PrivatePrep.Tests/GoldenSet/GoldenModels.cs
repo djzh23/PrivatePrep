@@ -30,6 +30,7 @@ public static class GoldenVocabulary
     public static readonly IReadOnlySet<string> Fields = new HashSet<string>
     {
         "pflege", "verwaltung", "vertrieb", "handwerk", "bildung", "it",
+        "finanzen", "ingenieurwesen", "marketing", "personal", "design", "recht",
     };
 
     public static readonly IReadOnlySet<string> Kinds = new HashSet<string>

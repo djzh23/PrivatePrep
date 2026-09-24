@@ -1,0 +1,19 @@
+{
+  "id": "holdout-12",
+  "field": "ingenieurwesen",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Entwicklungsingenieur (m/w/d) Fahrzeugbau - Vollzeit - Stuttgart\nAbgeschlossenes Studium des Maschinenbaus\nMindestens 3 Jahre Erfahrung in der Erprobung\nDeutsch und Englisch verhandlungssicher\nWir bieten 70.000 Euro pro Jahr",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium des Maschinenbaus" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 3 Jahre Erfahrung in der Erprobung" },
+      { "kind": "sprache", "quote": "Deutsch und Englisch verhandlungssicher" }
+    ],
+    "salaryVerbatim": "70.000 Euro pro Jahr",
+    "tariff": null,
+    "signals": []
+  }
+}

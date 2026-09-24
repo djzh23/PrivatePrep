@@ -1,0 +1,38 @@
+{
+  "field": "education",
+  "label": "Bildung / Wissenschaft",
+  "job_titles": [
+    { "name": "Lehrer", "aliases": ["lehrerin", "lehrkraft"] },
+    { "name": "Erzieher", "aliases": ["erzieherin"] },
+    { "name": "Dozent", "aliases": ["dozentin"] },
+    { "name": "Klassenlehrer", "aliases": ["klassenlehrerin"] }
+  ],
+  "skills": [
+    { "name": "Unterrichtsvorbereitung", "aliases": ["unterrichtsplanung", "stundenplanung"] },
+    { "name": "Klassenleitung", "aliases": [] },
+    { "name": "Differenzierung", "aliases": ["binnendifferenzierung"] },
+    { "name": "Leistungsbeurteilung", "aliases": ["benotung", "zeugnisse"] },
+    { "name": "Elternarbeit", "aliases": ["elterngespräche", "elterngespraeche", "elternabend"] },
+    { "name": "Inklusion", "aliases": ["inklusive pädagogik", "inklusive paedagogik"] },
+    { "name": "Förderplanung", "aliases": ["foerderplanung", "förderplan", "foerderplan"] },
+    { "name": "Classroom Management", "aliases": ["klassenführung", "klassenfuehrung"] },
+    { "name": "Lehramtsstudium", "aliases": ["erstes staatsexamen", "zweites staatsexamen"] },
+    { "name": "Referendariat", "aliases": ["vorbereitungsdienst"] },
+    { "name": "AEVO", "aliases": ["ausbildereignung", "ausbilderschein"] },
+    { "name": "Erwachsenenbildung", "aliases": ["erwachsenenbildung"] },
+    { "name": "Bewerbungstraining", "aliases": [] },
+    { "name": "EDV-Schulung", "aliases": ["it-schulung", "anwenderschulung"] },
+    { "name": "DaZ", "aliases": ["deutsch als zweitsprache", "daf"] },
+    { "name": "Moodle", "aliases": [] },
+    { "name": "IServ", "aliases": [] },
+    { "name": "WebUntis", "aliases": ["untis"] },
+    { "name": "Lehrplan", "aliases": ["bildungsplan", "kerncurriculum"] },
+    { "name": "Praktikumsbetreuung", "aliases": [] },
+    { "name": "Wissenschaftliches Arbeiten", "aliases": ["publizieren"] },
+    { "name": "Drittmittel", "aliases": ["förderantrag", "foerderantrag", "drittmittelantrag"] },
+    { "name": "Lehre an Hochschule", "aliases": ["lehrauftrag", "seminarleitung"] },
+    { "name": "Elementarpädagogik", "aliases": ["elementarpaedagogik"] },
+    { "name": "U3-Betreuung", "aliases": ["krippe"] },
+    { "name": "Beobachtung und Dokumentation", "aliases": ["entwicklungsdokumentation", "portfolio"] }
+  ]
+}

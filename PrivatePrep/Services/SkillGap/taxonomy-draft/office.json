@@ -1,0 +1,43 @@
+{
+  "field": "office",
+  "label": "Verwaltung / Büro",
+  "job_titles": [
+    { "name": "Teamassistenz", "aliases": ["assistenz der geschäftsführung", "assistenz der geschaeftsfuehrung", "vorstandsassistenz", "chefsekretariat"] },
+    { "name": "Sachbearbeitung", "aliases": ["sachbearbeiter", "fallbearbeitung"] }
+  ],
+  "skills": [
+    { "name": "Microsoft Office", "aliases": ["ms office", "microsoft 365", "office 365"] },
+    { "name": "Microsoft Word", "aliases": ["ms word", "word"] },
+    { "name": "Excel", "aliases": ["microsoft excel"] },
+    { "name": "Outlook", "aliases": ["microsoft outlook", "ms outlook"] },
+    { "name": "PowerPoint", "aliases": ["ms powerpoint", "microsoft powerpoint"] },
+    { "name": "Microsoft Teams", "aliases": ["ms teams"] },
+    { "name": "SharePoint", "aliases": ["microsoft sharepoint"] },
+    { "name": "10-Finger-System", "aliases": ["10-finger-schreiben", "blindschreiben", "touch typing"] },
+    { "name": "Terminplanung", "aliases": ["kalenderführung", "kalenderfuehrung", "terminorganisation", "terminkoordination"] },
+    { "name": "Reisekostenabrechnung", "aliases": ["reisekosten", "dienstreisen"] },
+    { "name": "Protokollführung", "aliases": ["protokollfuehrung", "protokolle", "sitzungsprotokoll"] },
+    { "name": "Korrespondenz", "aliases": ["schriftverkehr", "geschäftskorrespondenz", "geschaeftskorrespondenz"] },
+    { "name": "Empfang", "aliases": ["rezeption", "telefonzentrale", "besucherempfang"] },
+    { "name": "Büro-Einkauf", "aliases": ["buero-einkauf", "bestellwesen", "büromaterialbeschaffung", "buero-beschaffung"] },
+    { "name": "Buchhaltung", "aliases": ["fibu", "finanzbuchhaltung", "kontoauswertung"] },
+    { "name": "Aktenführung", "aliases": ["aktenfuehrung", "aktenverwaltung", "vorgangsbearbeitung", "registratur"] },
+    { "name": "eAkte", "aliases": ["e-akte", "elektronische akte"] },
+    { "name": "DMS", "aliases": ["dokumentenmanagement", "dokumentenmanagementsystem"] },
+    { "name": "Poststelle", "aliases": ["posteingang", "postausgang"] },
+    { "name": "Bescheidwesen", "aliases": ["bescheid", "verwaltungsakt"] },
+    { "name": "Meldewesen", "aliases": ["einwohnermeldeamt", "meldeangelegenheiten"] },
+    { "name": "Bürgerservice", "aliases": ["buergerservice", "bürgeramt", "buergeramt", "bürgerbüro", "buergerbuero", "kundenzentrum"] },
+    { "name": "Inventarverwaltung", "aliases": ["inventar", "anlagenverzeichnis"] },
+    { "name": "Ablage", "aliases": ["schriftgutverwaltung"] },
+    { "name": "Diktat", "aliases": ["phonodiktat"] },
+    { "name": "SAP", "aliases": ["sap erp", "sap s/4hana", "sap ecc"] },
+    { "name": "DATEV", "aliases": ["datev unternehmen online", "datev rewe", "steuerberatersoftware"] },
+    { "name": "VBA", "aliases": [] },
+    { "name": "Microsoft Access", "aliases": ["ms access"] },
+    { "name": "Power Automate", "aliases": ["microsoft flow"] },
+    { "name": "Jira", "aliases": ["atlassian jira"] },
+    { "name": "Confluence", "aliases": [] },
+    { "name": "Datenschutz", "aliases": ["dsgvo", "datengeheimnis"] }
+  ]
+}

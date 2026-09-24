@@ -1,0 +1,20 @@
+{
+  "id": "marketing-01",
+  "field": "marketing",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Online-Marketing-Manager (m/w/d), Vollzeit, Köln\nUnsere Agentur sucht Verstärkung für SEA und Content.\nAufgaben: Google Ads, Newsletter-Marketing und Abstimmung mit dem Vertrieb.\nAnforderungen: Abgeschlossenes Studium der Betriebswirtschaft oder eine vergleichbare Qualifikation, mindestens 2 Jahre Erfahrung im Online-Marketing, verhandlungssicheres Englisch.\nWir bieten 48.000 Euro Jahresgehalt. Ansprechpartnerin ist Frau Holm.",
+  "cvText": "B.A. Betriebswirtschaft. Drei Jahre Google Ads und Newsletter in einer Agentur. Englisch C1.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Betriebswirtschaft oder eine vergleichbare Qualifikation", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung im Online-Marketing", "status": "met" },
+      { "kind": "sprache", "quote": "verhandlungssicheres Englisch", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "48.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

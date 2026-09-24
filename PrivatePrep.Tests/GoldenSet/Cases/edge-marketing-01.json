@@ -1,0 +1,18 @@
+{
+  "id": "edge-marketing-01",
+  "field": "marketing",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Social-Media-Manager (m/w/d)\nDie Marke sucht Verstärkung in München.\nAnforderungen:\n- Abgeschlossenes Studium der Kommunikationswissenschaft\n- Mindestens 2 Jahre Erfahrung im Community Management\n- Fließend Deutsch\nWir bieten 44.000 Euro Jahresgehalt und 30 Urlaubstage.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossenes Studium der Kommunikationswissenschaft" },
+      { "kind": "berufserfahrung", "quote": "Mindestens 2 Jahre Erfahrung im Community Management" },
+      { "kind": "sprache", "quote": "Fließend Deutsch" }
+    ],
+    "salaryVerbatim": "44.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

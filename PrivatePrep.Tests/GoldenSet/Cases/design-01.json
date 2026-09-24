@@ -1,0 +1,20 @@
+{
+  "id": "design-01",
+  "field": "design",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Grafikdesigner (m/w/d), Vollzeit, Hamburg\nDie Agentur sucht Verstärkung für Print und Marke.\nAufgaben: Layout in InDesign, Bildbearbeitung in Photoshop und Pflege des Corporate Design.\nAnforderungen: Abgeschlossene Ausbildung zur Mediengestalterin Digital und Print, mindestens 3 Jahre Erfahrung im Grafikdesign, Deutsch auf Muttersprachniveau.\nWir bieten 44.000 Euro Jahresgehalt. Ansprechpartnerin ist Frau Lorenz.",
+  "cvText": "Mediengestalterin Digital und Print, Gesellenprüfung 2019. Vier Jahre InDesign, Photoshop und Corporate Design in einer Agentur. Deutsch Muttersprache.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "abschluss", "quote": "Abgeschlossene Ausbildung zur Mediengestalterin Digital und Print", "status": "met" },
+      { "kind": "berufserfahrung", "quote": "mindestens 3 Jahre Erfahrung im Grafikdesign", "status": "met" },
+      { "kind": "sprache", "quote": "Deutsch auf Muttersprachniveau", "status": "met" },
+      { "kind": "arbeitszeit", "quote": "Vollzeit", "status": "unclear" }
+    ],
+    "salaryVerbatim": "44.000 Euro Jahresgehalt",
+    "tariff": null,
+    "signals": []
+  }
+}

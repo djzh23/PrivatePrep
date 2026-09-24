@@ -1,0 +1,18 @@
+{
+  "id": "edge-personal-02",
+  "field": "personal",
+  "origin": "synthetic",
+  "language": "de",
+  "isJobPosting": true,
+  "jobDescription": "Sachbearbeiter Entgelt (m/w/d), Vollzeit\nDie Stadtwerke suchen Verstärkung für die Entgeltabrechnung.\nIhr Profil: Abgeschlossene kaufmännische Ausbildung, mindestens 2 Jahre Erfahrung in der Entgeltabrechnung.\nDie Eingruppierung erfolgt in die Entgeltgruppe 8 TVöD. Fragen beantwortet Frau Holm.",
+  "expected": {
+    "mustHaves": [
+      { "kind": "arbeitszeit", "quote": "Vollzeit" },
+      { "kind": "abschluss", "quote": "Abgeschlossene kaufmännische Ausbildung" },
+      { "kind": "berufserfahrung", "quote": "mindestens 2 Jahre Erfahrung in der Entgeltabrechnung" }
+    ],
+    "salaryVerbatim": null,
+    "tariff": { "agreement": "TVöD", "group": "8" },
+    "signals": []
+  }
+}
