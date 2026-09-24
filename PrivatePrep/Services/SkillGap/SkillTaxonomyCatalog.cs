@@ -94,8 +94,14 @@ public sealed class SkillTaxonomyCatalog
         return result;
     }
 
+    // MSBuild's default embedded-resource manifest name replaces characters that are not valid in a
+    // C# identifier with '_' when it builds the dotted resource name from the folder path, so the
+    // "taxonomy-draft" folder becomes "...SkillGap.taxonomy_draft.design.json" at runtime - with an
+    // underscore, not the hyphen the folder is actually named with. Checking for the hyphen here
+    // silently matched zero resources and made every analyze call throw (LoadFieldFiles throws when
+    // this returns nothing for anything).
     private static bool IsFieldTaxonomyResource(string resourceName) =>
-        resourceName.Contains("taxonomy-draft", StringComparison.OrdinalIgnoreCase)
+        resourceName.Contains("taxonomy_draft", StringComparison.OrdinalIgnoreCase)
         && resourceName.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
 
     private static SkillTaxonomyCatalog Merge(IReadOnlyList<SkillTaxonomyEntry> left, IReadOnlyList<SkillTaxonomyEntry> right)
