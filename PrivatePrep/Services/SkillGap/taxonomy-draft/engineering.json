@@ -25,7 +25,7 @@
     { "name": "Toleranzmanagement", "aliases": ["toleranzrechnung", "toleranzanalyse"] },
     { "name": "Wertanalyse", "aliases": ["value engineering"] },
     { "name": "Projektleitung Technik", "aliases": ["technische projektleitung"] },
-    { "name": "Bauausschreibung", "aliases": ["leistungsverzeichnis", "lv", "vob/a"] },
+    { "name": "Bauausschreibung", "aliases": ["leistungsverzeichnis", "vob/a"] },
     { "name": "Bauleitung", "aliases": ["objektüberwachung", "objektueberwachung"] },
     { "name": "Statik", "aliases": ["tragwerksplanung"] },
     { "name": "Elektrokonstruktion", "aliases": ["elektrodesign", "schaltplanerstellung", "stromlaufplan"] },
