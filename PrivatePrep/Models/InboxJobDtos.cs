@@ -27,6 +27,8 @@ public sealed record InboxJobResponse(
     DateTime? AnalyzedAt,
     Guid? AnalysisReportId);
 
+public sealed record InboxCountResponse(int Count, string Status);
+
 /// <summary>Compact list shape: no full RawText, just a short preview.</summary>
 public sealed record InboxJobListItemResponse(
     Guid Id,

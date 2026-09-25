@@ -14,8 +14,15 @@ public interface IInboxService
     /// </summary>
     Task<InboxJob> CreateOrUpdateAsync(string userId, CreateInboxJobRequest request, CancellationToken ct);
 
-    /// <summary>Newest first (ExtractedAt DESC). limit is clamped to [1, 100].</summary>
+    /// <summary>
+    /// Newest first (ExtractedAt DESC). limit is clamped to [1, 100].
+    /// <see cref="InboxJob.RawText"/> is a short preview only — use
+    /// <see cref="GetByIdForUserAsync"/> for the full posting.
+    /// </summary>
     Task<IReadOnlyList<InboxJob>> ListForUserAsync(string userId, InboxJobStatus? status, int limit, CancellationToken ct);
+
+    /// <summary>Count of this user's jobs with the given status (no row payload).</summary>
+    Task<int> CountForUserAsync(string userId, InboxJobStatus status, CancellationToken ct);
 
     /// <summary>Null if the job does not exist or does not belong to this user (one outcome, not two errors).</summary>
     Task<InboxJob?> GetByIdForUserAsync(string userId, Guid id, CancellationToken ct);

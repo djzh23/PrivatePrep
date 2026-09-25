@@ -188,6 +188,34 @@ public sealed class InboxServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task List_TruncatesRawTextToAPreview()
+    {
+        var sut = CreateSut();
+        var longText = new string('x', 400);
+        await sut.CreateOrUpdateAsync("user_1", Request(rawText: longText), CancellationToken.None);
+
+        var listed = Assert.Single(await sut.ListForUserAsync("user_1", null, 50, CancellationToken.None));
+        var full = await sut.GetByIdForUserAsync("user_1", listed.Id, CancellationToken.None);
+
+        Assert.Equal(InboxService.RawTextPreviewLength, listed.RawText.Length);
+        Assert.Equal(longText[..InboxService.RawTextPreviewLength], listed.RawText);
+        Assert.Equal(400, full!.RawText.Length);
+    }
+
+    [Fact]
+    public async Task CountForUser_OnlyCountsTheRequestedStatus()
+    {
+        var sut = CreateSut();
+        var analyzed = await sut.CreateOrUpdateAsync("user_1", Request(sourceUrl: "https://example.com/a"), CancellationToken.None);
+        await sut.CreateOrUpdateAsync("user_1", Request(sourceUrl: "https://example.com/b"), CancellationToken.None);
+        await SetStatusAsync(analyzed.Id, InboxJobStatus.Analyzed);
+
+        Assert.Equal(1, await sut.CountForUserAsync("user_1", InboxJobStatus.New, CancellationToken.None));
+        Assert.Equal(1, await sut.CountForUserAsync("user_1", InboxJobStatus.Analyzed, CancellationToken.None));
+        Assert.Equal(0, await sut.CountForUserAsync("user_2", InboxJobStatus.New, CancellationToken.None));
+    }
+
+    [Fact]
     public async Task CountActive_OnlyCountsNewStatus()
     {
         var sut = CreateSut();

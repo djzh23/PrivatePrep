@@ -98,6 +98,31 @@ public sealed class InboxController(
         return Ok(jobs.Select(ToListItemResponse).ToList());
     }
 
+    [HttpGet("count")]
+    public async Task<IActionResult> Count([FromQuery] string? status, CancellationToken ct)
+    {
+        var userId = userContext.UserId;
+        if (userContext.IsAnonymous || string.IsNullOrEmpty(userId))
+            return Unauthorized(new { error = "auth_required", message = "Bitte anmelden." });
+
+        var parsedStatus = InboxJobStatus.New;
+        if (!string.IsNullOrWhiteSpace(status))
+        {
+            if (!Enum.TryParse<InboxJobStatus>(status, ignoreCase: true, out var s))
+            {
+                return BadRequest(new
+                {
+                    error = "invalid_status",
+                    message = "Ungueltiger Status. Erlaubt sind New, Analyzed oder Archived.",
+                });
+            }
+            parsedStatus = s;
+        }
+
+        var count = await inboxService.CountForUserAsync(userId, parsedStatus, ct).ConfigureAwait(false);
+        return Ok(new InboxCountResponse(count, parsedStatus.ToString()));
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
@@ -237,5 +262,7 @@ public sealed class InboxController(
         job.ExtractedAt,
         job.AnalyzedAt,
         job.AnalysisReportId,
-        job.RawText.Length <= 200 ? job.RawText : job.RawText[..200]);
+        job.RawText.Length <= InboxService.RawTextPreviewLength
+            ? job.RawText
+            : job.RawText[..InboxService.RawTextPreviewLength]);
 }

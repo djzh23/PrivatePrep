@@ -7,6 +7,8 @@ namespace PrivatePrep.Services.Inbox;
 
 public sealed class InboxService(PrivatePrepDbContext db) : IInboxService
 {
+    public const int RawTextPreviewLength = 200;
+
     public async Task<InboxJob> CreateOrUpdateAsync(string userId, CreateInboxJobRequest request, CancellationToken ct)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(userId);
@@ -63,10 +65,52 @@ public sealed class InboxService(PrivatePrepDbContext db) : IInboxService
         var rows = await query
             .OrderByDescending(x => x.ExtractedAt)
             .Take(effectiveLimit)
+            .Select(x => new
+            {
+                x.Id,
+                x.UserId,
+                x.Title,
+                x.Company,
+                x.Location,
+                x.SourceUrl,
+                x.SourceKind,
+                Preview = x.RawText.Length <= RawTextPreviewLength
+                    ? x.RawText
+                    : x.RawText.Substring(0, RawTextPreviewLength),
+                x.Status,
+                x.ExtractedAt,
+                x.AnalyzedAt,
+                x.AnalysisReportId,
+                x.CreatedAt,
+                x.UpdatedAt,
+            })
             .ToListAsync(ct)
             .ConfigureAwait(false);
 
-        return rows.Select(ToDomain).ToList();
+        return rows.Select(x => new InboxJob(
+            x.Id,
+            x.UserId,
+            x.Title,
+            x.Company,
+            x.Location,
+            x.SourceUrl,
+            x.SourceKind,
+            x.Preview,
+            x.Status,
+            x.ExtractedAt,
+            x.AnalyzedAt,
+            x.AnalysisReportId,
+            x.CreatedAt,
+            x.UpdatedAt)).ToList();
+    }
+
+    public Task<int> CountForUserAsync(string userId, InboxJobStatus status, CancellationToken ct)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+        return db.InboxJobs
+            .AsNoTracking()
+            .Where(x => x.UserId == userId && x.Status == status)
+            .CountAsync(ct);
     }
 
     public async Task<InboxJob?> GetByIdForUserAsync(string userId, Guid id, CancellationToken ct)
@@ -121,14 +165,8 @@ public sealed class InboxService(PrivatePrepDbContext db) : IInboxService
         return true;
     }
 
-    public Task<int> CountActiveForUserAsync(string userId, CancellationToken ct)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
-        return db.InboxJobs
-            .AsNoTracking()
-            .Where(x => x.UserId == userId && x.Status == InboxJobStatus.New)
-            .CountAsync(ct);
-    }
+    public Task<int> CountActiveForUserAsync(string userId, CancellationToken ct) =>
+        CountForUserAsync(userId, InboxJobStatus.New, ct);
 
     public Task<int> CountRecentForUserAsync(string userId, TimeSpan window, CancellationToken ct)
     {

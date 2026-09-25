@@ -176,6 +176,42 @@ public class InboxControllerTests
     }
 
     [Fact]
+    public async Task Count_DefaultsToNewAndReturnsTheServiceCount()
+    {
+        SignedInAs("user_abc");
+        _inboxMock.Setup(s => s.CountForUserAsync("user_abc", InboxJobStatus.New, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(4);
+
+        var result = await CreateController().Count(null, CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        var body = Assert.IsType<InboxCountResponse>(ok.Value);
+        Assert.Equal(4, body.Count);
+        Assert.Equal(nameof(InboxJobStatus.New), body.Status);
+    }
+
+    [Fact]
+    public async Task Count_InvalidStatus_Returns400()
+    {
+        SignedInAs("user_abc");
+
+        var result = await CreateController().Count("not_a_status", CancellationToken.None);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        _inboxMock.Verify(s => s.CountForUserAsync(It.IsAny<string>(), It.IsAny<InboxJobStatus>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Count_NotSignedIn_Returns401()
+    {
+        Anonymous();
+
+        var result = await CreateController().Count("New", CancellationToken.None);
+
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
     public async Task List_InvalidStatus_Returns400()
     {
         SignedInAs("user_abc");
