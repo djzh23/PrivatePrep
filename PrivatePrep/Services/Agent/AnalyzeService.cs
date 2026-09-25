@@ -64,6 +64,27 @@ public sealed partial class AnalyzeService(
         var global = ClampScore(parsed.GlobalScore);
         var culture = ClampScore(parsed.Culture);
 
+        // V2 fields. All optional: a V1-shaped LLM response (or a retry that dropped them) leaves
+        // these null/empty rather than failing the whole analysis.
+        var verdictHeadline = NullIfBlank(parsed.VerdictHeadline) is { } vh ? PlainGerman(vh) : null;
+        var verdictParagraph = NullIfBlank(parsed.VerdictParagraph) is { } vp ? PlainGerman(vp) : null;
+        var dimensionReasons = parsed.DimensionReasons is null
+            ? null
+            : new DimensionReasons(
+                PlainGerman(parsed.DimensionReasons.CvMatch),
+                PlainGerman(parsed.DimensionReasons.RoleAlignment),
+                PlainGerman(parsed.DimensionReasons.Culture),
+                PlainGerman(parsed.DimensionReasons.RedFlags));
+        var sectionFindings = parsed.SectionFindings
+            .Where(f => !string.IsNullOrWhiteSpace(f.Section) && !string.IsNullOrWhiteSpace(f.Observation))
+            .Select(f => new SectionFinding(f.Section, PlainGerman(f.Label), PlainGerman(f.Observation), PlainGerman(f.Action)))
+            .ToList();
+        var actionPlan = parsed.ActionPlan
+            .Where(a => !string.IsNullOrWhiteSpace(a.Action))
+            .OrderBy(a => a.Priority)
+            .Select(a => new ActionPlanItem(a.Priority, PlainGerman(a.Action), a.EffortMinutes, NormalizeImpact(a.Impact)))
+            .ToList();
+
         if (cultureScreen == "fail")
         {
             if (culture > CultureFailDimensionCap)
@@ -85,9 +106,21 @@ public sealed partial class AnalyzeService(
             .Select(b => b with { Reasoning = PlainGerman(b.Reasoning) })
             .ToList();
 
+        // V2 narrative fields are additional LLM claims about the candidate, so they go through the
+        // same FactGate check as bullets: an invented skill in verdict_paragraph or a section
+        // finding is exactly the failure mode FactGate exists to catch.
         var generatedText = string.Join(
             "\n",
-            [roleSummary, .. warnings, .. bullets.Select(b => $"{b.OriginalBullet}\n{b.RewrittenBullet}\n{b.Reasoning}")]);
+            [
+                roleSummary,
+                verdictHeadline ?? "",
+                verdictParagraph ?? "",
+                .. warnings,
+                .. DimensionReasonSentences(dimensionReasons),
+                .. sectionFindings.SelectMany(f => new[] { f.Observation, f.Action }),
+                .. actionPlan.Select(a => a.Action),
+                .. bullets.Select(b => $"{b.OriginalBullet}\n{b.RewrittenBullet}\n{b.Reasoning}"),
+            ]);
 
         var allowed = gap.Existing.Concat(gap.SupportedByResume).ToList();
         var factResult = factGate.Verify(
@@ -126,7 +159,35 @@ public sealed partial class AnalyzeService(
             [],
             used.ModelUsed,
             used.InputTokens,
-            used.OutputTokens);
+            used.OutputTokens,
+            DimensionReasons: dimensionReasons,
+            VerdictHeadline: verdictHeadline,
+            VerdictParagraph: verdictParagraph,
+            SectionFindings: sectionFindings,
+            ActionPlan: actionPlan);
+    }
+
+    private static IEnumerable<string> DimensionReasonSentences(DimensionReasons? reasons)
+    {
+        if (reasons is null)
+            yield break;
+        yield return reasons.CvMatch;
+        yield return reasons.RoleAlignment;
+        yield return reasons.Culture;
+        yield return reasons.RedFlags;
+    }
+
+    private static string? NullIfBlank(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? null : value;
+
+    private static string NormalizeImpact(string raw)
+    {
+        var value = raw.Trim().ToLowerInvariant();
+        return value switch
+        {
+            "high" or "medium" or "low" => value,
+            _ => "medium",
+        };
     }
 
     // Users do not know the abbreviation, and the model uses it despite the prompt rule.

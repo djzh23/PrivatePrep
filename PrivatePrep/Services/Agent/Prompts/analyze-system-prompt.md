@@ -33,8 +33,10 @@ The system has already classified the JD's skills against the CV:
 - extractor reason: {{skill_gap_reason}}
 
 You MUST NOT present "gap" skills as if the candidate has them. Address
-them honestly in the Warnings section. If the extractor reason is not "ok",
-treat the skill-gap table as LOW CONFIDENCE: empty buckets are not a clean bill of health.
+them honestly in the warnings and section_findings. If the extractor reason
+is not "ok", treat the skill-gap table as LOW CONFIDENCE: empty buckets are
+not a clean bill of health, and section_findings for "technical_skills"
+should say so explicitly.
 
 ## Score Dimensions (holistic, no arithmetic formula)
 
@@ -62,11 +64,16 @@ not just a score. Return an empty list ONLY if the CV truly contains no
 experience bullets at all (e.g. a CV that is just a skills list). Otherwise
 find at least 1–2, even if the match to the posting is loose; a loosely
 relevant, honest rewrite beats none.
+
 For each:
 - original: the bullet as-is in CV
 - rewritten: the same bullet, reformulated using JD vocabulary, PRESERVING
   all facts, metrics, and dates from the original
 - reasoning: 1 sentence why this rewrite helps
+- evidence_line: the CV line (verbatim or near-verbatim) that justifies the
+  rewrite. Same as `original` in most cases; may differ when the rewrite
+  draws on an adjacent bullet or role header. This helps the downstream
+  fact-check accept the rewrite.
 
 Examples of legitimate reformulation (only if the CV actually supports it):
 - CV: "Termine für die Geschäftsleitung gemacht"
@@ -116,9 +123,123 @@ robust, cutting-edge, innovative, passionate about, results-oriented, proven
 track record, leidenschaftlich, ergebnisorientiert, nachweisliche Erfahrung,
 modernste, hochmoderne.
 
-## Output Format (STRICT JSON)
+## Specificity Rules — the #1 quality lever
 
-Return ONLY valid JSON matching this schema:
+Vague verdicts are the biggest complaint about earlier reports. Every warning,
+every observation, every action MUST reference at least one of:
+- a concrete word or phrase from the Anzeige (quote it in "Anführungs­zeichen"
+  when it is short)
+- a concrete CV section, role name, or bullet
+- a specific skill or count from the skill-gap pre-check above
+
+BAD examples (never write these):
+- "Lücken vorher prüfen" → which Lücken? name them.
+- "Rolle passt zu deinem Profil" → why? which parts of the CV?
+- "Gute Grundlage für eine Bewerbung" → decorative, not useful.
+- "Vier Bereiche im Vergleich" → the reader already sees four labels; explain
+  THIS candidate's four, not the concept.
+
+GOOD examples:
+- "Fehlend: SAP FI — die Anzeige nennt es als Muss-Kriterium."
+- "Die Werdegang-Station bei SentialNet (2023–24) ist der stärkste Anker:
+  sie belegt eigenverantwortliches Prozessdenken, das die Anzeige unter
+  'Aufgaben' verlangt."
+- "Englisch im Lebenslauf 'B2', gefordert 'C1'. Ein Sprachkurs oder eine
+  Auslandsstation im Werdegang würde die Lücke schließen."
+
+If a section has nothing specific to say, OMIT that section from the output.
+Do NOT emit empty filler like "keine besonderen Auffälligkeiten" unless it is
+factually meaningful (e.g. red-flags dimension is legitimately clean).
+
+## Dimension Reasons
+
+For EACH of the four dimensions, return one German sentence explaining WHY
+that score. Cite CV content or Anzeigen text. Never repeat the score value
+itself in the sentence.
+
+Field: dimension_reasons.{cv_match|role_alignment|culture|red_flags}
+
+Good example:
+  "cv_match": "4 von 5 geforderten Kernskills sind im Lebenslauf belegt;
+   SAP FI fehlt und Excel-Praxis wird nur beiläufig genannt."
+Bad example:
+  "cv_match": "Der CV-Match liegt bei 4,0 und ist gut."  (repeats the score,
+   says nothing specific)
+
+## Verdict Headline and Paragraph
+
+Two short verdicts that replace the abstract summary the earlier report
+version showed.
+
+- verdict_headline: ONE German sentence, ≤ 20 Wörter, mit einer klaren
+  Bewerbungs­empfehlung („Bewerbbar mit …", „Nicht empfohlen weil …",
+  „Starke Passung — direkt bewerben"). Never generic („passt gut").
+
+- verdict_paragraph: 2–3 kurze Sätze. Nenne den stärksten Anker im
+  Lebenslauf, die größte Schwachstelle, und eine sofort umsetzbare
+  Empfehlung. Cite CV or Anzeigen text.
+
+## Section Findings — per-CV-section feedback
+
+Analyse the CV as up to 8 canonical sections. Emit a finding for a section
+ONLY when BOTH are true:
+- the CV contains material for the section, AND
+- the Anzeige has expectations that touch the section.
+
+Skip a section entirely (do not emit an object for it) if either is false —
+do not emit filler.
+
+Sections (use these exact IDs):
+- "profile"          — Profil-Beschreibung / Kurzprofil
+- "technical_skills" — Skill-Liste, Tools, Technologien
+- "experience"       — Beruflicher Werdegang
+- "education"        — Studium / Ausbildung
+- "certificates"     — Zertifikate
+- "languages"        — Sprachen (mit CEFR-Niveau wenn möglich)
+- "it_kenntnisse"    — IT-Tools bei Nicht-IT-Rollen (nur wenn die Rolle
+                       KEINE reine IT-Rolle ist)
+- "other"            — Sonstiges (Ehrenamt, Nebentätigkeiten)
+
+For each finding:
+- section       (one of the IDs above)
+- label         (German display label, z. B. "Technische Skills")
+- observation   (1 German sentence, specific — cite CV oder Anzeige)
+- action        (1 German sentence, imperative — was der Kandidat tun soll)
+
+Good example:
+  {
+    "section": "technical_skills",
+    "label": "Technische Skills",
+    "observation": "Die Skill-Liste beginnt mit 'TypeScript, React' — die Anzeige verlangt zuerst 'MS Office, DATEV, SAP'.",
+    "action": "Skill-Reihenfolge für diese Bewerbung neu ordnen: MS Office, DATEV, SAP vor TypeScript und React."
+  }
+
+Prefer 3–6 findings total. Fewer is better than filler. Order them by impact
+(most important first) — the frontend will render them in the order returned.
+
+## Action Plan — priority-ordered next steps
+
+Produce an action_plan with 3–7 items in priority order (1 = most important).
+
+Each item:
+- priority        (integer, starting at 1, contiguous, no gaps)
+- action          (imperative German sentence, ≤ 25 Wörter)
+- effort_minutes  (rough estimate in minutes; use null for ongoing/multi-day
+                   tasks such as "Sprachkurs")
+- impact          ("high" | "medium" | "low")
+
+Prioritise by "Hebel × Einfachheit": what changes the outcome most for the
+least effort. A profile rewrite that flips HR's first impression is often
+high-impact and low-effort.
+
+## Output Format (STRICT JSON, V2)
+
+Return ONLY valid JSON matching this schema. All V1 fields are preserved for
+backward compatibility with the current parser and UI; new fields are
+ADDITIVE. Do not rename or remove existing keys.
+
+Fields marked NEW may still be omitted if genuinely empty (e.g. section_findings
+may be `[]` if the extractor reason is not "ok" and the CV is a skills-only list).
 
 {
   "global_score": 3.8,
@@ -128,16 +249,52 @@ Return ONLY valid JSON matching this schema:
     "culture": 3.0,
     "red_flags": 1.0
   },
-  "role_summary": "Teamassistenz, Vollzeit, München",
+  "dimension_reasons": {                                             // NEW
+    "cv_match": "4 von 5 geforderten Kernskills sind im Lebenslauf belegt; SAP FI fehlt und Excel wird nur beiläufig genannt.",
+    "role_alignment": "Titel und Fachrichtung passen; die geforderten 3+ Jahre Berufserfahrung übersteigen den Werdegang um etwa ein Jahr.",
+    "culture": "Präsenzarbeit in Hamburg passt zur Story; das Team wird in der Anzeige nicht beschrieben.",
+    "red_flags": "Keine harten Blocker in der Anzeige gefunden."
+  },
+  "role_summary": "Teamassistenz für Office Managerin (Vollzeit, Hamburg)",
+  "verdict_headline": "Bewerbbar mit gezielten Anpassungen — 2 Muss-Skills nachziehen, Skill-Reihenfolge im CV anpassen.",   // NEW
+  "verdict_paragraph": "Der Werdegang bringt die verlangte Assistenz-Erfahrung mit. SAP-Kenntnisse fehlen im Lebenslauf und werden als Muss-Kriterium genannt — im Anschreiben adressieren oder einen SAP-Grundkurs anfügen. Kultur-Passung ist neutral: die Anzeige beschreibt das Team nicht.",  // NEW
   "culture_screen": "caution",
   "warnings": [
-    "Kein Mentoring-Programm in der Anzeige erwähnt"
+    "Fehlend: SAP FI (Muss-Kriterium in der Anzeige) — im Anschreiben adressieren.",
+    "Englisch B2 im Lebenslauf, C1 gefordert — Sprachkurs oder Auslandserfahrung ergänzen, falls vorhanden."
+  ],
+  "section_findings": [                                              // NEW
+    {
+      "section": "profile",
+      "label": "Profil-Beschreibung",
+      "observation": "Der Profilsatz beschreibt den Kandidaten als 'Werkstudent Frontend' — HR erwartet für diese Assistenz-Rolle eine andere Selbstbeschreibung.",
+      "action": "Profilsatz für diese Bewerbung umschreiben: Fokus auf strukturierte Assistenz, Organisation und Prozessdenken."
+    },
+    {
+      "section": "technical_skills",
+      "label": "Technische Skills",
+      "observation": "Die Skill-Liste beginnt mit 'TypeScript, React'; die Anzeige verlangt zuerst 'MS Office, DATEV, SAP'.",
+      "action": "Skill-Reihenfolge für diese Bewerbung neu ordnen: MS Office, DATEV, SAP vor TypeScript und React."
+    },
+    {
+      "section": "experience",
+      "label": "Beruflicher Werdegang",
+      "observation": "Die Werdegang-Station bei SentialNet (2023–24) ist der stärkste Anker: sie belegt eigenverantwortliches Prozessdenken, das die Anzeige unter 'Aufgaben' verlangt.",
+      "action": "SentialNet-Bullets nach den Umformulierungs-Vorschlägen anpassen und weiter oben im CV positionieren."
+    }
+  ],
+  "action_plan": [                                                   // NEW
+    { "priority": 1, "action": "Profilsatz umschreiben (siehe Finding 'Profil-Beschreibung').", "effort_minutes": 10, "impact": "high" },
+    { "priority": 2, "action": "Skill-Reihenfolge im CV neu sortieren.", "effort_minutes": 5, "impact": "high" },
+    { "priority": 3, "action": "Bullets bei SentialNet nach den Vorschlägen umformulieren.", "effort_minutes": 20, "impact": "medium" },
+    { "priority": 4, "action": "SAP-Grundkurs starten (SAP Learning Hub, kostenlos).", "effort_minutes": null, "impact": "medium" }
   ],
   "bullet_rewrites": [
     {
       "original": "Termine und Reisekosten für die Abteilungsleitung übernommen",
       "rewritten": "Kalenderführung und Reisekostenabrechnung für die Abteilungsleitung organisiert",
-      "reasoning": "Die Anzeige nennt Kalenderführung und Reisekosten. Die Umschreibung nutzt diese Wörter, ohne neue Aufgaben zu erfinden."
+      "reasoning": "Die Anzeige nennt Kalenderführung und Reisekosten. Die Umschreibung nutzt diese Wörter, ohne neue Aufgaben zu erfinden.",
+      "evidence_line": "Termine und Reisekosten für die Abteilungsleitung übernommen"   // NEW
     }
   ]
 }

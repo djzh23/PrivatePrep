@@ -241,6 +241,155 @@ public class AnalyzeServiceTests
         Assert.Contains("Kubernetes", capturedSystem);
     }
 
+    private static string ValidV2Json(
+        decimal global = 3.8m,
+        decimal culture = 3.0m,
+        string cultureScreen = "caution",
+        string verdictHeadline = "Bewerbbar mit gezielten Anpassungen.",
+        string verdictParagraph = "Die JD betont Backend-APIs, die im CV belegt sind. Keine harten Lücken.") =>
+        $$"""
+        {
+          "global_score": {{global.ToString(System.Globalization.CultureInfo.InvariantCulture)}},
+          "dimensions": {
+            "cv_match": 4.0,
+            "role_alignment": 3.5,
+            "culture": {{culture.ToString(System.Globalization.CultureInfo.InvariantCulture)}},
+            "red_flags": 1.0
+          },
+          "dimension_reasons": {
+            "cv_match": "C# und ASP.NET Core sind im CV belegt, wie von der JD verlangt.",
+            "role_alignment": "Backend-Fokus passt zur Stelle.",
+            "culture": "Team sitzt laut JD in Deutschland.",
+            "red_flags": "Keine harten Blocker in der JD gefunden."
+          },
+          "role_summary": "Junior .NET Backend, Remote",
+          "verdict_headline": "{{verdictHeadline}}",
+          "verdict_paragraph": "{{verdictParagraph}}",
+          "culture_screen": "{{cultureScreen}}",
+          "warnings": [],
+          "section_findings": [
+            {
+              "section": "technical_skills",
+              "label": "Technische Skills",
+              "observation": "C# und ASP.NET Core stehen laut JD an erster Stelle.",
+              "action": "Skill-Reihenfolge im CV beibehalten."
+            }
+          ],
+          "action_plan": [
+            { "priority": 1, "action": "Bullet bei aktueller Stelle anpassen.", "effort_minutes": 10, "impact": "high" },
+            { "priority": 2, "action": "Anschreiben auf Backend-Fokus zuschneiden.", "effort_minutes": null, "impact": "medium" }
+          ],
+          "bullet_rewrites": [
+            {
+              "original": "Entwickelte ASP.NET Core REST APIs für interne Tools.",
+              "rewritten": "Entwickelte ASP.NET Core REST APIs für interne Tools.",
+              "reasoning": "JD betont Backend-APIs ohne neue Fakten.",
+              "evidence_line": "Entwickelte ASP.NET Core REST APIs für interne Tools."
+            }
+          ]
+        }
+        """;
+
+    [Fact]
+    public async Task Analyze_V2Json_ParsesVerdictDimensionReasonsFindingsAndActionPlan()
+    {
+        SetupHappyCollaborators(ValidV2Json());
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.Equal("Bewerbbar mit gezielten Anpassungen.", report.VerdictHeadline);
+        Assert.Equal(
+            "Die Stellenanzeige betont Backend-APIs, die im CV belegt sind. Keine harten Lücken.",
+            report.VerdictParagraph);
+        Assert.NotNull(report.DimensionReasons);
+        Assert.Equal(
+            "C# und ASP.NET Core sind im CV belegt, wie von der Stellenanzeige verlangt.",
+            report.DimensionReasons!.CvMatch);
+        var finding = Assert.Single(report.SectionFindings ?? []);
+        Assert.Equal("technical_skills", finding.Section);
+        Assert.Equal(2, (report.ActionPlan ?? []).Count);
+        Assert.Equal(1, report.ActionPlan![0].Priority);
+        Assert.Equal("high", report.ActionPlan![0].Impact);
+        Assert.Equal(
+            "Entwickelte ASP.NET Core REST APIs für interne Tools.",
+            Assert.Single(report.Bullets).EvidenceLine);
+    }
+
+    [Fact]
+    public async Task Analyze_V1ShapedJson_LeavesV2FieldsNullOrEmpty()
+    {
+        SetupHappyCollaborators(ValidJson());
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.Null(report.VerdictHeadline);
+        Assert.Null(report.VerdictParagraph);
+        Assert.Null(report.DimensionReasons);
+        Assert.True(report.SectionFindings is null or []);
+        Assert.True(report.ActionPlan is null or []);
+        Assert.Null(Assert.Single(report.Bullets).EvidenceLine);
+    }
+
+    [Fact]
+    public async Task Analyze_ActionPlanWithInvalidImpact_NormalizesToMedium()
+    {
+        var json = ValidV2Json().Replace("\"impact\": \"high\"", "\"impact\": \"dringend\"");
+        SetupHappyCollaborators(json);
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.Equal("medium", report.ActionPlan![0].Impact);
+    }
+
+    [Fact]
+    public async Task Analyze_FactGateViolation_SuppressesV2NarrativeFieldsToo()
+    {
+        _gap.Setup(g => g.Classify(It.IsAny<string>(), It.IsAny<string>())).Returns(OkGap());
+        _llm.Setup(l => l.CompleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new LlmResponse(ValidV2Json(), "llama-3.3-70b-versatile", 100, 80));
+        _gate.Setup(g => g.Verify(It.IsAny<string>(), It.IsAny<FactGateContext>()))
+            .Returns(new FactGateResult(false, [
+                new FactGateViolation(FactGateViolationTypes.InventedSkill, "Kubernetes", "not in CV")
+            ]));
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.Null(report.VerdictHeadline);
+        Assert.Null(report.VerdictParagraph);
+        Assert.Null(report.DimensionReasons);
+        Assert.True(report.SectionFindings is null or []);
+        Assert.True(report.ActionPlan is null or []);
+    }
+
+    [Fact]
+    public async Task Analyze_FactGateSeesV2NarrativeText_NotJustBullets()
+    {
+        // A verdict_paragraph inventing an unverifiable skill must be caught the same way a bullet
+        // rewrite would be: the FactGate input text must include the V2 narrative fields.
+        FactGateContext? capturedContext = null;
+        string? capturedText = null;
+        _gap.Setup(g => g.Classify(It.IsAny<string>(), It.IsAny<string>())).Returns(OkGap());
+        _llm.Setup(l => l.CompleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new LlmResponse(
+                ValidV2Json(verdictParagraph: "Kubernetes-Erfahrung macht diesen Kandidaten stark."),
+                "llama-3.3-70b-versatile",
+                100,
+                80));
+        _gate.Setup(g => g.Verify(It.IsAny<string>(), It.IsAny<FactGateContext>()))
+            .Callback<string, FactGateContext>((text, ctx) => { capturedText = text; capturedContext = ctx; })
+            .Returns(new FactGateResult(true, []));
+        var sut = CreateSut();
+
+        await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.NotNull(capturedContext);
+        Assert.Contains("Kubernetes-Erfahrung macht diesen Kandidaten stark.", capturedText);
+    }
+
     [Fact]
     public async Task Analyze_ScrubsEmailBeforeLlm()
     {
