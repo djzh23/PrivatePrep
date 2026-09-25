@@ -75,7 +75,7 @@ dotnet test
 
 Vor jedem Deploy wird die Release-Checkliste durchgegangen. Siehe
 [docs/deployment/RELEASE-CHECKLIST.md](docs/deployment/RELEASE-CHECKLIST.md).
-Branch-Mapping: [docs/BRANCHES.md](docs/BRANCHES.md).
+Live kommt von Branch `main`. Branch-Mapping: [docs/BRANCHES.md](docs/BRANCHES.md).
 
 ## Attribution
 

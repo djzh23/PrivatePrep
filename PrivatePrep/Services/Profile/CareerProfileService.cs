@@ -37,6 +37,9 @@ public sealed class CareerProfileService(CareerProfilePostgresService postgres) 
     public Task SetCvFingerprintAsync(string userId, string contentHash, int contentLength, CancellationToken cancellationToken = default) =>
         postgres.SetCvFingerprintAsync(userId, contentHash, contentLength, cancellationToken);
 
+    public Task ClearCvDerivedDataAsync(string userId, CancellationToken cancellationToken = default) =>
+        postgres.ClearCvDerivedDataAsync(userId, cancellationToken);
+
     public Task SetSkills(string userId, List<string> skills) => postgres.SetSkills(userId, skills);
 
     public Task<string> AddTargetJob(string userId, string title, string? company, string? description) =>

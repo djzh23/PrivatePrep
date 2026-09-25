@@ -188,6 +188,43 @@ public sealed class CareerProfilePostgresService(PrivatePrepDbContext db)
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Removes CV-derived profile data and the stored fingerprint so a new upload cannot mix with the old CV.
+    /// Keeps field, level, goals, story, target jobs and onboarding flags.
+    /// </summary>
+    public async Task ClearCvDerivedDataAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+
+        var existing = await db.CareerProfiles
+            .FirstOrDefaultAsync(x => x.ClerkUserId == userId, cancellationToken)
+            .ConfigureAwait(false);
+        if (existing is null)
+            return;
+
+        var profile = DeserializeProfile(existing.ProfileJson, userId);
+        profile.CurrentRole = null;
+        profile.Skills = [];
+        profile.Experience = [];
+        profile.EducationEntries = [];
+        profile.Languages = [];
+        profile.CvSummary = null;
+        profile.CvSummaryEn = null;
+        profile.CvUploadedAt = null;
+        StripNonPersistedCvFields(profile);
+
+        var now = DateTime.UtcNow;
+        profile.UpdatedAt = now;
+        existing.UpdatedAt = now;
+        existing.ProfileJson = JsonSerializer.Serialize(profile, JsonOpts);
+        existing.CvContentHash = null;
+        existing.CvContentLength = null;
+        existing.CacheVersion += 1;
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
     public async Task SetSkills(string userId, List<string> skills, CancellationToken cancellationToken = default)
     {
         var profile = await GetProfile(userId, cancellationToken).ConfigureAwait(false)

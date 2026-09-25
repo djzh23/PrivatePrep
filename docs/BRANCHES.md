@@ -4,25 +4,16 @@ Stand September 2026. Es gibt eine Live-Umgebung, kein Staging.
 
 Render (Backend, dieses Repo) und Vercel (Frontend,
 [SmartAssist-react](https://github.com/djzh23/SmartAssist-react)) deployen
-aktuell von `v1-focus`. GitHub Actions Deploy-Jobs laufen nur bei Push auf
-`main` und sind nicht der aktuelle Live-Pfad.
+von `main`.
 
 ## Aktive Branches
 
-### v1-focus
+### main
 
 Zweck: Arbeits- und Live-Branch der geschlossenen Beta
 Status: geschlossene Beta, aktive Entwicklung
-Deploy: automatisch auf Render (Backend) und Vercel (Frontend). Das
-GitHub-Actions-Workflow `deploy.yml` feuert hier nicht (nur `main`).
-
-### main
-
-Zweck: Default-Branch auf GitHub. Actions (Render-Hook / Vercel Production)
-laufen nur bei Push auf `main`.
-Status: hinter `v1-focus`; nicht die aktuelle Live-Quelle
-Deploy: nicht ohne ausdrückliche Entscheidung mergen oder pushen. Kein
-Auto-Push auf `main`.
+Deploy: automatisch auf Render (Backend) und Vercel (Frontend). GitHub
+Actions Deploy-Jobs laufen bei Push auf `main`.
 
 ### v2-features
 

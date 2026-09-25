@@ -183,6 +183,32 @@ public sealed class CvController(
     }
 
     /// <summary>
+    /// Deletes CV-derived career data and the stored fingerprint. Analysis is blocked until a new CV is uploaded.
+    /// </summary>
+    [HttpDelete]
+    [EnableRateLimiting("profile_writes")]
+    public async Task<IActionResult> ClearCvDerivedData()
+    {
+        var userId = userContext.UserId;
+        var isAnonymous = userContext.IsAnonymous;
+        if (isAnonymous || string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        try
+        {
+            await profileService.ClearCvDerivedDataAsync(userId, HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+            SetCareerProfileStorageHeaders();
+            return Ok(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Clear CV-derived profile data failed for user {UserId}", userId);
+            return StatusCode(500, new { error = "cv_clear_failed", message = "Lebenslauf-Daten konnten nicht gelöscht werden." });
+        }
+    }
+
+    /// <summary>
     /// PDF-CV hochladen: Text extrahieren, per KI strukturieren, Hash speichern. Rohtext geht nicht in die Datenbank.
     /// </summary>
     [HttpPost("upload-pdf")]

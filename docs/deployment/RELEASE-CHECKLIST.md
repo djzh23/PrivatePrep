@@ -1,16 +1,14 @@
 # Release-Checkliste
 
-Vor jedem Push, der Live erreichen kann. Live deployt aktuell von `v1-focus`
-(Render Backend, Vercel Frontend). GitHub Actions Deploy-Jobs feuern nur auf
-`main`.
+Vor jedem Push, der Live erreichen kann. Live deployt von `main`
+(Render Backend, Vercel Frontend).
 
 Offene Go-Live-Blocker stehen in
 [PRE-LAUNCH-CHECKLIST.md](./PRE-LAUNCH-CHECKLIST.md).
 
 ## Vor dem Push
 
-- [ ] Zielbranch ist der, den Zouhair genannt hat (`v1-focus` für Live; nie
-      `main`, außer ausdrücklich gewünscht)
+- [ ] Zielbranch ist `main`
 - [ ] Impressum: Straße und PLZ sind Platzhalter, außer Zouhair hat sie selbst
       gefüllt und mit `docs: fill in address for beta launch` committed
 - [ ] Datenschutz beschreibt den echten Ablauf (nur Groq, CV-Hash plus Länge
@@ -24,7 +22,7 @@ Offene Go-Live-Blocker stehen in
 - [ ] Backend-Tests und Frontend Lint/Build lokal grün, wenn Code geändert
       wurde
 
-## Nach Deploy auf v1-focus (Render / Vercel)
+## Nach Deploy auf main (Render / Vercel)
 
 - [ ] Render hat anstehende SQL-Migrationen angewendet (aktuell
       `016_cv_store_hash_drop_raw_text.sql` beim Boot)
