@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.SkillGap;
 
 namespace PrivatePrep.Services.FactGate;
@@ -57,6 +58,76 @@ public sealed partial class FactGateService : IFactGateService
 
         return new FactGateResult(violations.Count == 0, violations);
     }
+
+    public FactGateBulletResult VerifyBullet(
+        BulletRewriteSuggestion bullet,
+        string? evidenceLine,
+        FactGateContext context)
+    {
+        ArgumentNullException.ThrowIfNull(bullet);
+        context ??= new FactGateContext("", "", []);
+
+        var sources = $"{context.CvText}\n{context.StoryText}";
+        var violations = new List<FactGateViolation>();
+
+        // An evidence line the CV does not contain is itself the violation: taking the model's word
+        // for it would let it license any claim by inventing the line it supposedly came from.
+        var evidence = (evidenceLine ?? "").Trim();
+        if (evidence.Length > 0 && !IsGroundedInSources(evidence, sources))
+        {
+            violations.Add(new FactGateViolation(
+                FactGateViolationTypes.UngroundedEvidence,
+                evidence,
+                "The evidence line for this rewrite does not appear in the CV or story."));
+        }
+
+        var text = string.Join(
+            "\n",
+            bullet.OriginalBullet ?? "",
+            bullet.RewrittenBullet ?? "",
+            bullet.Reasoning ?? "");
+
+        CollectInventedSkills(text, context, sources, violations);
+        CollectInventedMetrics(text, sources, violations);
+        CollectBannedWords(text, violations);
+
+        return new FactGateBulletResult(violations.Count == 0, violations);
+    }
+
+    /// <summary>
+    /// Whether a quoted CV line really comes from the sources. Exact first, then punctuation- and
+    /// whitespace-insensitive, then a word-overlap fallback so a lightly reflowed quote still counts
+    /// while an invented sentence does not.
+    /// </summary>
+    private static bool IsGroundedInSources(string line, string sources)
+    {
+        if (sources.Contains(line, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var normalizedLine = NormalizeForMatch(line);
+        if (normalizedLine.Length == 0)
+            return true;
+        if (NormalizeForMatch(sources).Contains(normalizedLine, StringComparison.Ordinal))
+            return true;
+
+        var sourceWords = NormalizeForMatch(sources)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .ToHashSet(StringComparer.Ordinal);
+        var lineWords = normalizedLine
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Where(w => w.Length >= 3)
+            .ToList();
+        if (lineWords.Count == 0)
+            return false;
+
+        var hits = lineWords.Count(sourceWords.Contains);
+        return (double)hits / lineWords.Count >= EvidenceWordOverlapThreshold;
+    }
+
+    private const double EvidenceWordOverlapThreshold = 0.8;
+
+    private static string NormalizeForMatch(string text) =>
+        MatchNoiseRegex().Replace(text.ToLowerInvariant(), " ").Trim();
 
     private void CollectInventedSkills(
         string output,
@@ -183,4 +254,8 @@ public sealed partial class FactGateService : IFactGateService
         """\b(\d+(?:[.,]\d+)?)\s*(%|(?:[kKmMbB]|[xX]|Millionen|Million|Milliarden|Milliarde|Nutzer|Zeilen|Jahre|Jahr|Monate|Monat|Tage|Tag|Stunden|Stunde|Mitarbeiter|Kunden|Prozent|Teams|Projekte|Tickets|Users?|Customers?|Years?|Year|Lines?|Deployments?|Requests?)\b)""",
         RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex MetricRegex();
+
+    /// <summary>Everything that is not a letter or digit, so quoting differences do not break a match.</summary>
+    [GeneratedRegex(@"[^\p{L}\p{N}]+", RegexOptions.CultureInvariant)]
+    private static partial Regex MatchNoiseRegex();
 }

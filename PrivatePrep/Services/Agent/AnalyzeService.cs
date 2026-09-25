@@ -106,10 +106,14 @@ public sealed partial class AnalyzeService(
             .Select(b => b with { Reasoning = PlainGerman(b.Reasoning) })
             .ToList();
 
-        // V2 narrative fields are additional LLM claims about the candidate, so they go through the
-        // same FactGate check as bullets: an invented skill in verdict_paragraph or a section
-        // finding is exactly the failure mode FactGate exists to catch.
-        var generatedText = string.Join(
+        var allowed = gap.Existing.Concat(gap.SupportedByResume).ToList();
+        var factContext = new FactGateContext(cv, story, allowed);
+
+        // The narrative is checked as one blob: role summary, warnings and the V2 prose all speak
+        // about the candidate as a whole, so an invention anywhere in there taints all of it.
+        // Bullets are checked one at a time below, because they are independent claims and one bad
+        // rewrite should not cost the user the good ones.
+        var narrativeText = string.Join(
             "\n",
             [
                 roleSummary,
@@ -119,19 +123,15 @@ public sealed partial class AnalyzeService(
                 .. DimensionReasonSentences(dimensionReasons),
                 .. sectionFindings.SelectMany(f => new[] { f.Observation, f.Action }),
                 .. actionPlan.Select(a => a.Action),
-                .. bullets.Select(b => $"{b.OriginalBullet}\n{b.RewrittenBullet}\n{b.Reasoning}"),
             ]);
 
-        var allowed = gap.Existing.Concat(gap.SupportedByResume).ToList();
-        var factResult = factGate.Verify(
-            generatedText,
-            new FactGateContext(cv, story, allowed));
+        var narrativeResult = factGate.Verify(narrativeText, factContext);
 
-        if (!factResult.Passed)
+        if (!narrativeResult.Passed)
         {
             logger.LogInformation(
-                "FactGate blocked analyze output. UserId {UserId} Violations {Count}",
-                request.UserId, factResult.Violations.Count);
+                "FactGate blocked analyze narrative. UserId {UserId} Violations {Count}",
+                request.UserId, narrativeResult.Violations.Count);
             warnings.Add("FactGate hat den generierten Text blockiert. Umformulierungen werden nicht angezeigt.");
             return new AnalyzeReport(
                 global,
@@ -141,11 +141,29 @@ public sealed partial class AnalyzeService(
                 "",
                 warnings,
                 cultureScreen,
-                factResult.Violations,
+                narrativeResult.Violations,
                 used.ModelUsed,
                 used.InputTokens,
                 used.OutputTokens,
                 UnverifiedBullets: bullets);
+        }
+
+        var bulletViolations = new List<FactGateViolation>();
+        var unverifiedIndices = new List<int>();
+        for (var i = 0; i < bullets.Count; i++)
+        {
+            var result = factGate.VerifyBullet(bullets[i], bullets[i].EvidenceLine, factContext);
+            if (result.Passed)
+                continue;
+            unverifiedIndices.Add(i);
+            bulletViolations.AddRange(result.Violations);
+        }
+
+        if (unverifiedIndices.Count > 0)
+        {
+            logger.LogInformation(
+                "FactGate flagged {Flagged} of {Total} bullets. UserId {UserId}",
+                unverifiedIndices.Count, bullets.Count, request.UserId);
         }
 
         return new AnalyzeReport(
@@ -156,7 +174,7 @@ public sealed partial class AnalyzeService(
             roleSummary.Trim(),
             warnings,
             cultureScreen,
-            [],
+            bulletViolations,
             used.ModelUsed,
             used.InputTokens,
             used.OutputTokens,
@@ -164,7 +182,8 @@ public sealed partial class AnalyzeService(
             VerdictHeadline: verdictHeadline,
             VerdictParagraph: verdictParagraph,
             SectionFindings: sectionFindings,
-            ActionPlan: actionPlan);
+            ActionPlan: actionPlan,
+            UnverifiedBulletIndices: unverifiedIndices);
     }
 
     private static IEnumerable<string> DimensionReasonSentences(DimensionReasons? reasons)

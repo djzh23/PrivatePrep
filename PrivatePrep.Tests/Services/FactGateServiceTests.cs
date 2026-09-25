@@ -1,3 +1,4 @@
+using PrivatePrep.Services.Agent;
 using PrivatePrep.Services.FactGate;
 
 namespace PrivatePrep.Tests.Services;
@@ -95,5 +96,94 @@ public class FactGateServiceTests
         Assert.Contains(english.Violations, v =>
             v.ViolationType == FactGateViolationTypes.BannedWord
             && v.Snippet.Contains("leverage", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private const string BulletCv = """
+        Kenntnisse
+        C#, ASP.NET Core, PostgreSQL
+
+        Berufserfahrung
+        Entwickelte ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL-Backend.
+        """;
+
+    private static FactGateContext BulletContext() =>
+        new(BulletCv, "Ich will im Backend bleiben.", ["C#", "ASP.NET Core", "PostgreSQL"]);
+
+    [Fact]
+    public void VerifyBullet_EvidenceLineVerbatimInCv_Passes()
+    {
+        var bullet = new BulletRewriteSuggestion(
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL-Backend.",
+            "ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL entwickelt.",
+            "Die Anzeige nennt REST APIs und PostgreSQL zuerst.",
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL-Backend.");
+
+        var result = _sut.VerifyBullet(bullet, bullet.EvidenceLine, BulletContext());
+
+        Assert.True(result.Passed);
+        Assert.Empty(result.Violations);
+    }
+
+    [Fact]
+    public void VerifyBullet_EvidenceLineNotInCv_Fails()
+    {
+        var bullet = new BulletRewriteSuggestion(
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools.",
+            "Kubernetes-Cluster für interne Business-Tools betrieben.",
+            "Die Anzeige nennt Kubernetes.",
+            "Betrieb von Kubernetes-Clustern in Produktion für mehrere Teams.");
+
+        var result = _sut.VerifyBullet(bullet, bullet.EvidenceLine, BulletContext());
+
+        Assert.False(result.Passed);
+        Assert.Contains(result.Violations, v => v.ViolationType == FactGateViolationTypes.UngroundedEvidence);
+    }
+
+    [Fact]
+    public void VerifyBullet_LightlyReflowedEvidenceLine_StillCountsAsGrounded()
+    {
+        // The model re-quotes CV lines with its own punctuation and spacing; that must not read as
+        // a fabricated source.
+        var bullet = new BulletRewriteSuggestion(
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL-Backend.",
+            "ASP.NET Core REST APIs mit PostgreSQL entwickelt.",
+            "Nutzt die Wörter der Anzeige.",
+            "Entwickelte ASP.NET Core REST APIs  für interne Business-Tools mit PostgreSQL Backend");
+
+        var result = _sut.VerifyBullet(bullet, bullet.EvidenceLine, BulletContext());
+
+        Assert.True(result.Passed);
+    }
+
+    [Fact]
+    public void VerifyBullet_NoEvidenceLine_StillChecksTheRewriteItself()
+    {
+        var bullet = new BulletRewriteSuggestion(
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools.",
+            "Kubernetes-Cluster in Produktion betrieben.",
+            "Passt zur Anzeige.",
+            null);
+
+        var result = _sut.VerifyBullet(bullet, null, BulletContext());
+
+        Assert.False(result.Passed);
+        Assert.Contains(result.Violations, v =>
+            v.ViolationType == FactGateViolationTypes.InventedSkill
+            && v.Snippet.Contains("Kubernetes", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void VerifyBullet_GroundedEvidenceButInventedSkillInRewrite_Fails()
+    {
+        var bullet = new BulletRewriteSuggestion(
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL-Backend.",
+            "REST APIs auf Kubernetes ausgerollt.",
+            "Passt zur Anzeige.",
+            "Entwickelte ASP.NET Core REST APIs für interne Business-Tools mit PostgreSQL-Backend.");
+
+        var result = _sut.VerifyBullet(bullet, bullet.EvidenceLine, BulletContext());
+
+        Assert.False(result.Passed);
+        Assert.Contains(result.Violations, v => v.ViolationType == FactGateViolationTypes.InventedSkill);
     }
 }

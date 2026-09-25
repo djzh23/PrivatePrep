@@ -13,6 +13,18 @@ public class AnalyzeServiceTests
     private readonly Mock<IFactGateService> _gate = new();
     private readonly Mock<ILlmRouter> _llm = new();
 
+    public AnalyzeServiceTests()
+    {
+        // Per-bullet checks pass unless a test says otherwise, so cases about parsing, scoring or
+        // the narrative gate do not each have to restate it.
+        _gate
+            .Setup(g => g.VerifyBullet(
+                It.IsAny<BulletRewriteSuggestion>(),
+                It.IsAny<string?>(),
+                It.IsAny<FactGateContext>()))
+            .Returns(new FactGateBulletResult(true, []));
+    }
+
     private AnalyzeService CreateSut() =>
         new(_gap.Object, _gate.Object, _llm.Object, new PiiScrubberService(), NullLogger<AnalyzeService>.Instance);
 
@@ -388,6 +400,111 @@ public class AnalyzeServiceTests
 
         Assert.NotNull(capturedContext);
         Assert.Contains("Kubernetes-Erfahrung macht diesen Kandidaten stark.", capturedText);
+    }
+
+    private static string TwoBulletJson() =>
+        """
+        {
+          "global_score": 3.8,
+          "dimensions": { "cv_match": 4.0, "role_alignment": 3.5, "culture": 3.0, "red_flags": 1.0 },
+          "role_summary": "Junior .NET Backend, Remote",
+          "culture_screen": "caution",
+          "warnings": [],
+          "bullet_rewrites": [
+            {
+              "original": "Entwickelte ASP.NET Core REST APIs für interne Tools.",
+              "rewritten": "ASP.NET Core REST APIs für interne Tools entwickelt.",
+              "reasoning": "Nutzt die Wörter der Anzeige.",
+              "evidence_line": "Entwickelte ASP.NET Core REST APIs für interne Tools."
+            },
+            {
+              "original": "Entwickelte ASP.NET Core REST APIs für interne Tools.",
+              "rewritten": "Kubernetes-Cluster in Produktion betrieben.",
+              "reasoning": "Passt zur Anzeige.",
+              "evidence_line": "Betrieb von Kubernetes-Clustern."
+            }
+          ]
+        }
+        """;
+
+    [Fact]
+    public async Task Analyze_OneBulletFailsItsOwnCheck_KeepsTheOtherAndFlagsTheIndex()
+    {
+        _gap.Setup(g => g.Classify(It.IsAny<string>(), It.IsAny<string>())).Returns(OkGap());
+        _gate.Setup(g => g.Verify(It.IsAny<string>(), It.IsAny<FactGateContext>()))
+            .Returns(new FactGateResult(true, []));
+        _gate.Setup(g => g.VerifyBullet(
+                It.Is<BulletRewriteSuggestion>(b => b.RewrittenBullet.Contains("Kubernetes")),
+                It.IsAny<string?>(),
+                It.IsAny<FactGateContext>()))
+            .Returns(new FactGateBulletResult(false, [
+                new FactGateViolation(FactGateViolationTypes.InventedSkill, "Kubernetes", "not in CV")
+            ]));
+        _llm.Setup(l => l.CompleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new LlmResponse(TwoBulletJson(), "llama-3.3-70b-versatile", 100, 80));
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        // Both rewrites survive; only the bad one is marked, so the good one is not collateral damage.
+        Assert.Equal(2, report.Bullets.Count);
+        Assert.Equal([1], report.UnverifiedBulletIndices);
+        Assert.Contains(report.FactViolations, v => v.Snippet == "Kubernetes");
+        Assert.NotEqual("", report.RoleSummary);
+    }
+
+    [Fact]
+    public async Task Analyze_EveryBulletPasses_LeavesNoIndicesFlagged()
+    {
+        SetupHappyCollaborators(ValidV2Json());
+        var sut = CreateSut();
+
+        var report = await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.True(report.UnverifiedBulletIndices is null or []);
+        Assert.Empty(report.FactViolations);
+    }
+
+    [Fact]
+    public async Task Analyze_BulletEvidenceLine_IsPassedToTheBulletCheck()
+    {
+        string? capturedEvidence = null;
+        SetupHappyCollaborators(ValidV2Json());
+        _gate.Setup(g => g.VerifyBullet(
+                It.IsAny<BulletRewriteSuggestion>(),
+                It.IsAny<string?>(),
+                It.IsAny<FactGateContext>()))
+            .Callback<BulletRewriteSuggestion, string?, FactGateContext>((_, evidence, _) => capturedEvidence = evidence)
+            .Returns(new FactGateBulletResult(true, []));
+        var sut = CreateSut();
+
+        await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.Equal("Entwickelte ASP.NET Core REST APIs für interne Tools.", capturedEvidence);
+    }
+
+    [Fact]
+    public async Task Analyze_NarrativeCheck_ExcludesBulletTextButKeepsRoleSummaryAndWarnings()
+    {
+        string? narrative = null;
+        _gap.Setup(g => g.Classify(It.IsAny<string>(), It.IsAny<string>())).Returns(OkGap());
+        _gate.Setup(g => g.Verify(It.IsAny<string>(), It.IsAny<FactGateContext>()))
+            .Callback<string, FactGateContext>((text, _) => narrative = text)
+            .Returns(new FactGateResult(true, []));
+        _llm.Setup(l => l.CompleteAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new LlmResponse(
+                TwoBulletJson().Replace("\"warnings\": []", "\"warnings\": [\"Englisch B2 statt C1.\"]"),
+                "llama-3.3-70b-versatile",
+                100,
+                80));
+        var sut = CreateSut();
+
+        await sut.AnalyzeAsync(Request(), CancellationToken.None);
+
+        Assert.NotNull(narrative);
+        Assert.Contains("Junior .NET Backend, Remote", narrative);
+        Assert.Contains("Englisch B2 statt C1.", narrative);
+        Assert.DoesNotContain("Kubernetes", narrative);
     }
 
     [Fact]

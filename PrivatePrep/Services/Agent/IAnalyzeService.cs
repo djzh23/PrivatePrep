@@ -25,6 +25,10 @@ public record AnalyzeRequest(
 /// same conditions as <paramref name="DimensionReasons"/>.</param>
 /// <param name="SectionFindings">V2. Per-CV-section feedback, empty (not null) when the model returned none.</param>
 /// <param name="ActionPlan">V2. Priority-ordered next steps, empty (not null) when the model returned none.</param>
+/// <param name="UnverifiedBulletIndices">V2. Positions in <paramref name="Bullets"/> whose own FactGate check
+/// failed. Those rewrites are still shown, marked individually, instead of withholding every rewrite because
+/// of one bad apple. Empty when every bullet passed; irrelevant when the narrative check failed, since
+/// <paramref name="Bullets"/> is then empty and <paramref name="UnverifiedBullets"/> carries them all.</param>
 public record AnalyzeReport(
     decimal GlobalScore,
     ScoreDimensions Dimensions,
@@ -42,7 +46,8 @@ public record AnalyzeReport(
     string? VerdictHeadline = null,
     string? VerdictParagraph = null,
     IReadOnlyList<SectionFinding>? SectionFindings = null,
-    IReadOnlyList<ActionPlanItem>? ActionPlan = null);
+    IReadOnlyList<ActionPlanItem>? ActionPlan = null,
+    IReadOnlyList<int>? UnverifiedBulletIndices = null);
 
 public record ScoreDimensions(
     decimal CvMatch,
